@@ -12,13 +12,13 @@ namespace Auto_Part_WebUI
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+       
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -28,12 +28,9 @@ namespace Auto_Part_WebUI
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(cfg =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                cfg.MapControllerRoute("default", "{controller=home}/{action=index}/{id?}");
             });
         }
     }
