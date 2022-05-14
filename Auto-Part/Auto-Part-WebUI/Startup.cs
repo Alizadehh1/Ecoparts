@@ -27,6 +27,7 @@ namespace Auto_Part_WebUI
             }
 
             app.UseRouting();
+            app.UseStaticFiles();
 
             app.UseEndpoints(cfg =>
             {
