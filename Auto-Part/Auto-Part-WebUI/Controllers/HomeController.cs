@@ -12,5 +12,9 @@ namespace Auto_Part_WebUI.Controllers
         {
             return View();
         }
+        public IActionResult AllProducts()
+        {
+            return View();
+        }
     }
 }
