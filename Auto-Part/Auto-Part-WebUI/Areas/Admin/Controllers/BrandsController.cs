@@ -20,13 +20,14 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             this.db = db;
         }
 
-        // GET: Admin/Brands
         public async Task<IActionResult> Index()
         {
-            return View(await db.Brands.ToListAsync());
+            var model = await db.Brands
+                .Where(b => b.DeletedById == null)
+                .ToListAsync();
+            return View(model);
         }
 
-        // GET: Admin/Brands/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,7 +36,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             }
 
             var brand = await db.Brands
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id && m.DeletedById==null);
             if (brand == null)
             {
                 return NotFound();
@@ -108,34 +109,26 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             }
             return View(brand);
         }
-
-        // GET: Admin/Brands/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [HttpPost]
+        public IActionResult Delete([FromRoute] int id)
         {
-            if (id == null)
+            var entity = db.Brands.FirstOrDefault(b => b.Id == id);
+            if (entity == null)
             {
-                return NotFound();
+                return Json(new
+                {
+                    error = true,
+                    message = "Movcud deyil"
+                });
             }
-
-            var brand = await db.Brands
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (brand == null)
+            entity.DeletedById = 1; //todo
+            entity.DeletedDate = DateTime.UtcNow.AddHours(4);
+            db.SaveChanges();
+            return Json(new
             {
-                return NotFound();
-            }
-
-            return View(brand);
-        }
-
-        // POST: Admin/Brands/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var brand = await db.Brands.FindAsync(id);
-            db.Brands.Remove(brand);
-            await db.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+                error = false,
+                message = "Ugurla silindi"
+            });
         }
 
         private bool BrandExists(int id)

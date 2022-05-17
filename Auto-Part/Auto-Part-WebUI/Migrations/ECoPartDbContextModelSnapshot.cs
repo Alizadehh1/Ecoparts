@@ -69,6 +69,7 @@ namespace Auto_Part_WebUI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ParentId")
@@ -80,7 +81,7 @@ namespace Auto_Part_WebUI.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Product", b =>
@@ -123,7 +124,7 @@ namespace Auto_Part_WebUI.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.ProductPartCode", b =>
@@ -155,7 +156,7 @@ namespace Auto_Part_WebUI.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductPartCode");
+                    b.ToTable("ProductPartCodes");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.ProductPricing", b =>
@@ -188,7 +189,7 @@ namespace Auto_Part_WebUI.Migrations
 
                     b.HasIndex("ProductTypeId");
 
-                    b.ToTable("ProductPricing");
+                    b.ToTable("ProductPricings");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.ProductType", b =>
@@ -215,7 +216,7 @@ namespace Auto_Part_WebUI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductType");
+                    b.ToTable("ProductTypes");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Category", b =>

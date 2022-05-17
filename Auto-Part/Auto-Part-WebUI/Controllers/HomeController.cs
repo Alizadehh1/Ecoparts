@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Auto_Part_WebUI.Models.DataContexts;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,13 @@ namespace Auto_Part_WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        readonly ECoPartDbContext db;
+
+        public HomeController(ECoPartDbContext db)
         {
-            return View();
+            this.db = db;
         }
-        public IActionResult AllProducts()
+        public IActionResult Index()
         {
             return View();
         }

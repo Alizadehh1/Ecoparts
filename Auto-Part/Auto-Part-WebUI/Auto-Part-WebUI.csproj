@@ -111,6 +111,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="wwwroot\libs\" />
   </ItemGroup>
 
   <ItemGroup>

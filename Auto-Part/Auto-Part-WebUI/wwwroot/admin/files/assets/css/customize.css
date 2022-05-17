@@ -12,6 +12,9 @@
 .table tbody tr .actionBtns {
     padding: 29px 12px;
 }
+.table-hover thead tr th {
+    text-align: start;
+}
 .table td.cell-sm{
     max-width:120px;
     width:120px;
