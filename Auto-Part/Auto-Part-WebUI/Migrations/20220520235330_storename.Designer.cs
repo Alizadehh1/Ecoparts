@@ -4,14 +4,16 @@ using Auto_Part_WebUI.Models.DataContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Auto_Part_WebUI.Migrations
 {
     [DbContext(typeof(ECoPartDbContext))]
-    partial class ECoPartDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220520235330_storename")]
+    partial class storename
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,7 +112,7 @@ namespace Auto_Part_WebUI.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("Roles", "Membership");
+                    b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Membership.ECoPartRoleClaim", b =>
@@ -133,7 +135,7 @@ namespace Auto_Part_WebUI.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RoleClaims", "Membership");
+                    b.ToTable("AspNetRoleClaims");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Membership.ECoPartUser", b =>
@@ -163,10 +165,6 @@ namespace Auto_Part_WebUI.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -191,10 +189,6 @@ namespace Auto_Part_WebUI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -212,7 +206,7 @@ namespace Auto_Part_WebUI.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("Users", "Membership");
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Membership.ECoPartUserClaim", b =>
@@ -235,7 +229,7 @@ namespace Auto_Part_WebUI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserClaims", "Membership");
+                    b.ToTable("AspNetUserClaims");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Membership.ECoPartUserLogin", b =>
@@ -256,7 +250,7 @@ namespace Auto_Part_WebUI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLogins", "Membership");
+                    b.ToTable("AspNetUserLogins");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Membership.ECoPartUserRole", b =>
@@ -271,7 +265,7 @@ namespace Auto_Part_WebUI.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoles", "Membership");
+                    b.ToTable("AspNetUserRoles");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Membership.ECoPartUserToken", b =>
@@ -290,7 +284,7 @@ namespace Auto_Part_WebUI.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("UserTokens", "Membership");
+                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Product", b =>

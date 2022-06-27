@@ -59,21 +59,32 @@
                     </div>
                     <div class="header-right">
                         <div class="dropdown">
-                          
+
                         </div>
                         <!-- End DropDown Menu -->
                         <div class="dropdown ml-5">
-                            
+
                         </div>
                         <!-- End DropDown Menu -->
                         <span class="divider"></span>
                         <a asp-controller="home" asp-action="contact" class="contact d-lg-show"><i class="d-icon-map"></i>Bizimlə Əlaqə</a>
                         <a href="~/assets/#" class="help d-lg-show"><i class="d-icon-info"></i> Need Help</a>
-                        <a class="login-link" href="~/assets/ajax/login.html" data-toggle="login-modal">
-                            <i class="d-icon-user"></i>Daxil Ol
-                        </a>
-                        <span class="delimiter">/</span>
-                        <a class="register-link ml-0" href="~/assets/ajax/login.html" data-toggle="login-modal">Qeydiyyat</a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a asp-action="Profile" asp-controller="account">
+                                <i style="margin-right: 3px;" class="d-icon-user"></i>@User.GetPrincipalName()
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-action="SignIn" asp-controller="account">
+                                <i style="margin-right: 3px;" class="d-icon-user"></i>Daxil Ol
+                            </a>
+                            <span class="delimiter">/</span>
+                            <a class="ml-0" asp-action="Register" asp-controller="account">Qeydiyyat</a>
+                        }
+
+
                         <!-- End of Login -->
                     </div>
                 </div>
@@ -92,7 +103,7 @@
 
                         <div class="header-search hs-simple">
                             <form action="#" method="get" class="input-wrapper">
-                               
+
                                 <input type="text" class="form-control" name="search" id="search"
                                        placeholder="Axtardığınız məhsulun kodunu daxil edin ..." required="">
                                 <button class="btn btn-search" type="submit"><i class="d-icon-search"></i></button>

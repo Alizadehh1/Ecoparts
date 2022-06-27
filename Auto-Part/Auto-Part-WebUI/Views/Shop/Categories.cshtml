@@ -3,31 +3,23 @@
     ViewData["Title"] = "Categories";
 }
 
-<div class="page-header"
-     style="background-image: url('/assets/images/demos/demo23/page-header.jpg'); background-color: #3C63A4;">
-    <h1 class="page-title ls-m">Riode Shop</h1>
-    <ul class="breadcrumb pb-0">
-        <li><a href="demo23.html"><i class="d-icon-home"></i></a></li>
-        <li class="delimiter">/</li>
-        <li>Riode Shop</li>
-    </ul>
-</div>
+<nav class="breadcrumb-nav">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="demo1.html"><i class="d-icon-home"></i></a></li>
+            <li>Shop</li>
+        </ul>
+    </div>
+</nav>
 <div class="page-content mb-10">
     <div class="container">
         <div class="row main-content-wrap gutter-lg">
             <aside class="col-lg-3 sidebar sidebar-fixed sidebar-toggle-remain shop-sidebar sticky-sidebar-wrapper">
-                <div class="sidebar-overlay">
-                    <a class="sidebar-close" href="#"><i class="d-icon-times"></i></a>
-                </div>
+                <div class="sidebar-overlay"></div>
+                <a href="#" class="sidebar-toggle"><i class="fas fa-chevron-right"></i></a>
+                <a class="sidebar-close" href="#"><i class="d-icon-times"></i></a>
                 <div class="sidebar-content">
                     <div class="sticky-sidebar" data-sticky-options="{'top': 10}">
-                        <div class="filter-actions mb-4">
-                            <a href="#"
-                               class="sidebar-toggle-btn toggle-remain btn btn-outline btn-primary">
-                                Filter<i class="d-icon-arrow-left ml-2"></i>
-                            </a>
-                            <a href="#" class="filter-clean">Clean All</a>
-                        </div>
                         <div class="widget widget-collapsible">
                             @foreach (var item in ViewBag.Brand)
                             {
@@ -234,12 +226,21 @@
                 </div>
             </aside>
             <div class="col-lg-9 main-content">
+                <div class="shop-banner-default banner mb-1"
+                     style="background-image: url('./assets/images/shop/banner.jpg'); background-color: #4e6582;">
+                    <div class="banner-content">
+                        <h4 class="banner-subtitle font-weight-bold ls-normal text-uppercase text-white">
+                            Riode Shop
+                        </h4>
+                        <h1 class="banner-title font-weight-bold text-white">Banner with Sidebar</h1>
+                        <a href="#" class="btn btn-white btn-outline btn-icon-right btn-rounded text-normal">
+                            Discover
+                            now<i class="d-icon-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
                 <nav class="toolbox sticky-toolbox sticky-content fix-top">
                     <div class="toolbox-left">
-                        <a href="#"
-                           class="toolbox-item left-sidebar-toggle btn btn-sm btn-outline btn-primary d-lg-none">
-                            Filters<i class="d-icon-arrow-right"></i>
-                        </a>
                         <div class="toolbox-item toolbox-sort select-box">
                             <label>Sort By :</label>
                             <select name="orderby" class="form-control">

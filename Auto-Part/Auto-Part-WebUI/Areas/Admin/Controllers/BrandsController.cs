@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Auto_Part_WebUI.Models.DataContexts;
 using Auto_Part_WebUI.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Auto_Part_WebUI.Areas.Admin.Controllers
 {
@@ -19,7 +20,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
         {
             this.db = db;
         }
-
+        [Authorize(Policy = "admin.brands.index")]
         public async Task<IActionResult> Index()
         {
             var model = await db.Brands
@@ -27,7 +28,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                 .ToListAsync();
             return View(model);
         }
-
+        [Authorize(Policy = "admin.brands.details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,7 +45,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
 
             return View(brand);
         }
-
+        [Authorize(Policy = "admin.brands.create")]
         public IActionResult Create()
         {
             return View();
@@ -52,6 +53,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.brands.create")]
         public async Task<IActionResult> Create([Bind("Name,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] Brand brand)
         {
             if (ModelState.IsValid)
@@ -62,7 +64,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             }
             return View(brand);
         }
-
+        [Authorize(Policy = "admin.brands.edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,6 +82,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.brands.edit")]
         public async Task<IActionResult> Edit(int id, [Bind("Name,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] Brand brand)
         {
             if (id != brand.Id)
@@ -110,6 +113,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             return View(brand);
         }
         [HttpPost]
+        [Authorize(Policy = "admin.brands.delete")]
         public IActionResult Delete([FromRoute] int id)
         {
             var entity = db.Brands.FirstOrDefault(b => b.Id == id);

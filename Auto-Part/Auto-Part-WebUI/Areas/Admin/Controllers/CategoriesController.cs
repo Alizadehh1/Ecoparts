@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Auto_Part_WebUI.Models.DataContexts;
 using Auto_Part_WebUI.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Auto_Part_WebUI.Areas.Admin.Controllers
 {
@@ -20,7 +21,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             this.db = db;
         }
 
-        // GET: Admin/Categories
+        [Authorize(Policy ="admin.categories.index")]
         public async Task<IActionResult> Index()
         {
             var eCoPartDbContext = db.Categories
@@ -29,7 +30,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             return View(await eCoPartDbContext.ToListAsync());
         }
 
-        // GET: Admin/Categories/Details/5
+        [Authorize(Policy = "admin.categories.details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -49,7 +50,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             return View(category);
         }
 
-        // GET: Admin/Categories/Create
+        [Authorize(Policy = "admin.categories.create")]
         public IActionResult Create()
         {
             var data = db.Categories
@@ -67,6 +68,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.categories.create")]
         public async Task<IActionResult> Create([Bind("Name,BrandId,ParentId,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] Category category)
         {
             if (ModelState.IsValid)
@@ -87,7 +89,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             ViewData["ParentId"] = new SelectList(data, "Id", "Name", category.ParentId);
             return View(category);
         }
-
+        [Authorize(Policy = "admin.categories.edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -108,6 +110,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "admin.categories.edit")]
         public async Task<IActionResult> Edit(int id, [Bind("Name,BrandId,ParentId,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] Category category)
         {
             if (id != category.Id)
@@ -141,6 +144,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "admin.categories.delete")]
         public IActionResult Delete([FromRoute] int id)
         {
             var entity = db.Categories.FirstOrDefault(b => b.Id == id);

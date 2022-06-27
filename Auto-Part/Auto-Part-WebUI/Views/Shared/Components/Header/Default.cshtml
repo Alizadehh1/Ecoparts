@@ -14,12 +14,11 @@
                 <span class="divider"></span>
                 <a asp-controller="home" asp-action="contact" class="contact d-lg-show"><i class="d-icon-map"></i>Bizimlə Əlaqə</a>
                 <a href="~/assets/#" class="help d-lg-show"><i class="d-icon-info"></i>Need Help,</a>
-                <a class="login-link" href="~/assets/ajax/login.html" data-toggle="login-modal">
-                    <i class="d-icon-user"></i>Daxil Ol
+                <a  asp-action="SignIn" asp-controller="account" >
+                    <i style="margin-right: 3px;" class="d-icon-user"></i>Daxil Ol
                 </a>
                 <span class="delimiter">/</span>
-                <a class="register-link ml-0" href="~/assets/ajax/login.html" data-toggle="login-modal">Qeydiyyat</a>
-                <!-- End of Login -->
+                <a class="ml-0" asp-action="Register" asp-controller="account" >Qeydiyyat</a>
             </div>
         </div>
     </div>

@@ -1,4 +1,6 @@
 ﻿using Auto_Part_WebUI.Models.Entities;
+using Auto_Part_WebUI.Models.Entities.Membership;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Auto_Part_WebUI.Models.DataContexts
 {
-    public class ECoPartDbContext : DbContext
+    public class ECoPartDbContext : IdentityDbContext<ECoPartUser, ECoPartRole, int, ECoPartUserClaim, ECoPartUserRole, ECoPartUserLogin, ECoPartRoleClaim, ECoPartUserToken>
     {
         public ECoPartDbContext(DbContextOptions options)
             : base(options)
@@ -22,13 +24,42 @@ namespace Auto_Part_WebUI.Models.DataContexts
         public DbSet<ProductType> ProductTypes { get; set; }
 
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
-            modelBuilder.Entity<ProductPricing>(e =>
+            builder.Entity<ProductPricing>(e =>
             {
                 e.HasKey(k => new { k.ProductId, k.TypeId });
+            });
+
+            builder.Entity<ECoPartUser>(e =>
+            {
+                e.ToTable("Users", "Membership");
+            });
+            builder.Entity<ECoPartRole>(e =>
+            {
+                e.ToTable("Roles", "Membership");
+            });
+            builder.Entity<ECoPartUserRole>(e =>
+            {
+                e.ToTable("UserRoles", "Membership");
+            });
+            builder.Entity<ECoPartUserClaim>(e =>
+            {
+                e.ToTable("UserClaims", "Membership");
+            });
+            builder.Entity<ECoPartRoleClaim>(e =>
+            {
+                e.ToTable("RoleClaims", "Membership");
+            });
+            builder.Entity<ECoPartUserLogin>(e =>
+            {
+                e.ToTable("UserLogins", "Membership");
+            });
+            builder.Entity<ECoPartUserToken>(e =>
+            {
+                e.ToTable("UserTokens", "Membership");
             });
         }
 

@@ -1,0 +1,67 @@
+﻿@model LoginFormModel
+@{
+    ViewData["Title"] = "Daxil ol";
+}
+
+<main class="main">
+    <nav class="breadcrumb-nav">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a href="demo1.html"><i class="d-icon-home"></i></a></li>
+                <li><a href="shop.html">EcoPart Onlayn Dükan</a></li>
+                <li>Mənim Profilim</li>
+            </ul>
+        </div>
+    </nav>
+    <div class="page-content mt-6 pb-2 mb-10">
+        <div class="container">
+            <div class="login-popup">
+                <div class="form-box">
+                    <div class="tab tab-nav-simple tab-nav-boxed form-tab">
+                        <ul class="nav nav-tabs nav-fill align-items-center border-no justify-content-center mb-5" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active border-no lh-1 ls-normal">Giriş</a>
+                            </li>
+                            <li class="delimiter">və ya</li>
+                            <li class="nav-item">
+                                <a class="nav-link border-no lh-1 ls-normal" asp-action="Register">Qeydiyyat</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="signin">
+                                <form method="post">
+                                    <div asp-validation-summary="All"></div>
+                                    @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
+                                    {
+                                        <div class="form-group mb-3">
+                                            <div class="alert alert-danger text-white">
+                                                @ViewBag.Message
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="form-group mb-3">
+                                        <input class="form-control" asp-for="Email" placeholder="E-Poçt *" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" asp-for="Password" placeholder="Şifrə *" />
+                                    </div>
+                                    <div class="form-footer">
+                                        <div class="form-checkbox">
+                                            <input type="checkbox" class="custom-checkbox" id="signin-remember"
+                                                   name="signin-remember" />
+                                            <label class="form-control-label" for="signin-remember">
+                                                Məni Yadda saxla
+                                            </label>
+                                        </div>
+                                        <a href="#" class="lost-link">Şifrəni unutmusunuz?</a>
+                                    </div>
+                                    <button class="btn btn-dark btn-block btn-rounded" type="submit">Giriş</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
