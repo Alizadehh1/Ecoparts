@@ -1,6 +1,7 @@
 using Auto_Part_WebUI.AppCode.Providers;
 using Auto_Part_WebUI.Models.DataContexts;
 using Auto_Part_WebUI.Models.Entities.Membership;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -98,6 +99,10 @@ namespace Auto_Part_WebUI
             });
 
             services.AddMediatR(this.GetType().Assembly);
+            services.AddFluentValidation(cfg =>
+            {
+                cfg.RegisterValidatorsFromAssemblies(new[] { this.GetType().Assembly });
+            });
             services.AddScoped<UserManager<ECoPartUser>>();
             services.AddScoped<SignInManager<ECoPartUser>>();
             services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
