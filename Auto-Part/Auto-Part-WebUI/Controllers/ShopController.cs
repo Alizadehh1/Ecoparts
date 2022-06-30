@@ -1,6 +1,7 @@
 ﻿using Auto_Part_WebUI.Models.DataContexts;
 using Auto_Part_WebUI.Models.Entities;
 using Auto_Part_WebUI.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,6 +19,7 @@ namespace Auto_Part_WebUI.Controllers
         {
             this.db = db;
         }
+        [Authorize(Policy = "shop.index")]
         public IActionResult Index()
         {
             var model = db.Brands
@@ -25,6 +27,7 @@ namespace Auto_Part_WebUI.Controllers
                 .ToList();
             return View(model);
         }
+        [Authorize(Policy = "shop.categories")]
         public IActionResult Categories(int id)
         {
             var model = new ShopViewModel();

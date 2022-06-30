@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace Auto_Part_WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class DashboardController : Controller
+    public class ProductsController : Controller
     {
-        [Authorize(Policy = "admin.dashboard.index")]
+        [Authorize(Policy ="admin.products.index")]
         public IActionResult Index()
         {
             return View();

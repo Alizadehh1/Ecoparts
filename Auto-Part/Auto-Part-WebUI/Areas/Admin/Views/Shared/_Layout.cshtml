@@ -173,7 +173,7 @@
                                                      src="~/admin/files/assets/images/avatar-4.jpg"
                                                      alt="Generic placeholder image">
                                                 <div class="media-body">
-                                                    <h5 class="notification-user">Alizadehh</h5>
+                                                    <h5 class="notification-user">@User.Identity.Name</h5>
                                                     <p class="notification-msg">
                                                         Lorem ipsum dolor sit amet, consectetuer
                                                         elit.
@@ -228,7 +228,7 @@
                                     <div class="dropdown-toggle" data-toggle="dropdown">
                                         <img src="~/admin/files/assets/images/avatar-4.jpg" class="img-radius"
                                              alt="User-Profile-Image">
-                                        <span>Alizadehh</span>
+                                        <span>@User.Identity.Name</span>
                                         <i class="feather icon-chevron-down"></i>
                                     </div>
                                     <ul class="show-notification profile-notification dropdown-menu"
@@ -425,6 +425,24 @@
                                         <a asp-controller="users" asp-action="index">
                                             <span class="pcoded-micon"><i class="icofont-users"></i></span>
                                             <span class="pcoded-mtext">İstifadəçilər</span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (User.HasAccess("admin.producttypes.index"))
+                                {
+                                    <li class="">
+                                        <a asp-controller="producttypes" asp-action="index">
+                                            <span class="pcoded-micon"><i class="fa-solid fa-a"></i></span>
+                                            <span class="pcoded-mtext">Məhsul Növü</span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (User.HasAccess("admin.productpartcodes.index"))
+                                {
+                                    <li class="">
+                                        <a asp-controller="productpartcodes" asp-action="index">
+                                            <span class="pcoded-micon"><i class="fa-solid fa-barcode"></i></span>
+                                            <span class="pcoded-mtext">Məhsul Kodu</span>
                                         </a>
                                     </li>
                                 }

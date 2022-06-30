@@ -13,7 +13,7 @@ namespace Auto_Part_WebUI.Models.Entities
         public virtual Category Category { get; set; }
         public string ShortDescription { get; set; }
         public string ImagePath { get; set; }
-        public ICollection<ProductPartCode> ProductPartCodes { get; set; }
         public ICollection<ProductPricing> ProductPricings { get; set; }
+        public ICollection<ProductPartCode> ProductPartCodes { get; set; }
     }
 }

@@ -14,25 +14,24 @@ using Auto_Part_WebUI.Models.Entities.Membership;
 namespace Auto_Part_WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class BrandsController : Controller
+    public class ProductTypesController : Controller
     {
         private readonly ECoPartDbContext db;
         private readonly UserManager<ECoPartUser> userManager;
 
-        public BrandsController(ECoPartDbContext db, UserManager<ECoPartUser> userManager)
+        public ProductTypesController(ECoPartDbContext db, UserManager<ECoPartUser> userManager)
         {
             this.db = db;
             this.userManager = userManager;
         }
-        [Authorize(Policy = "admin.brands.index")]
+        [Authorize(Policy = "admin.producttypes.index")]
         public async Task<IActionResult> Index()
         {
-            var model = await db.Brands
-                .Where(b => b.DeletedById == null)
-                .ToListAsync();
-            return View(model);
+            return View(await db.ProductTypes
+                .Where(pt => pt.DeletedById == null)
+                .ToListAsync());
         }
-        [Authorize(Policy = "admin.brands.details")]
+        [Authorize(Policy = "admin.producttypes.details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,35 +39,34 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var brand = await db.Brands
-                .FirstOrDefaultAsync(m => m.Id == id && m.DeletedById==null);
-            if (brand == null)
+            var productType = await db.ProductTypes
+                .FirstOrDefaultAsync(m => m.Id == id && m.DeletedById == null);
+            if (productType == null)
             {
                 return NotFound();
             }
 
-            return View(brand);
+            return View(productType);
         }
-        [Authorize(Policy = "admin.brands.create")]
+        [Authorize(Policy = "admin.producttypes.create")]
         public IActionResult Create()
         {
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Policy = "admin.brands.create")]
-        public async Task<IActionResult> Create([Bind("Name,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] Brand brand)
+        [Authorize(Policy = "admin.producttypes.create")]
+        public async Task<IActionResult> Create([Bind("Name,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] ProductType productType)
         {
             if (ModelState.IsValid)
             {
-                db.Add(brand);
+                db.Add(productType);
                 await db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(brand);
+            return View(productType);
         }
-        [Authorize(Policy = "admin.brands.edit")]
+        [Authorize(Policy = "admin.producttypes.edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,21 +74,20 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var brand = await db.Brands
-                .FirstOrDefaultAsync(m => m.Id == id && m.DeletedById == null);
-            if (brand == null)
+            var productType = await db.ProductTypes.FirstOrDefaultAsync(m => m.Id == id && m.DeletedById == null);
+            if (productType == null)
             {
                 return NotFound();
             }
-            return View(brand);
+            return View(productType);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Policy = "admin.brands.edit")]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] Brand brand)
+        [Authorize(Policy = "admin.producttypes.edit")]
+        public async Task<IActionResult> Edit(int id, [Bind("Name,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] ProductType productType)
         {
-            if (id != brand.Id || brand.DeletedById!=null)
+            if (id != productType.Id || productType.DeletedById == null)
             {
                 return NotFound();
             }
@@ -99,12 +96,12 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             {
                 try
                 {
-                    db.Update(brand);
+                    db.Update(productType);
                     await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BrandExists(brand.Id))
+                    if (!ProductTypeExists(productType.Id))
                     {
                         return NotFound();
                     }
@@ -115,13 +112,14 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(brand);
+            return View(productType);
         }
+
         [HttpPost]
-        [Authorize(Policy = "admin.brands.delete")]
+        [Authorize(Policy = "admin.producttypes.delete")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var entity = db.Brands.FirstOrDefault(b => b.Id == id && b.DeletedById == null);
+            var entity = db.ProductTypes.FirstOrDefault(b => b.Id == id && b.DeletedById == null);
             if (entity == null)
             {
                 return Json(new
@@ -141,9 +139,9 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             });
         }
 
-        private bool BrandExists(int id)
+        private bool ProductTypeExists(int id)
         {
-            return db.Brands.Any(e => e.Id == id);
+            return db.ProductTypes.Any(e => e.Id == id);
         }
     }
 }

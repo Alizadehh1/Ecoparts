@@ -115,7 +115,7 @@ namespace Auto_Part_WebUI.Controllers
                 user.StoreName = model.StoreName;
                 user.Name = model.Name;
                 user.Surname = model.Surname;
-                user.UserName = $"{model.Name} {model.Surname}";
+                user.UserName = $"{model.Name}.{model.Surname}";
 
                 user.PhoneNumberConfirmed = true;
                 var result = await userManager.CreateAsync(user,model.Password);

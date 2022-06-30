@@ -8,8 +8,7 @@ namespace Auto_Part_WebUI.Models.Entities
 {
     public class ProductPartCode : BaseEntity
     {
-        public int ProductId { get; set; }
-        public virtual Product Product { get; set; }
-        public int Code { get; set; }
+        public int? ProductId { get; set; }
+        public string Code { get; set; }
     }
 }

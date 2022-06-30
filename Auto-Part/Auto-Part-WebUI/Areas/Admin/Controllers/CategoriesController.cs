@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Auto_Part_WebUI.Models.DataContexts;
 using Auto_Part_WebUI.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Auto_Part_WebUI.Models.Entities.Membership;
 
 namespace Auto_Part_WebUI.Areas.Admin.Controllers
 {
@@ -15,10 +17,12 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
     public class CategoriesController : Controller
     {
         private readonly ECoPartDbContext db;
+        private readonly UserManager<ECoPartUser> userManager;
 
-        public CategoriesController(ECoPartDbContext db)
+        public CategoriesController(ECoPartDbContext db, UserManager<ECoPartUser> userManager)
         {
             this.db = db;
+            this.userManager = userManager;
         }
 
         [Authorize(Policy ="admin.categories.index")]
@@ -98,7 +102,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             }
 
             var category = await db.Categories
-                .FindAsync(id);
+                .FirstOrDefaultAsync(m => m.Id == id && m.DeletedById == null);
             if (category == null)
             {
                 return NotFound();
@@ -113,7 +117,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
         [Authorize(Policy = "admin.categories.edit")]
         public async Task<IActionResult> Edit(int id, [Bind("Name,BrandId,ParentId,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] Category category)
         {
-            if (id != category.Id)
+            if (id != category.Id || category.DeletedById != null)
             {
                 return NotFound();
             }
@@ -145,9 +149,9 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
 
         [HttpPost]
         [Authorize(Policy = "admin.categories.delete")]
-        public IActionResult Delete([FromRoute] int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var entity = db.Categories.FirstOrDefault(b => b.Id == id);
+            var entity = db.Categories.FirstOrDefault(b => b.Id == id && b.DeletedById==null);
             if (entity == null)
             {
                 return Json(new
@@ -164,7 +168,8 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                     message = "Ana Kateqoriyanı Silmək Olmaz!"
                 });
             }
-            entity.DeletedById = 1; //todo
+            var user = await userManager.GetUserAsync(User);
+            entity.DeletedById = user.Id;
             entity.DeletedDate = DateTime.UtcNow.AddHours(4);
             db.SaveChanges();
             return Json(new

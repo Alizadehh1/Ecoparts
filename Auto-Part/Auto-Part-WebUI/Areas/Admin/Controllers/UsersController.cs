@@ -54,6 +54,29 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "admin.users.delete")]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            var entity = db.Users.FirstOrDefault(u => u.Id == id);
+            if (entity == null)
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = "Movcud deyil"
+                });
+            }
+            //entity.DeletedById = 1; //todo
+            //entity.DeletedDate = DateTime.UtcNow.AddHours(4);
+            db.SaveChanges();
+            return Json(new
+            {
+                error = false,
+                message = "Ugurla silindi"
+            });
+        }
+
+        [HttpPost]
         [Route("/user-set-role")]
         [Authorize("admin.users.setrole")]
         public async Task<IActionResult> SetRole(int userId, int roleId, bool selected)

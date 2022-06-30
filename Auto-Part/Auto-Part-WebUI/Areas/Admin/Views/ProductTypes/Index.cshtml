@@ -1,14 +1,13 @@
-﻿@model IEnumerable<ECoPartUser>
+﻿@model IEnumerable<ProductType>
 @{
     ViewData["Title"] = "Index";
 }
-
 <div class="page-header">
     <div class="row align-items-end">
         <div class="col-lg-8">
             <div class="page-header-title">
                 <div class="d-inline">
-                    <h4>İstifadəçilərin Siyahısı</h4>
+                    <h4>List Of Product Type</h4>
                     @*<span>
                             lorem ipsum dolor sit amet, consectetur adipisicing
                             elit
@@ -23,7 +22,7 @@
                         <a asp-action="index" asp-controller="dashboard"> <i class="feather icon-home"></i> </a>
                     </li>
                     <li class="breadcrumb-item" style="float: left;">
-                        <a href="#!">İstifadəçilər</a>
+                        <a href="#!">Product Type</a>
                     </li>
                 </ul>
             </div>
@@ -33,7 +32,7 @@
 <div class="page-body">
     <div class="card">
         <div class="card-header">
-            <h5>İstifadəçilər</h5>
+            <h5>Product Type</h5>
         </div>
         <div class="card-block table-border-style">
             <div class="table-responsive">
@@ -41,26 +40,11 @@
                     <thead>
                         <tr>
                             <th>
-                                Ad
+                                @Html.DisplayNameFor(model => model.Name)
                             </th>
-                            <th>
-                                Soyad
+                            <th class="actionBtns">
+                                <a asp-action="Create" class="btn btn-success btn-icon"><i class="icofont-plus"></i></a>
                             </th>
-                            <th>
-                                İstifadəçi Adı
-                            </th>
-                            <th>
-                                Elektron Poçt
-                            </th>
-                            <th>
-                                Elektron Poçt Təsdiqi
-                            </th>
-                            @*@if (User.HasAccess("admin.users.create"))
-                            {
-                                <th class="actionBtns">
-                                    <a asp-action="Create" class="btn btn-success btn-icon"><i class="icofont-plus"></i></a>
-                                </th>
-                            }*@
                         </tr>
                     </thead>
                     <tbody>
@@ -68,39 +52,14 @@
                         {
                             <tr data-entity-id="@item.Id">
                                 <td>
-                                    @item.Name
-                                </td>
-                                <td>
-                                    @item.Surname
-                                </td>
-                                <td>
-                                    @item.UserName
-                                </td>
-                                <td>
-                                    @item.Email
-                                </td>
-                                <td>
-                                    @if (item.EmailConfirmed)
-                                    {
-                                        <span class="badge badge-success">Təsdiqlənib</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge badge-warning">Təsdiq Gözləyir</span>
-                                    }
+                                    @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td class="actionBtns">
-                                    @if (User.HasAccess("admin.users.details"))
-                                    {
-                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-icon"><i class="icofont icofont-eye-alt"></i></a>
-                                    }
-                                    @if (User.HasAccess("admin.users.delete"))
-                                    {
-                                        <a onclick="removeEntity(event,@item.Id, '@item.UserName')" class="btn btn-danger btn-icon">
-                                            <i class="icofont-trash"></i>
-                                        </a>
-                                    }
-
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-icon"><i class="icofont-pencil-alt-5"></i></a> |
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-icon"><i class="icofont icofont-eye-alt"></i></a> |
+                                    <a onclick="removeEntity(event,@item.Id,'@item.Name')" class="btn btn-danger btn-icon">
+                                        <i class="icofont-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
                         }
@@ -114,10 +73,10 @@
 @section js{
     <script src="~/libs/sweetalert/sweetalert.min.js"></script>
     <script>
-        function removeEntity(ev, entityId, username) {
+        function removeEntity(ev, entityId, name) {
             swal({
-                title: "Əminsən?",
-                text: `${username} adlı istifadəçi silinəcək, Əminsən?`,
+                title: "Are you sure?",
+                text: `${name} will be deleted, Are you sure?`,
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,

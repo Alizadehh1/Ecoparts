@@ -1,6 +1,7 @@
 using Auto_Part_WebUI.AppCode.Providers;
 using Auto_Part_WebUI.Models.DataContexts;
 using Auto_Part_WebUI.Models.Entities.Membership;
+using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -96,6 +97,7 @@ namespace Auto_Part_WebUI
                 
             });
 
+            services.AddMediatR(this.GetType().Assembly);
             services.AddScoped<UserManager<ECoPartUser>>();
             services.AddScoped<SignInManager<ECoPartUser>>();
             services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
