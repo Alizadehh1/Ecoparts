@@ -4,14 +4,16 @@ using Auto_Part_WebUI.Models.DataContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Auto_Part_WebUI.Migrations
 {
     [DbContext(typeof(ECoPartDbContext))]
-    partial class ECoPartDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220702042558_productPartCodeVolIDK")]
+    partial class productPartCodeVolIDK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -354,7 +356,7 @@ namespace Auto_Part_WebUI.Migrations
                     b.Property<string>("PartCodeIds")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PartCodeName")
+                    b.Property<string>("PartCodeValues")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShortDescription")

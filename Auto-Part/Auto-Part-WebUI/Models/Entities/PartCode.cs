@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Auto_Part_WebUI.Models.Entities
 {
-    public class ProductPartCode : BaseEntity
+    public class PartCode : BaseEntity
     {
-        public int? ProductId { get; set; }
-        public string Code { get; set; }
+        public string Name { get; set; }
     }
 }

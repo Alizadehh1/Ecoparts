@@ -87,7 +87,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
         [Authorize(Policy = "admin.producttypes.edit")]
         public async Task<IActionResult> Edit(int id, [Bind("Name,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] ProductType productType)
         {
-            if (id != productType.Id || productType.DeletedById == null)
+            if (id != productType.Id || productType.DeletedById != null)
             {
                 return NotFound();
             }

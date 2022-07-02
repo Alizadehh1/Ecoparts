@@ -22,6 +22,8 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
         public int CategoryId { get; set; }
         public string ShortDescription { get; set; }
         public ProductPricing[] Pricing { get; set; }
+        public string Values { get; set; }
+        public string Ids { get; set; }
         public IFormFile File { get; set; }
         public string ImagePath { get; set; }
         public class ProductCreateCommandHandler : IRequestHandler<ProductCreateCommand, ProductCreateCommandResponse>
@@ -69,23 +71,18 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
                 product.Name = request.Name;
                 product.CategoryId = request.CategoryId;
                 product.ShortDescription = request.ShortDescription;
-                //if (request.)
-                //{
+                
 
-                //}
-                //if (request.Specification != null && request.Specification.Length > 0)
-                //{
-                //    product.Specifications = new List<ProductSpecification>();
 
-                //    foreach (var spec in request.Specification)
-                //    {
-                //        product.Specifications.Add(new ProductSpecification
-                //        {
-                //            SpecificationId = spec.Id,
-                //            Value = spec.Value
-                //        });
-                //    }
-                //}
+                if (request.Values != null && request.Values.Length > 0)
+                {
+                    product.PartCodeName = request.Values;
+                }
+
+                if (request.Ids != null && request.Ids.Length > 0)
+                {
+                    product.PartCodeIds = request.Ids;
+                }
 
                 string fileExtension = Path.GetExtension(request.File.FileName);
                 string name = $"product-{Guid.NewGuid()}{fileExtension}";
@@ -94,15 +91,15 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
                 {
                     await request.File.CopyToAsync(fs, cancellationToken);
                 }
-
+                product.ImagePath = name;
 
                 if (request.Pricing != null && request.Pricing.Length > 0)
                 {
-                    product.ProductPricings = new List<Models.Entities.ProductPricing>();
+                    product.Pricings = new List<Models.Entities.ProductPricing>();
 
                     foreach (var pricing in request.Pricing)
                     {
-                        product.ProductPricings.Add(new Models.Entities.ProductPricing
+                        product.Pricings.Add(new Models.Entities.ProductPricing
                         {
                             TypeId = pricing.TypeId,
                             Price = pricing.Price
