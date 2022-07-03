@@ -23,7 +23,12 @@ namespace Auto_Part_WebUI.Controllers
         [Authorize(Policy = "shop.index")]
         public IActionResult Index()
         {
-            var model = db.Brands
+            var model = new ShopIndexViewModel();
+            model.Brands = db.Brands
+                .Where(b => b.DeletedById == null)
+                .ToList();
+            model.Products = db.Products
+                .Include(p => p.Category)
                 .Where(b => b.DeletedById == null)
                 .ToList();
             return View(model);
@@ -49,13 +54,17 @@ namespace Auto_Part_WebUI.Controllers
         [Authorize(Policy = "shop.categories")]
         public IActionResult Categories(int id)
         {
-            var model = new ShopViewModel();
+            var model = new ShopIndexViewModel();
             model.Categories=db.Categories
                 .Include(c => c.Children)
                 .Where(c => c.BrandId == id && c.DeletedById == null)
                 .ToList();
             ViewBag.Brand = db.Brands
                 .Where(c=>c.Id==id && c.DeletedById==null)
+                .ToList();
+            model.Products = db.Products
+                .Include(p => p.Category)
+                .Where(b => b.DeletedById == null && b.Category.Brand.Id==id)
                 .ToList();
             return View(model);
         }

@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Auto_Part_WebUI.Models.ViewModels
 {
-    public class ShopViewModel
+    public class ShopIndexViewModel
     {
         public List<Category> Categories { get; set; }
         public List<Brand> Brands { get; set; }
+        public List<Product> Products { get; set; }
     }
 }
