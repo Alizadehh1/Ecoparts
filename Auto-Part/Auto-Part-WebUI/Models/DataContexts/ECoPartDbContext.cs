@@ -19,7 +19,7 @@ namespace Auto_Part_WebUI.Models.DataContexts
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductPartCode> ProductPartCodes { get; set; }
+        public DbSet<PartCode> PartCodes { get; set; }
         public DbSet<ProductPricing> ProductPricings { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
 
@@ -32,6 +32,10 @@ namespace Auto_Part_WebUI.Models.DataContexts
             {
                 e.HasKey(k => new { k.ProductId, k.TypeId });
             });
+            //builder.Entity<ProductPartCode>(e =>
+            //{
+            //    e.HasKey(k => new { k.ProductId, k.PartCodeId });
+            //});
 
             builder.Entity<ECoPartUser>(e =>
             {

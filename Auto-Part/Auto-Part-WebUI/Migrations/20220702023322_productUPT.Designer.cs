@@ -4,14 +4,16 @@ using Auto_Part_WebUI.Models.DataContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Auto_Part_WebUI.Migrations
 {
     [DbContext(typeof(ECoPartDbContext))]
-    partial class ECoPartDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220702023322_productUPT")]
+    partial class productUPT
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -345,20 +347,14 @@ namespace Auto_Part_WebUI.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ForSearch")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PartCodeIds")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PartCodeName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PartCodeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ShortDescription")
                         .HasColumnType("nvarchar(max)");
@@ -368,6 +364,8 @@ namespace Auto_Part_WebUI.Migrations
                     b.HasIndex("BrandId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("PartCodeId");
 
                     b.ToTable("Products");
                 });
@@ -512,7 +510,15 @@ namespace Auto_Part_WebUI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Auto_Part_WebUI.Models.Entities.PartCode", "PartCode")
+                        .WithMany()
+                        .HasForeignKey("PartCodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("PartCode");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.ProductPricing", b =>

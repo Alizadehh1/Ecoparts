@@ -14,25 +14,25 @@ using Auto_Part_WebUI.Models.Entities.Membership;
 namespace Auto_Part_WebUI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ProductPartCodesController : Controller
+    public class PartCodesController : Controller
     {
         private readonly ECoPartDbContext db;
         private readonly UserManager<ECoPartUser> userManager;
 
-        public ProductPartCodesController(ECoPartDbContext db, UserManager<ECoPartUser> userManager)
+        public PartCodesController(ECoPartDbContext db, UserManager<ECoPartUser> userManager)
         {
             this.db = db;
             this.userManager = userManager;
         }
-        [Authorize(Policy = "admin.productpartcodes.index")]
+        [Authorize(Policy = "admin.partcodes.index")]
         public async Task<IActionResult> Index()
         {
-            
-            return View(await db.ProductPartCodes
-                .Where(ppc=>ppc.DeletedById==null)
+
+            return View(await db.PartCodes
+                .Where(ppc => ppc.DeletedById == null)
                 .ToListAsync());
         }
-        [Authorize(Policy = "admin.productpartcodes.details")]
+        [Authorize(Policy = "admin.partcodes.details")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,8 +40,8 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var productPartCode = await db.ProductPartCodes
-                .FirstOrDefaultAsync(m => m.Id == id && m.DeletedById==null);
+            var productPartCode = await db.PartCodes
+                .FirstOrDefaultAsync(m => m.Id == id && m.DeletedById == null);
             if (productPartCode == null)
             {
                 return NotFound();
@@ -49,28 +49,26 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
 
             return View(productPartCode);
         }
-        [Authorize(Policy = "admin.productpartcodes.create")]
+        [Authorize(Policy = "admin.partcodes.create")]
         public IActionResult Create()
         {
-            ViewData["ProductId"] = new SelectList(db.Products, "Id", "Id");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Policy = "admin.productpartcodes.create")]
-        public async Task<IActionResult> Create([Bind("ProductId,Code,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] ProductPartCode productPartCode)
+        [Authorize(Policy = "admin.partcodes.create")]
+        public async Task<IActionResult> Create(PartCode partCode)
         {
             if (ModelState.IsValid)
             {
-                db.Add(productPartCode);
+                db.Add(partCode);
                 await db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(db.Products, "Id", "Id", productPartCode.ProductId);
-            return View(productPartCode);
+            return View(partCode);
         }
-        [Authorize(Policy = "admin.productpartcodes.edit")]
+        [Authorize(Policy = "admin.partcodes.edit")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,22 +76,21 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var productPartCode = await db.ProductPartCodes
+            var partCode = await db.PartCodes
                 .FirstOrDefaultAsync(m => m.Id == id && m.DeletedById == null);
-            if (productPartCode == null)
+            if (partCode == null)
             {
                 return NotFound();
             }
-            ViewData["ProductId"] = new SelectList(db.Products, "Id", "Id", productPartCode.ProductId);
-            return View(productPartCode);
+            return View(partCode);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Policy = "admin.productpartcodes.edit")]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Code,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] ProductPartCode productPartCode)
+        [Authorize(Policy = "admin.partcodes.edit")]
+        public async Task<IActionResult> Edit(int id, [Bind("Name,Id,CreatedById,CreatedDate,DeletedById,DeletedDate")] PartCode partCode)
         {
-            if (id != productPartCode.Id || productPartCode.DeletedById == null)
+            if (id != partCode.Id || partCode.DeletedById != null)
             {
                 return NotFound();
             }
@@ -102,12 +99,12 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             {
                 try
                 {
-                    db.Update(productPartCode);
+                    db.Update(partCode);
                     await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductPartCodeExists(productPartCode.Id))
+                    if (!ProductPartCodeExists(partCode.Id))
                     {
                         return NotFound();
                     }
@@ -118,15 +115,15 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(db.Products, "Id", "Id", productPartCode.ProductId);
-            return View(productPartCode);
+
+            return View(partCode);
         }
 
         [HttpPost]
-        [Authorize(Policy = "admin.productpartcodes.delete")]
+        [Authorize(Policy = "admin.partcodes.delete")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            var entity = db.ProductPartCodes.FirstOrDefault(b => b.Id == id && b.DeletedById == null);
+            var entity = db.PartCodes.FirstOrDefault(b => b.Id == id && b.DeletedById == null);
             if (entity == null)
             {
                 return Json(new
@@ -148,7 +145,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
 
         private bool ProductPartCodeExists(int id)
         {
-            return db.ProductPartCodes.Any(e => e.Id == id);
+            return db.PartCodes.Any(e => e.Id == id);
         }
     }
 }
