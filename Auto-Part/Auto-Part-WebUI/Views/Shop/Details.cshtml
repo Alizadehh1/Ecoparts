@@ -84,12 +84,13 @@
                             {
                                 if (item.ProductId == Model.Id)
                                 {
-                                    foreach (var type in ViewBag)
+                                    foreach (var type in ViewBag.Name)
                                     {
                                         if (item.TypeId == type.Id)
-                                        {
-                                            <a class="size" href="#">@type.Name</a>
-                                        }
+                                            {
+
+                                            }
+                                        <a class="size" href="#">@type</a>
                                     }
                                 }
                             }*@

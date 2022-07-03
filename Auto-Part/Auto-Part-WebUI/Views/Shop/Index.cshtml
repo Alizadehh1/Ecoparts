@@ -1,4 +1,4 @@
-﻿@model List<Brand>
+﻿@model ShopIndexViewModel
     <nav class="breadcrumb-nav">
         <div class="container">
             <ul class="breadcrumb">
@@ -19,7 +19,7 @@
                             <div class="widget widget-collapsible">
                                 <h3 class="widget-title">Markalar</h3>
                                 <ul class="widget-body filter-items search-ul">
-                                    @foreach (var item in Model)
+                                    @foreach (var item in Model.Brands)
                                     {
                                         <li><a asp-action="categories" asp-route-id="@item.Id">@item.Name</a></li>
                                     }
@@ -266,510 +266,42 @@
                         </div>
                     </nav>
                     <div class="row cols-2 cols-sm-3 product-wrapper">
-                        <div class="product-wrap">
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="demo23-product.html">
-                                        <img src="~/assets/images/demos/demo23/products/1.jpg" alt="product" width="234"
-                                             height="259">
-                                    </a>
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                                           data-target="#addCartModal" title="Add to cart">
-                                            <i class="d-icon-bag"></i>
+                        @foreach (var item in Model.Products)
+                        {
+                            <div class="product-wrap">
+                                <div class="product text-center">
+                                    <figure class="product-media">
+                                        <a asp-action="details" asp-route-id="@item.Id">
+                                            <img src="~/uploads/images/@item.ImagePath" alt="product" width="234"
+                                                 height="259">
                                         </a>
-                                        <a href="#" class="btn-product-icon btn-wishlist"
-                                           title="Add to wishlist"><i class="d-icon-heart"></i></a>
-                                    </div>
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-quickview" title="Quick View">
-                                            Quick
-                                            View
-                                        </a>
-                                    </div>
-                                </figure>
-                                <div class="product-details">
-                                    <div class="product-cat">
-                                        <a href="demo23-shop.html">categories</a>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="demo23-product.html">Flash Disk USB 2.0</a>
-                                    </h3>
-                                    <div class="product-price">
-                                        <span class="price">$35.00</span>
-                                    </div>
-                                    <div class="ratings-container">
-                                        <div class="ratings-full">
-                                            <span class="ratings" style="width:100%"></span>
-                                            <span class="tooltiptext tooltip-top"></span>
+                                        <div class="product-action-vertical">
+                                            <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
+                                               data-target="#addCartModal" title="Add to cart">
+                                                <i class="d-icon-bag"></i>
+                                            </a>
                                         </div>
-                                        <a href="demo23-product.html" class="rating-reviews">( 6 )</a>
+                                        <div class="product-action">
+                                            <a href="#" class="btn-product btn-quickview" title="Quick View">
+                                                Quick
+                                                View
+                                            </a>
+                                        </div>
+                                    </figure>
+                                    <div class="product-details">
+                                        <div class="product-cat">
+                                            <a href="demo23-shop.html">@item.Category.Name</a>
+                                        </div>
+                                        <h3 class="product-name">
+                                            <a asp-action="details" asp-route-id="@item.Id">@item.Name</a>
+                                        </h3>
+                                        <div class="product-price">
+                                            <span class="price">$35.00</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="product-wrap">
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="demo23-product.html">
-                                        <img src="~/assets/images/demos/demo23/products/2.jpg" alt="product" width="234"
-                                             height="259">
-                                    </a>
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                                           data-target="#addCartModal" title="Add to cart">
-                                            <i class="d-icon-bag"></i>
-                                        </a>
-                                        <a href="#" class="btn-product-icon btn-wishlist"
-                                           title="Add to wishlist"><i class="d-icon-heart"></i></a>
-                                    </div>
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-quickview" title="Quick View">
-                                            Quick
-                                            View
-                                        </a>
-                                    </div>
-                                </figure>
-                                <div class="product-details">
-                                    <div class="product-cat">
-                                        <a href="demo23-shop.html">categories</a>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="demo23-product.html">Fashion Training Shoes</a>
-                                    </h3>
-                                    <div class="product-price">
-                                        <span class="price">$35.00</span>
-                                    </div>
-                                    <div class="ratings-container">
-                                        <div class="ratings-full">
-                                            <span class="ratings" style="width:100%"></span>
-                                            <span class="tooltiptext tooltip-top"></span>
-                                        </div>
-                                        <a href="demo23-product.html" class="rating-reviews">( 6 )</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-wrap">
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="demo23-product.html">
-                                        <img src="~/assets/images/demos/demo23/products/3.jpg" alt="product" width="234"
-                                             height="259">
-                                    </a>
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                                           data-target="#addCartModal" title="Add to cart">
-                                            <i class="d-icon-bag"></i>
-                                        </a>
-                                        <a href="#" class="btn-product-icon btn-wishlist"
-                                           title="Add to wishlist"><i class="d-icon-heart"></i></a>
-                                    </div>
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-quickview" title="Quick View">
-                                            Quick
-                                            View
-                                        </a>
-                                    </div>
-                                </figure>
-                                <div class="product-details">
-                                    <div class="product-cat">
-                                        <a href="demo23-shop.html">categories</a>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="demo23-product.html">Official Knife</a>
-                                    </h3>
-                                    <div class="product-price">
-                                        <span class="price">$35.00</span>
-                                    </div>
-                                    <div class="ratings-container">
-                                        <div class="ratings-full">
-                                            <span class="ratings" style="width:100%"></span>
-                                            <span class="tooltiptext tooltip-top"></span>
-                                        </div>
-                                        <a href="demo23-product.html" class="rating-reviews">( 6 )</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-wrap">
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="demo23-product.html">
-                                        <img src="~/assets/images/demos/demo23/products/4.jpg" alt="product" width="234"
-                                             height="259">
-                                    </a>
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                                           data-target="#addCartModal" title="Add to cart">
-                                            <i class="d-icon-bag"></i>
-                                        </a>
-                                        <a href="#" class="btn-product-icon btn-wishlist"
-                                           title="Add to wishlist"><i class="d-icon-heart"></i></a>
-                                    </div>
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-quickview" title="Quick View">
-                                            Quick
-                                            View
-                                        </a>
-                                    </div>
-                                </figure>
-                                <div class="product-details">
-                                    <div class="product-cat">
-                                        <a href="demo23-shop.html">categories</a>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="demo23-product.html">SAMSUNG Galaxy S5</a>
-                                    </h3>
-                                    <div class="product-price">
-                                        <span class="price">$35.00</span>
-                                    </div>
-                                    <div class="ratings-container">
-                                        <div class="ratings-full">
-                                            <span class="ratings" style="width:100%"></span>
-                                            <span class="tooltiptext tooltip-top"></span>
-                                        </div>
-                                        <a href="demo23-product.html" class="rating-reviews">( 6 )</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-wrap">
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="demo23-product.html">
-                                        <img src="~/assets/images/demos/demo23/products/5.jpg" alt="product" width="234"
-                                             height="259">
-                                    </a>
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                                           data-target="#addCartModal" title="Add to cart">
-                                            <i class="d-icon-bag"></i>
-                                        </a>
-                                        <a href="#" class="btn-product-icon btn-wishlist"
-                                           title="Add to wishlist"><i class="d-icon-heart"></i></a>
-                                    </div>
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-quickview" title="Quick View">
-                                            Quick
-                                            View
-                                        </a>
-                                    </div>
-                                </figure>
-                                <div class="product-details">
-                                    <div class="product-cat">
-                                        <a href="demo23-shop.html">categories</a>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="demo23-product.html">Toilet Powder</a>
-                                    </h3>
-                                    <div class="product-price">
-                                        <span class="price">$35.00</span>
-                                    </div>
-                                    <div class="ratings-container">
-                                        <div class="ratings-full">
-                                            <span class="ratings" style="width:100%"></span>
-                                            <span class="tooltiptext tooltip-top"></span>
-                                        </div>
-                                        <a href="demo23-product.html" class="rating-reviews">( 6 )</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-wrap">
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="demo23-product.html">
-                                        <img src="~/assets/images/demos/demo23/products/6.jpg" alt="product" width="234"
-                                             height="259">
-                                    </a>
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                                           data-target="#addCartModal" title="Add to cart">
-                                            <i class="d-icon-bag"></i>
-                                        </a>
-                                        <a href="#" class="btn-product-icon btn-wishlist"
-                                           title="Add to wishlist"><i class="d-icon-heart"></i></a>
-                                    </div>
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-quickview" title="Quick View">
-                                            Quick
-                                            View
-                                        </a>
-                                    </div>
-                                </figure>
-                                <div class="product-details">
-                                    <div class="product-cat">
-                                        <a href="demo23-shop.html">categories</a>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="demo23-product.html">Bluetooth Speaker</a>
-                                    </h3>
-                                    <div class="product-price">
-                                        <span class="price">$35.00</span>
-                                    </div>
-                                    <div class="ratings-container">
-                                        <div class="ratings-full">
-                                            <span class="ratings" style="width:100%"></span>
-                                            <span class="tooltiptext tooltip-top"></span>
-                                        </div>
-                                        <a href="demo23-product.html" class="rating-reviews">( 6 )</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-wrap">
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="demo23-product.html">
-                                        <img src="~/assets/images/demos/demo23/products/7.jpg" alt="product" width="234"
-                                             height="259">
-                                    </a>
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                                           data-target="#addCartModal" title="Add to cart">
-                                            <i class="d-icon-bag"></i>
-                                        </a>
-                                        <a href="#" class="btn-product-icon btn-wishlist"
-                                           title="Add to wishlist"><i class="d-icon-heart"></i></a>
-                                    </div>
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-quickview" title="Quick View">
-                                            Quick
-                                            View
-                                        </a>
-                                    </div>
-                                </figure>
-                                <div class="product-details">
-                                    <div class="product-cat">
-                                        <a href="demo23-shop.html">categories</a>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="demo23-product.html">Sports Watch</a>
-                                    </h3>
-                                    <div class="product-price">
-                                        <span class="price">$35.00</span>
-                                    </div>
-                                    <div class="ratings-container">
-                                        <div class="ratings-full">
-                                            <span class="ratings" style="width:100%"></span>
-                                            <span class="tooltiptext tooltip-top"></span>
-                                        </div>
-                                        <a href="demo23-product.html" class="rating-reviews">( 6 )</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-wrap">
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="demo23-product.html">
-                                        <img src="~/assets/images/demos/demo23/products/20.jpg" alt="product" width="234"
-                                             height="259">
-                                    </a>
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                                           data-target="#addCartModal" title="Add to cart">
-                                            <i class="d-icon-bag"></i>
-                                        </a>
-                                        <a href="#" class="btn-product-icon btn-wishlist"
-                                           title="Add to wishlist"><i class="d-icon-heart"></i></a>
-                                    </div>
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-quickview" title="Quick View">
-                                            Quick
-                                            View
-                                        </a>
-                                    </div>
-                                </figure>
-                                <div class="product-details">
-                                    <div class="product-cat">
-                                        <a href="demo23-shop.html">categories</a>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="demo23-product.html">Super Sound Speaker</a>
-                                    </h3>
-                                    <div class="product-price">
-                                        <span class="price">$35.00</span>
-                                    </div>
-                                    <div class="ratings-container">
-                                        <div class="ratings-full">
-                                            <span class="ratings" style="width:100%"></span>
-                                            <span class="tooltiptext tooltip-top"></span>
-                                        </div>
-                                        <a href="demo23-product.html" class="rating-reviews">( 6 )</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-wrap">
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="demo23-product.html">
-                                        <img src="~/assets/images/demos/demo23/products/9.jpg" alt="product" width="234"
-                                             height="259">
-                                    </a>
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                                           data-target="#addCartModal" title="Add to cart">
-                                            <i class="d-icon-bag"></i>
-                                        </a>
-                                        <a href="#" class="btn-product-icon btn-wishlist"
-                                           title="Add to wishlist"><i class="d-icon-heart"></i></a>
-                                    </div>
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-quickview" title="Quick View">
-                                            Quick
-                                            View
-                                        </a>
-                                    </div>
-                                </figure>
-                                <div class="product-details">
-                                    <div class="product-cat">
-                                        <a href="demo23-shop.html">categories</a>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="demo23-product.html">iPad 8 inchi</a>
-                                    </h3>
-                                    <div class="product-price">
-                                        <span class="price">$35.00</span>
-                                    </div>
-                                    <div class="ratings-container">
-                                        <div class="ratings-full">
-                                            <span class="ratings" style="width:100%"></span>
-                                            <span class="tooltiptext tooltip-top"></span>
-                                        </div>
-                                        <a href="demo23-product.html" class="rating-reviews">( 6 )</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-wrap">
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="demo23-product.html">
-                                        <img src="~/assets/images/demos/demo23/products/10.jpg" alt="product" width="234"
-                                             height="259">
-                                    </a>
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                                           data-target="#addCartModal" title="Add to cart">
-                                            <i class="d-icon-bag"></i>
-                                        </a>
-                                        <a href="#" class="btn-product-icon btn-wishlist"
-                                           title="Add to wishlist"><i class="d-icon-heart"></i></a>
-                                    </div>
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-quickview" title="Quick View">
-                                            Quick
-                                            View
-                                        </a>
-                                    </div>
-                                </figure>
-                                <div class="product-details">
-                                    <div class="product-cat">
-                                        <a href="demo23-shop.html">categories</a>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="demo23-product.html">Sports Watch</a>
-                                    </h3>
-                                    <div class="product-price">
-                                        <span class="price">$35.00</span>
-                                    </div>
-                                    <div class="ratings-container">
-                                        <div class="ratings-full">
-                                            <span class="ratings" style="width:100%"></span>
-                                            <span class="tooltiptext tooltip-top"></span>
-                                        </div>
-                                        <a href="demo23-product.html" class="rating-reviews">( 6 )</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-wrap">
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="demo23-product.html">
-                                        <img src="~/assets/images/demos/demo23/products/11.jpg" alt="product" width="234"
-                                             height="259">
-                                    </a>
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                                           data-target="#addCartModal" title="Add to cart">
-                                            <i class="d-icon-bag"></i>
-                                        </a>
-                                        <a href="#" class="btn-product-icon btn-wishlist"
-                                           title="Add to wishlist"><i class="d-icon-heart"></i></a>
-                                    </div>
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-quickview" title="Quick View">
-                                            Quick
-                                            View
-                                        </a>
-                                    </div>
-                                </figure>
-                                <div class="product-details">
-                                    <div class="product-cat">
-                                        <a href="demo23-shop.html">categories</a>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="demo23-product.html">Apple Sports Watch</a>
-                                    </h3>
-                                    <div class="product-price">
-                                        <span class="price">$35.00</span>
-                                    </div>
-                                    <div class="ratings-container">
-                                        <div class="ratings-full">
-                                            <span class="ratings" style="width:100%"></span>
-                                            <span class="tooltiptext tooltip-top"></span>
-                                        </div>
-                                        <a href="demo23-product.html" class="rating-reviews">( 6 )</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-wrap">
-                            <div class="product text-center">
-                                <figure class="product-media">
-                                    <a href="demo23-product.html">
-                                        <img src="~/assets/images/demos/demo23/products/12.jpg" alt="product" width="234"
-                                             height="259">
-                                    </a>
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                                           data-target="#addCartModal" title="Add to cart">
-                                            <i class="d-icon-bag"></i>
-                                        </a>
-                                        <a href="#" class="btn-product-icon btn-wishlist"
-                                           title="Add to wishlist"><i class="d-icon-heart"></i></a>
-                                    </div>
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-quickview" title="Quick View">
-                                            Quick
-                                            View
-                                        </a>
-                                    </div>
-                                </figure>
-                                <div class="product-details">
-                                    <div class="product-cat">
-                                        <a href="demo23-shop.html">categories</a>
-                                    </div>
-                                    <h3 class="product-name">
-                                        <a href="demo23-product.html">Huawei SmartPhone</a>
-                                    </h3>
-                                    <div class="product-price">
-                                        <span class="price">$35.00</span>
-                                    </div>
-                                    <div class="ratings-container">
-                                        <div class="ratings-full">
-                                            <span class="ratings" style="width:100%"></span>
-                                            <span class="tooltiptext tooltip-top"></span>
-                                        </div>
-                                        <a href="demo23-product.html" class="rating-reviews">( 6 )</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        }
                     </div>
                     <nav class="toolbox toolbox-pagination mb-0 pb-0">
                         <p class="show-info">Showing 1–12 of 48 Products</p>
