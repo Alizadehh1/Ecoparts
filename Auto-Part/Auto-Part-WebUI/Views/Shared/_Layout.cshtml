@@ -100,12 +100,17 @@
                             <img src="~/assets/images/demos/demo23/logo.png" alt="logo" width="153" height="44" />
                         </a>
                         <!-- End Logo -->
+                        @*<div class="header-search hs-simple">
+                                <form action="#" method="get" class="input-wrapper">
 
+                                    <input type="text" class="form-control" name="search" id="search"
+                                           placeholder="Axtardığınız məhsulun kodunu daxil edin ..." required="">
+                                    <button class="btn btn-search" type="submit"><i class="d-icon-search"></i></button>
+                                </form>
+                            </div>*@
                         <div class="header-search hs-simple">
-                            <form action="#" method="get" class="input-wrapper">
-
-                                <input type="text" class="form-control" name="search" id="search"
-                                       placeholder="Axtardığınız məhsulun kodunu daxil edin ..." required="">
+                            <form method="get" asp-controller="Shop" asp-action="Search">
+                                <input type="text" class="form-control" id="search" name="query" placeholder="Search">
                                 <button class="btn btn-search" type="submit"><i class="d-icon-search"></i></button>
                             </form>
                         </div>

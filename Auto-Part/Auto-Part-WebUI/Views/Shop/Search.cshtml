@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewData["Title"] = "Search";
+}
+<style>
+    .generalblog {
+        margin-top: 40px;
+    }
+
+        .generalblog .blogimage {
+            overflow: hidden;
+            width: 324px;
+        }
+
+            .generalblog .blogimage img {
+                width: 324px;
+                height: 249px;
+                transition: 0.4s;
+            }
+
+                .generalblog .blogimage img:hover {
+                    transform: scale(1.1);
+                }
+
+        .generalblog .blogcontent {
+            background-color: #041b26;
+            padding: 35px;
+            display: inline-block;
+            width: 78%;
+            border-top: 4px solid #cfa86e;
+        }
+
+            .generalblog .blogcontent h4 {
+                color: #f3f3f3;
+                font-size: 26px;
+                margin: 0 0 15px;
+            }
+
+            .generalblog .blogcontent p {
+                color: #cbcccc;
+                font-size: 18px;
+                margin: 0 0 15px;
+            }
+
+            .generalblog .blogcontent a {
+                text-decoration: none;
+                color: #C2A86E;
+                transition: 0.5s;
+            }
+
+                .generalblog .blogcontent a:hover {
+                    color: #f3f3f3;
+                }
+
+    #products {
+        /*   margin-bottom: 27px;
+        margin-top: 116px;*/
+        padding: 170px;
+        /*background-color: #031823;*/
+    }
+</style>
+
+@model List<Product>
+
+<section id="products">
+    <div class="container">
+        <div class="row">
+            @foreach (Product product in Model)
+            {
+                @if (product.DeletedById == null)
+                {
+                    <div class="col-lg-4">
+                        <div class="generalblog">
+                            <div class="blogimage">
+                                <a asp-action="Detail" asp-controller="shop" asp-route-id="@product.Id"> <img src="~/uploads/images/@product.ImagePath" alt=""></a>
+                            </div>
+                            <div class="blogcontent">
+                                <h4>@product.Name</h4>
+                                <p>@product.ShortDescription</p>
+                                <a asp-action="Details" asp-controller="Shop" asp-route-id="@product.Id">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                }
+
+            }
+        </div>
+    </div>
+</section>
+

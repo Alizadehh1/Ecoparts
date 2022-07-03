@@ -26,6 +26,7 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
         public string Ids { get; set; }
         public IFormFile File { get; set; }
         public string ImagePath { get; set; }
+        public string ForSearch { get; set; }
         public class ProductCreateCommandHandler : IRequestHandler<ProductCreateCommand, ProductCreateCommandResponse>
         {
             readonly ECoPartDbContext db;
@@ -77,6 +78,7 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
                 if (request.Values != null && request.Values.Length > 0)
                 {
                     product.PartCodeName = request.Values;
+                    product.ForSearch = request.Name + request.Values;
                 }
 
                 if (request.Ids != null && request.Ids.Length > 0)

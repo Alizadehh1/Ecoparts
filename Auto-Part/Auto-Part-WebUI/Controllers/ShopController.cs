@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Auto_Part_WebUI.Controllers
 {
+    [Authorize(Policy = "shop")]
     public class ShopController : Controller
     {
         readonly ECoPartDbContext db;
@@ -40,9 +41,9 @@ namespace Auto_Part_WebUI.Controllers
             {
                 return NotFound();
             }
-            ViewBag.Pricings = db.ProductPricings
-                .Include(p=>p.ProductType)
-                .Where(p => p.ProductId == id);
+            ViewBag.Types = db.ProductTypes
+                .Where(t => t.DeletedById == null)
+                .ToList();
             return View(product);
         }
         [Authorize(Policy = "shop.categories")]
@@ -57,6 +58,22 @@ namespace Auto_Part_WebUI.Controllers
                 .Where(c=>c.Id==id && c.DeletedById==null)
                 .ToList();
             return View(model);
+        }
+        [Authorize(Policy = "shop.search")]
+        public async Task<IActionResult> Search(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                return RedirectToAction("Index", "Shop");
+            }
+            List<Product> products = await db.Products.Where(p => p.ForSearch.ToLower().Contains(query.ToLower())).ToListAsync();
+            return View(products);
+        }
+        [Authorize(Policy = "shop.searchPartial")]
+        public async Task<IActionResult> SearchPartial(string query)
+        {
+            List<Product> products = await db.Products.Where(p => p.ForSearch.ToLower().Contains(query.ToLower())).ToListAsync();
+            return PartialView("_SearchPartialView", products);
         }
 
     }
