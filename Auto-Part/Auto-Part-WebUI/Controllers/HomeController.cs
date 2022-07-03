@@ -21,5 +21,10 @@ namespace Auto_Part_WebUI.Controllers
         {
             return View();
         }
+
+        public IActionResult About()
+        {
+            return View();
+        }
     }
 }
