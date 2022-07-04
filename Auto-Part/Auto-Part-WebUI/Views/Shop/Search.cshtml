@@ -1,94 +1,92 @@
-﻿
+﻿@model ShopViewModel
 @{
     ViewData["Title"] = "Search";
 }
-<style>
-    .generalblog {
-        margin-top: 40px;
-    }
 
-        .generalblog .blogimage {
-            overflow: hidden;
-            width: 324px;
-        }
-
-            .generalblog .blogimage img {
-                width: 324px;
-                height: 249px;
-                transition: 0.4s;
-            }
-
-                .generalblog .blogimage img:hover {
-                    transform: scale(1.1);
-                }
-
-        .generalblog .blogcontent {
-            background-color: #041b26;
-            padding: 35px;
-            display: inline-block;
-            width: 78%;
-            border-top: 4px solid #cfa86e;
-        }
-
-            .generalblog .blogcontent h4 {
-                color: #f3f3f3;
-                font-size: 26px;
-                margin: 0 0 15px;
-            }
-
-            .generalblog .blogcontent p {
-                color: #cbcccc;
-                font-size: 18px;
-                margin: 0 0 15px;
-            }
-
-            .generalblog .blogcontent a {
-                text-decoration: none;
-                color: #C2A86E;
-                transition: 0.5s;
-            }
-
-                .generalblog .blogcontent a:hover {
-                    color: #f3f3f3;
-                }
-
-    #products {
-        /*   margin-bottom: 27px;
-        margin-top: 116px;*/
-        padding: 170px;
-        /*background-color: #031823;*/
-    }
-</style>
-
-@model List<Product>
-
-<section id="products">
+<div class="page-header"
+     style="background-image: url('/assets/images/shop/page-header-back.jpg'); background-color: #3C63A4;">
+    <h3 class="page-subtitle">Axtarışa uyğun nəticələr</h3>
+    <ul class="breadcrumb">
+        <li><a asp-controller="Home" asp-action="index"><i class="d-icon-home"></i></a></li>
+        <li class="delimiter">/</li>
+        <li>axtarış</li>
+    </ul>
+</div>
+<div class="page-content mt-10 mb-10 pb-6">
     <div class="container">
-        <div class="row">
-            @foreach (Product product in Model)
+        <div class="row cols-2 cols-sm-3 cols-md-4 product-wrapper">
+            @foreach (var item in Model.Products)
             {
-                @if (product.DeletedById == null)
-                {
-                    <div class="col-lg-4">
-                        <div class="generalblog">
-                            <div class="blogimage">
-                                <a asp-action="Detail" asp-controller="shop" asp-route-id="@product.Id"> <img src="~/uploads/images/@product.ImagePath" alt=""></a>
+                <div class="product-wrap">
+                    <div class="product">
+                        <figure class="product-media">
+                            <a asp-action="Details" asp-route-id="@item.Id">
+                                <img src="~/uploads/images/@item.ImagePath" alt="product" width="280" height="315">
+                            </a>
+                            <div class="product-label-group">
+                                <label class="product-label label-new">new</label>
                             </div>
-                            <div class="blogcontent">
-                                <h4>@product.Name</h4>
-                                <p>@product.ShortDescription</p>
-                                <a asp-action="Details" asp-controller="Shop" asp-route-id="@product.Id">Read More</a>
+                            <div class="product-action-vertical">
+                                <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
+                                   data-target="#addCartModal" title="Add to cart">
+                                    <i class="d-icon-bag"></i>
+                                </a>
+                            </div>
+                            <div class="product-action">
+                                <a href="#" class="btn-product btn-quickview" title="Quick View">
+                                    Quick
+                                    View
+                                </a>
+                            </div>
+                        </figure>
+                        <div class="product-details">
+                            <div class="product-cat">
+                                <span>@item.Category.Name</span>
+                            </div>
+                            <h3 class="product-name">
+                                <a asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                            </h3>
+                            <div class="product-price">
+                                @foreach (var price in Model.Pricings)
+                                {
+                                    if (item.Id == price.ProductId)
+                                    {
+                                        foreach (var type in Model.Types)
+                                        {
+                                            if (type.Id == price.TypeId)
+                                            {
+                                                <ins class="new-price">@price.Price&#8380;</ins>
+                                            }
+                                        }
+                                    }
+                                }
                             </div>
                         </div>
                     </div>
-
-
-
-
-                }
-
+                </div>
             }
         </div>
+        <nav class="toolbox toolbox-pagination">
+            <p class="show-info mr-sm-auto">
+                Showing 12 of 56 Products
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                        <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1"
+                           aria-disabled="true">
+                            <i class="d-icon-arrow-left"></i>Prev
+                        </a>
+                    </li>
+                    <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item page-item-dots"><a class="page-link" href="#">6</a></li>
+                    <li class="page-item">
+                        <a class="page-link page-link-next" href="#" aria-label="Next">
+                            Next<i class="d-icon-arrow-right"></i>
+                        </a>
+                    </li>
+                </ul>
+        </nav>
     </div>
-</section>
+</div>
 

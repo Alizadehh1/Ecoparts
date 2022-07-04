@@ -1,6 +1,6 @@
-﻿@model List<Product>
+﻿@model ShopViewModel
 
-@foreach (Product item in Model)
+@foreach (var item in Model.Products)
 {
     <li><a id="prod-search-list-link" asp-controller="shop" asp-action="Search" asp-route-query="@item.ForSearch">@item.ForSearch</a></li>
 }

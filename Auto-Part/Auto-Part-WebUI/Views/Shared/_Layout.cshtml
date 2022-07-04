@@ -50,7 +50,6 @@
 
     <div class="page-wrapper">
         <h1 class="d-none">Riode - Responsive eCommerce HTML Template</h1>
-        @*@await Component.InvokeAsync("Header");*@
         <header class="header">
             <div class="header-top">
                 <div class="container">
@@ -61,11 +60,9 @@
                         <div class="dropdown">
 
                         </div>
-                        <!-- End DropDown Menu -->
                         <div class="dropdown ml-5">
 
                         </div>
-                        <!-- End DropDown Menu -->
                         <span class="divider"></span>
                         <a asp-controller="home" asp-action="contact" class="contact d-lg-show"><i class="d-icon-map"></i>Bizimlə Əlaqə</a>
                         <a href="~/assets/#" class="help d-lg-show"><i class="d-icon-info"></i> Need Help</a>
@@ -85,11 +82,9 @@
                         }
 
 
-                        <!-- End of Login -->
                     </div>
                 </div>
             </div>
-            <!-- End HeaderTop -->
             <div class="header-middle sticky-header fix-top sticky-content">
                 <div class="container">
                     <div class="header-left">
@@ -99,22 +94,12 @@
                         <a asp-action="index" asp-controller="home" class="logo">
                             <img src="~/assets/images/demos/demo23/logo.png" alt="logo" width="153" height="44" />
                         </a>
-                        <!-- End Logo -->
-                        @*<div class="header-search hs-simple">
-                                <form action="#" method="get" class="input-wrapper">
-
-                                    <input type="text" class="form-control" name="search" id="search"
-                                           placeholder="Axtardığınız məhsulun kodunu daxil edin ..." required="">
-                                    <button class="btn btn-search" type="submit"><i class="d-icon-search"></i></button>
-                                </form>
-                            </div>*@
                         <div class="header-search hs-simple">
-                            <form method="get" asp-controller="Shop" asp-action="Search">
-                                <input type="text" class="form-control" id="search" name="query" placeholder="Search">
+                            <form class="input-wrapper" method="get" asp-controller="Shop" asp-action="Search">
+                                <input type="text" class="form-control" id="search" name="query" placeholder="Axtardığınız məhsulun kodunu daxil edin ...">
                                 <button class="btn btn-search" type="submit"><i class="d-icon-search"></i></button>
                             </form>
                         </div>
-                        <!-- End Header Search -->
                     </div>
                     <div class="header-right">
                         <a href="~/assets/tel:#" class="icon-box icon-box-side">
@@ -140,7 +125,6 @@
                                 <i class="d-icon-bag"><span class="cart-count">0</span></i>
                             </a>
                             <div class="cart-overlay"></div>
-                            <!-- End Cart Toggle -->
                             <div class="dropdown-box">
                                 <div class="cart-header">
                                     <h4 class="cart-title">Shopping Cart</h4>
@@ -168,7 +152,6 @@
                                         </div>
 
                                     </div>
-                                    <!-- End of Cart Product -->
                                     <div class="product product-cart">
                                         <figure class="product-media">
                                             <a href="~/assets/product.html">
@@ -190,21 +173,16 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- End of Cart Product -->
                                 </div>
-                                <!-- End of Products  -->
                                 <div class="cart-total">
                                     <label>Subtotal:</label>
                                     <span class="price">$139.00</span>
                                 </div>
-                                <!-- End of Cart Total -->
                                 <div class="cart-action">
                                     <a href="~/assets/cart.html" class="btn btn-dark btn-link">View Cart</a>
                                     <a href="~/assets/checkout.html" class="btn btn-dark"><span>Go To Checkout</span></a>
                                 </div>
-                                <!-- End of Cart Action -->
                             </div>
-                            <!-- End Dropdown Box -->
                         </div>
                         <div class="header-search hs-toggle mobile-search">
                             <a href="~/assets/#" class="search-toggle">
@@ -218,7 +196,6 @@
                                 </button>
                             </form>
                         </div>
-                        <!-- End of Header Search -->
                     </div>
                 </div>
             </div>
@@ -235,11 +212,9 @@
             </div>
         </header>
 
-        <!-- End Header -->
         <main class="main">
             @RenderBody();
         </main>
-        <!-- End Main -->
         <footer class="footer">
             <div class="container">
                 <div class="footer-top">
@@ -249,7 +224,6 @@
                                 <img src="~/assets/images/demos/demo23/logo-footer.png" alt="logo-footer" width="154"
                                      height="43" />
                             </a>
-                            <!-- End FooterLogo -->
                         </div>
                         <div class="col-lg-9">
                             <div class="widget widget-newsletter form-wrapper form-wrapper-inline">
@@ -265,11 +239,9 @@
                                     </button>
                                 </form>
                             </div>
-                            <!-- End Newsletter -->
                         </div>
                     </div>
                 </div>
-                <!-- End FooterTop -->
                 <div class="footer-middle">
                     <div class="row">
                         <div class="col-lg-3 col-md-6">
@@ -296,7 +268,6 @@
                                     </li>
                                 </ul>
                             </div>
-                            <!-- End Widget -->
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="widget ml-lg-4">
@@ -319,7 +290,6 @@
                                     </li>
                                 </ul>
                             </div>
-                            <!-- End Widget -->
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="widget ml-lg-4">
@@ -342,7 +312,6 @@
                                     </li>
                                 </ul>
                             </div>
-                            <!-- End Widget -->
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="widget widget-instagram">
@@ -374,11 +343,9 @@
                                     </div>
                                 </figure>
                             </div>
-                            <!-- End Instagram -->
                         </div>
                     </div>
                 </div>
-                <!-- End FooterMiddle -->
                 <div class="footer-bottom">
                     <div class="footer-left">
                         <figure class="payment">
@@ -396,12 +363,9 @@
                         </div>
                     </div>
                 </div>
-                <!-- End FooterBottom -->
             </div>
         </footer>
-        <!-- End Footer -->
     </div>
-    <!-- Sticky Footer -->
     <div class="sticky-footer sticky-content fix-bottom">
         <a asp-action="index" asp-controller="home" class="sticky-link active">
             <i class="d-icon-home"></i>
@@ -433,16 +397,12 @@
             </form>
         </div>
     </div>
-    <!-- Scroll Top -->
     <a id="scroll-top" href="~/assets/#top" title="Top" role="button" class="scroll-top"><i class="d-icon-arrow-up"></i></a>
 
-    <!-- MobileMenu -->
     <div class="mobile-menu-wrapper">
         <div class="mobile-menu-overlay">
         </div>
-        <!-- End Overlay -->
         <a class="mobile-menu-close" href="~/assets/#"><i class="d-icon-times"></i></a>
-        <!-- End CloseButton -->
         <div class="mobile-menu-container scrollable">
             <form action="#" class="input-wrapper">
                 <input type="text" class="form-control" name="search" autocomplete="off"
@@ -451,7 +411,6 @@
                     <i class="d-icon-search"></i>
                 </button>
             </form>
-            <!-- End Search Form -->
             <ul class="mobile-menu mmenu-anim">
                 <li>
                     <a asp-action="index" asp-controller="home">Home</a>
@@ -603,31 +562,8 @@
                 </li>
                 <li><a href="~/assets/https://d-themes.com/buynow/riodehtml">Buy Riode!</a></li>
             </ul>
-            <!-- End MobileMenu -->
         </div>
     </div>
-
-    @*<div class="newsletter-popup mfp-hide" id="newsletter-popup" style="background-image: url(images/newsletter-popup.jpg)">
-            <div class="newsletter-content">
-                <h4 class="text-uppercase text-dark">Up to <span class="text-primary">20% Off</span></h4>
-                <h2 class="font-weight-semi-bold">Sign up to <span>RIODE</span></h2>
-                <p class="text-grey">
-                    Subscribe to the Riode eCommerce newsletter to receive timely updates from your favorite
-                    products.
-                </p>
-                <form action="#" method="get" class="input-wrapper input-wrapper-inline input-wrapper-round">
-                    <input type="email" class="form-control email" name="email" id="email2" placeholder="Email address here..."
-                           required="">
-                    <button class="btn btn-dark" type="submit">SUBMIT</button>
-                </form>
-                <div class="form-checkbox justify-content-center">
-                    <input type="checkbox" class="custom-checkbox" id="hide-newsletter-popup" name="hide-newsletter-popup"
-                           required />
-                    <label for="hide-newsletter-popup">Don't show this popup again</label>
-                </div>
-            </div>
-        </div>*@
-
     <script src="~/assets/vendor/jquery/jquery.min.js"></script>
     <script src="~/assets/vendor/elevatezoom/jquery.elevatezoom.min.js"></script>
     <script src="~/assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
@@ -637,7 +573,6 @@
     <script src="~/assets/vendor/isotope/isotope.pkgd.min.js"></script>
     <script src="~/assets/vendor/jquery.plugin/jquery.plugin.min.js"></script>
     <script src="~/assets/vendor/jquery.countdown/jquery.countdown.min.js"></script>
-    <!-- Main JS File -->
     <script src="~/libs/toastr.js/toastr.min.js"></script>
     <script src="~/assets/js/main.min.js"></script>
     <script src="~/admin/files/assets/js/customize.js"></script>
