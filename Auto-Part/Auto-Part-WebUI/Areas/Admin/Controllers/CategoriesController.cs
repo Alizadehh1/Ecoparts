@@ -10,6 +10,7 @@ using Auto_Part_WebUI.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Auto_Part_WebUI.Models.Entities.Membership;
+using Auto_Part_WebUI.Models.ViewModels;
 
 namespace Auto_Part_WebUI.Areas.Admin.Controllers
 {
@@ -26,12 +27,13 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
         }
 
         [Authorize(Policy ="admin.categories.index")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 10)
         {
-            var eCoPartDbContext = db.Categories
+            var query = db.Categories
                 .Where(c => c.DeletedById == null)
                 .Include(c => c.Brand).Include(c => c.Parent);
-            return View(await eCoPartDbContext.ToListAsync());
+            var pagedModel = new PagedViewModel<Category>(query, pageIndex, pageSize);
+            return View(pagedModel);
         }
 
         [Authorize(Policy = "admin.categories.details")]

@@ -1,6 +1,8 @@
 ﻿using Auto_Part_WebUI.AppCode.Infrastructure;
 using Auto_Part_WebUI.AppCode.Modules.ProductModule;
 using Auto_Part_WebUI.Models.DataContexts;
+using Auto_Part_WebUI.Models.Entities;
+using Auto_Part_WebUI.Models.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,13 +25,13 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             this.mediator = mediator;
         }
         [Authorize(Policy = "admin.products.index")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 5)
         {
-            var autopartDbContext = await db.Products
+            var query = db.Products
                 .Include(p => p.Category)
-                .Where(p => p.DeletedById == null)
-                .ToListAsync();
-            return View(autopartDbContext);
+                .Where(p => p.DeletedById == null);
+            var pagedModel = new PagedViewModel<Product>(query, pageIndex, pageSize);
+            return View(pagedModel);
         }
         [Authorize(Policy = "admin.products.details")]
         public async Task<IActionResult> Details(int? id)

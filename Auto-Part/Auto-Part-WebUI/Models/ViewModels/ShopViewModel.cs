@@ -14,5 +14,6 @@ namespace Auto_Part_WebUI.Models.ViewModels
         public Product Product { get; set; }
         public List<ProductType> Types { get; set; }
         public List<ProductPricing> Pricings { get; set; }
+        public PagedViewModel<Product> PagedViewModel { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Auto_Part_WebUI.Models.Entities.Product>
+﻿@model PagedViewModel<Auto_Part_WebUI.Models.Entities.Product>
 
 @{
     ViewData["Title"] = "Index";
@@ -62,7 +62,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.Items)
                         {
                             <tr data-entity-id="@item.Id">
                                 <td>
@@ -80,7 +80,7 @@
                                 <td>
                                     @item.PartCodeName
                                 </td>
-                                
+
 
                                 <td class="actionBtns">
                                     <a asp-action="Edit" asp-route-id="@item.Id"><button class="btn btn-warning btn-icon"><i class="icofont-pencil-alt-5"></i></button></a> |
@@ -94,10 +94,13 @@
                     </tbody>
                 </table>
             </div>
+            @Model.GetPagenation(Url,"Index","Admin")
         </div>
     </div>
 </div>
-
+@section css{
+    <link type="text/css" rel="stylesheet" href="~/assets/css/pagination.css" />
+}
 @section js{
     <script src="~/libs/sweetalert/sweetalert.min.js"></script>
     <script>

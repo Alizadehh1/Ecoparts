@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ECoPartUser>
+﻿@model PagedViewModel<ECoPartUser>
 @{
     ViewData["Title"] = "Index";
 }
@@ -64,7 +64,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.Items)
                         {
                             <tr data-entity-id="@item.Id">
                                 <td>
@@ -107,10 +107,13 @@
                     </tbody>
                 </table>
             </div>
+            @Model.GetPagenation(Url,"Index","Admin")
         </div>
     </div>
 </div>
-
+@section css{ 
+    <link type="text/css" rel="stylesheet" href="~/assets/css/pagination.css" />
+}
 @section js{
     <script src="~/libs/sweetalert/sweetalert.min.js"></script>
     <script>

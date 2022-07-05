@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Category>
+﻿@model PagedViewModel<Category>
 
 @{
     ViewData["Title"] = "Index";
@@ -41,13 +41,13 @@
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.Name)
+                                Ad
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Brand)
+                                Aid olduğu maşın markası
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Parent)
+                                Üst Kateqoriyası
                             </th>
                             <th class="actionBtns">
                                 @if (User.HasAccess("admin.categories.create"))
@@ -59,7 +59,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.Where(c => c.ParentId == null))
+                        @foreach (var item in Model.Items.Where(c => c.ParentId == null))
                         {
                             <tr data-entity-id="@item.Id" class="treegrid-@item.Id">
                                 <td>
@@ -124,11 +124,13 @@
                     </tbody>
                 </table>
             </div>
+            @Model.GetPagenation(Url,"Index","Admin")
         </div>
     </div>
 </div>
 @section css{
     <link href="~/libs/jquery-treegrid/css/jquery.treegrid.css" rel="stylesheet" />
+    <link href="~/assets/css/pagination.css" rel="stylesheet" />
 }
 @section js{
     <script src="~/libs/jquery-treegrid/js/jquery.treegrid.js"></script>

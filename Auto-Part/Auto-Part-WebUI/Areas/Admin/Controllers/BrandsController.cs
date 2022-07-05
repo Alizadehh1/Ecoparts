@@ -10,6 +10,7 @@ using Auto_Part_WebUI.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Auto_Part_WebUI.Models.Entities.Membership;
+using Auto_Part_WebUI.Models.ViewModels;
 
 namespace Auto_Part_WebUI.Areas.Admin.Controllers
 {
@@ -25,12 +26,12 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             this.userManager = userManager;
         }
         [Authorize(Policy = "admin.brands.index")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 10)
         {
-            var model = await db.Brands
-                .Where(b => b.DeletedById == null)
-                .ToListAsync();
-            return View(model);
+            var query = db.Brands
+                .Where(b => b.DeletedById == null);
+            var pagedModel = new PagedViewModel<Brand>(query, pageIndex, pageSize);
+            return View(pagedModel);
         }
         [Authorize(Policy = "admin.brands.details")]
         public async Task<IActionResult> Details(int? id)

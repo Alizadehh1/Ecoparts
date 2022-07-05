@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProductType>
+﻿@model PagedViewModel<ProductType>
 @{
     ViewData["Title"] = "Index";
 }
@@ -40,7 +40,7 @@
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.Name)
+                                Name
                             </th>
                             <th class="actionBtns">
                                 <a asp-action="Create" class="btn btn-success btn-icon"><i class="icofont-plus"></i></a>
@@ -48,7 +48,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.Items)
                         {
                             <tr data-entity-id="@item.Id">
                                 <td>
@@ -66,10 +66,13 @@
                     </tbody>
                 </table>
             </div>
+            @Model.GetPagenation(Url,"Index","Admin")
         </div>
     </div>
 </div>
-
+@section css{ 
+    <link rel="stylesheet" type="text/css" href="~/assets/css/pagination.css" />
+}
 @section js{
     <script src="~/libs/sweetalert/sweetalert.min.js"></script>
     <script>

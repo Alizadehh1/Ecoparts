@@ -266,7 +266,7 @@
                     </div>
                 </nav>
                 <div class="row cols-2 cols-sm-3 product-wrapper">
-                    @foreach (var item in Model.Products)
+                    @foreach (var item in Model.PagedViewModel.Items)
                     {
                         <div class="product-wrap">
                             <div class="product text-center">
@@ -318,26 +318,12 @@
                 </div>
                 <nav class="toolbox toolbox-pagination mb-0 pb-0">
                     <p class="show-info">Showing 1–12 of 48 Products</p>
-                    <ul class="pagination">
-                        <li class="page-item disabled">
-                            <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1"
-                               aria-disabled="true">
-                                <i class="d-icon-arrow-left"></i>Prev
-                            </a>
-                        </li>
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link page-link-next" href="#" aria-label="Next">
-                                Next<i class="d-icon-arrow-right"></i>
-                            </a>
-                        </li>
-                    </ul>
+                    @Model.PagedViewModel.GetPagenation(Url, "Index")
                 </nav>
             </div>
         </div>
     </div>
 </div>
+@section css{
+    <link rel="stylesheet" type="text/css" href="~/assets/css/pagination.css" />
+}

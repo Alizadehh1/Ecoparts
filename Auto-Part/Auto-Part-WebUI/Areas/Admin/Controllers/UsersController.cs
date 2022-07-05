@@ -1,5 +1,6 @@
 ﻿using Auto_Part_WebUI.Models.DataContexts;
 using Auto_Part_WebUI.Models.Entities.Membership;
+using Auto_Part_WebUI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,10 +21,11 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             this.db = db;
         }
         [Authorize("admin.users.index")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 5)
         {
-            var data = await db.Users.ToListAsync();
-            return View(data);
+            var query = db.Users;
+            var pagedModel = new PagedViewModel<ECoPartUser>(query, pageIndex, pageSize);
+            return View(pagedModel);
         }
         [Authorize("admin.users.details")]
         public async Task<IActionResult> Details(int id)

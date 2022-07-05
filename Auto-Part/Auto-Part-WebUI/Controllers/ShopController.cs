@@ -21,14 +21,11 @@ namespace Auto_Part_WebUI.Controllers
             this.db = db;
         }
         [Authorize(Policy = "shop.index")]
-        public IActionResult Index()
+        public IActionResult Index(int pageIndex = 1, int pageSize = 5)
         {
+
             var model = new ShopViewModel();
             model.Brands = db.Brands
-                .Where(b => b.DeletedById == null)
-                .ToList();
-            model.Products = db.Products
-                .Include(p => p.Category)
                 .Where(b => b.DeletedById == null)
                 .ToList();
             model.Pricings = db.ProductPricings
@@ -37,6 +34,8 @@ namespace Auto_Part_WebUI.Controllers
             model.Types = db.ProductTypes
                 .Where(pt => pt.DeletedById == null)
                 .ToList();
+            var query = db.Products.Include(p => p.Category).Where(b => b.DeletedById == null);
+            model.PagedViewModel = new PagedViewModel<Product>(query, pageIndex, pageSize);
             return View(model);
         }
         [Authorize(Policy = "shop.details")]
@@ -58,10 +57,11 @@ namespace Auto_Part_WebUI.Controllers
                 .Include(p => p.Category)
                 .Where(b => b.DeletedById == null && b.Category.Brand.Id == model.Product.Category.Brand.Id && b.Id != id)
                 .ToList();
+            
             return View(model);
         }
         [Authorize(Policy = "shop.categories")]
-        public IActionResult Categories(int id)
+        public IActionResult Categories(int id, int pageIndex = 1, int pageSize = 5)
         {
             var model = new ShopViewModel();
             model.Categories=db.Categories
@@ -71,10 +71,8 @@ namespace Auto_Part_WebUI.Controllers
             ViewBag.Brand = db.Brands
                 .Where(c=>c.Id==id && c.DeletedById==null)
                 .ToList();
-            model.Products = db.Products
-                .Include(p => p.Category)
-                .Where(b => b.DeletedById == null && b.Category.Brand.Id==id)
-                .ToList();
+            var query = db.Products.Include(p => p.Category).Where(b => b.DeletedById == null && b.Category.Brand.Id == id);
+            model.PagedViewModel = new PagedViewModel<Product>(query, pageIndex, pageSize);
             return View(model);
         }
         [Authorize(Policy = "shop.search")]

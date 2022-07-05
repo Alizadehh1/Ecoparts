@@ -10,6 +10,7 @@ using Auto_Part_WebUI.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Auto_Part_WebUI.Models.Entities.Membership;
+using Auto_Part_WebUI.Models.ViewModels;
 
 namespace Auto_Part_WebUI.Areas.Admin.Controllers
 {
@@ -25,12 +26,12 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             this.userManager = userManager;
         }
         [Authorize(Policy = "admin.partcodes.index")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 5)
         {
-
-            return View(await db.PartCodes
-                .Where(ppc => ppc.DeletedById == null)
-                .ToListAsync());
+            var query = db.PartCodes
+                .Where(ppc => ppc.DeletedById == null);
+            var pagedModel = new PagedViewModel<PartCode>(query, pageIndex, pageSize);
+            return View(pagedModel);
         }
         [Authorize(Policy = "admin.partcodes.details")]
         public async Task<IActionResult> Details(int? id)

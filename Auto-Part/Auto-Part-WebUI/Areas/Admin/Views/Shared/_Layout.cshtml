@@ -3,11 +3,11 @@
 }
 <!DOCTYPE html>
 <html lang="en">
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 <head>
     <title>@ViewData["Title"] | Adminty</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="#">
     <meta name="keywords"
@@ -65,12 +65,13 @@
             top: 1px !important;
             right: 3px !important;
         }
+
         th.table-row-select,
-        td.table-row-select{
-            width:50px;
-            min-width:50px;
-            max-width:50px;
-            text-align:center;
+        td.table-row-select {
+            width: 50px;
+            min-width: 50px;
+            max-width: 50px;
+            text-align: center;
         }
     </style>
     <link href="~/libs/select2/css/select2.min.css" rel="stylesheet" />
@@ -443,6 +444,15 @@
                                         <a asp-controller="partcodes" asp-action="index">
                                             <span class="pcoded-micon"><i class="fa-solid fa-barcode"></i></span>
                                             <span class="pcoded-mtext">Məhsul Kodu</span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (User.HasAccess("admin.products.index"))
+                                {
+                                    <li class="">
+                                        <a asp-controller="products" asp-action="index">
+                                            <span class="pcoded-micon"><i class="icofont-settings-alt"></i></span>
+                                            <span class="pcoded-mtext">Məhsullar</span>
                                         </a>
                                     </li>
                                 }
