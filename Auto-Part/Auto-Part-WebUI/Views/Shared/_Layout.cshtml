@@ -117,7 +117,7 @@
                         </a>
                         <span class="divider"></span>
                         <div class="dropdown cart-dropdown type2 cart-offcanvas mr-0 mr-lg-2">
-                            <a href="~/assets/#" class="cart-toggle label-block link">
+                            <a asp-controller="shop" asp-action="Basket" class="cart-toggle label-block link">
                                 <div class="cart-label d-lg-show">
                                     <span class="cart-name">Səbət:</span>
                                     <span class="cart-price">$0.00</span>
@@ -299,7 +299,7 @@
                                         <a href="~/assets/#">Sign in</a>
                                     </li>
                                     <li>
-                                        <a href="~/assets/cart.html">View Cart</a>
+                                        <a asp-action="Basket" asp-controller="shop"  >View Cart</a>
                                     </li>
                                     <li>
                                         <a href="~/assets/wishlist.html">My Wishlist</a>
