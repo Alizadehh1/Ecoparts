@@ -85,5 +85,30 @@ namespace Auto_Part_WebUI.Controllers
             return PartialView("_SearchPartialView", products);
         }
 
+
+        public IActionResult Basket()
+        {
+            if(Request.Cookies.TryGetValue("cards",out string cards))
+            {
+                int[] idsFromCookie = cards.Split(",").Where(CheckIsNumber)
+                        .Select(item => int.Parse(item))
+                        .ToArray();
+                
+                var products = from p in db.Products.Where(p=>p.DeletedById==null)
+                               where idsFromCookie.Contains(p.Id) && p.DeletedById == null
+                               select p;
+
+                return View(products.ToList());
+                               
+            }
+
+            return View(new List<Product>());
+
+        }
+
+        private bool CheckIsNumber(string value)
+        {
+            return int.TryParse(value, out int v);
+        }
     }
 }
