@@ -275,12 +275,13 @@
                                         <img src="~/uploads/images/@item.ImagePath" alt="product" width="234"
                                              height="259">
                                     </a>
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                                           data-target="#addCartModal" title="Add to cart">
+                                    @*<div class="product-action-vertical">
+                                        <a href="#" class="btn-product-icon btn-cart" data-item-id="@item.Id"
+                                           onclick="addToCart(event)"
+                                           title="Add to cart">
                                             <i class="d-icon-bag"></i>
                                         </a>
-                                    </div>
+                                    </div>*@
                                     <div class="product-action">
                                         <a href="#" class="btn-product btn-quickview" title="Quick View">
                                             Quick
@@ -325,5 +326,42 @@
     </div>
 </div>
 @section css{
+
+
     <link rel="stylesheet" type="text/css" href="~/assets/css/pagination.css" />
+}
+@section js{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+            function addToCart(ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                let data = $(ev.currentTarget).data();
+                addToBasket(data.itemId);
+
+                showCardCount();
+            }
+        function readFromBasket() {
+            if ($.cookie('cards') != undefined) {
+                return ($.cookie('cards') || '').split(',');
+            }
+            return [];
+        }
+        function addToBasket(cardId) {
+            let items = readFromBasket();
+            let length = items.filter(item => item == cardId).length;
+            if (length > 0) return;
+            items.push(cardId);
+
+            $.cookie('cards', items.filter(item => item.length > 0).toString(), { expires: 7, path: '/' });
+        }
+
+        function showCardCount() {
+            let items = readFromBasket();
+            $('.cart-count').html(items.length);
+
+        }
+        showCardCount();
+
+    </script>
 }

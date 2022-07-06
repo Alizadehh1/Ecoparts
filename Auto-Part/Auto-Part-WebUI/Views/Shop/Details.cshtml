@@ -71,7 +71,7 @@
                             <input onchange="quantityAction()" id="qty" class="quantity form-control" type="number" min="1" max="1000000">
                             <button onclick="quantityAction()" class="quantity-plus quantity-action d-icon-plus"></button>
                         </div>
-                        <button class="btn-product btn-cart">
+                        <button data-item-id="@Model.Product.Id" onclick="addToCart(event)" class="btn-product btn-cart">
                             <i class="d-icon-bag"></i>Səbətə Əlavə Et
                         </button>
                     </div>
@@ -154,8 +154,9 @@
                                  height="259">
                         </a>
                         <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                               data-target="#addCartModal" title="Add to cart">
+                            <a href="#" class="btn-product-icon btn-cart" data-item-id="@item.Id"
+                               onclick="addToCart(event)"
+                               title="Add to cart">
                                 <i class="d-icon-bag"></i>
                             </a>
                         </div>
@@ -196,6 +197,7 @@
 </div>
 
 @section js{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         $('a[data-type-id]').click(function (e, item) {
             let idName = e.currentTarget.getAttribute('id');
@@ -235,6 +237,46 @@
             }
 
         }
+            let types = document.querySelectorAll('.size');
+            for (var i = 0; i < types.length; i++) {
+                if (types[i].getAttribute('class') == 'size active') {
+                    let idName = types[i].getAttribute('id');
+                    let typeId = idName.substring(5);
+                }
+            }
+
+        function addToCart(ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            let data = $(ev.currentTarget).data();
+            addToBasket(data.itemId);
+
+            console.log($.cookie('cards'));
+            showCardCount();
+        }
+        function readFromBasket() {
+            if ($.cookie('cards') != undefined) {
+                return $.cookie('cards').split(',');
+            }
+            return [];
+        }
+        function addToBasket(cardId) {
+            let items = readFromBasket();
+            let length = items.filter(item => item == cardId).length;
+            if (length > 0) return;
+            items.push(cardId);
+
+            $.cookie('cards', items.toString(), { expires: 7, path: '/' });
+        }
+
+        function showCardCount() {
+            let items = readFromBasket();
+            $('.cart-count').html(items.length);
+
+        }
+        showCardCount();
     </script>
+
+    
 }
 

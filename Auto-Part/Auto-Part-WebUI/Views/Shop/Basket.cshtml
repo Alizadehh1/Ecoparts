@@ -5,8 +5,8 @@
 <div class="page-content pt-7 pb-10">
     <div class="step-by pr-4 pl-4">
         <h3 class="title title-simple title-step active"><a href="cart.html">Səbət</a></h3>@*
-        <h3 class="title title-simple title-step"><a href="checkout.html">2. Checkout</a></h3>
-        <h3 class="title title-simple title-step"><a href="order.html">3. Order Complete</a></h3>*@
+            <h3 class="title title-simple title-step"><a href="checkout.html">2. Checkout</a></h3>
+            <h3 class="title title-simple title-step"><a href="order.html">3. Order Complete</a></h3>*@
     </div>
     <div class="container mt-7 mb-2">
         <div class="row">
@@ -17,7 +17,7 @@
                             <th><span>Məhsul</span></th>
                             <th></th>
                             <th><span>Qiymət</span></th>
-                            <th><span>Ədəd</span></th>
+                            <th style="text-align:center;">Ədəd</th>
                             <th>Yekun</th>
                         </tr>
                     </thead>
@@ -31,7 +31,7 @@
                                     <figure>
                                         <a href="product-simple.html">
                                             <img src="~/uploads/images/@item.ImagePath" width="100" height="100"
-                                             alt="product">
+                                                 alt="product">
                                         </a>
                                     </figure>
                                 </td>
@@ -159,7 +159,7 @@
 
 
 @section js{
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
 
         function plusQuantity(e) {
@@ -203,19 +203,48 @@
             else {
                 return;
             }
-            
+
             $(row).find('td.product-price .amount').html(`${parseFloat(data.itemPrice) * parseFloat(quantity)}man`);
-           
+
             console.log(parseFloat(data.itemPrice) * parseFloat(quantity));
         }
 
 
+        @*function readTypeFromCookie() {
+            if ($.cookie('types') != undefined) {
+                return $.cookie('types').split(',');
+            }
+            return [];
+        }
 
+        function readFromBasket() {
+            if ($.cookie('cards') != undefined) {
+                return $.cookie('cards').split(',');
+            }
+            return [];
+        }
 
+        function getTypeId() {
+            let types = readTypeFromCookie();
+            let ids = readFromBasket();
+
+            @foreach (var pricing in Model.)
+                    {
+                        <text>
+                        if (@pricing.TypeId == typeId) {
+                            let price = @pricing.Price;
+                        }
+                        </text>
+                    }
+
+            console.log(ids);
+            console.log(types);*@
+        
+        //getTypeId();
 
     </script>
 
 
 
 
-		}
+}
