@@ -13,6 +13,7 @@ namespace Auto_Part_WebUI.Models.Entities
         public string ShortDescription { get; set; }
         public string ImagePath { get; set; }
         public string ForSearch { get; set; }
+        public int Quantity { get; set; }
         public virtual ICollection<ProductPricing> Pricings { get; set; }
     }
 }

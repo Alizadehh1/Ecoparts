@@ -20,6 +20,7 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
     {
         public string Name { get; set; }
         public int CategoryId { get; set; }
+        public int Quantity { get; set; }
         public string ShortDescription { get; set; }
         public ProductPricing[] Pricing { get; set; }
         public string Values { get; set; }
@@ -72,7 +73,7 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
                 product.Name = request.Name;
                 product.CategoryId = request.CategoryId;
                 product.ShortDescription = request.ShortDescription;
-                
+                product.Quantity = request.Quantity;
 
 
                 if (request.Values != null && request.Values.Length > 0)

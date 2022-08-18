@@ -48,13 +48,13 @@
                                 Məhsulun Adı
                             </th>
                             <th>
-                                Məhsul Haqqında
-                            </th>
-                            <th>
                                 Məhsulun Kateqoriyası
                             </th>
                             <th>
                                 Məhsulun Kod nömrəsi
+                            </th>
+                            <th>
+                                Məhsulun Stokda Sayı
                             </th>
                             <th class="actionBtns">
                                 <a asp-action="Create"><button class="btn btn-success btn-icon"><i class="icofont-plus"></i></button></a>
@@ -79,6 +79,9 @@
                                 </td>
                                 <td>
                                     @item.PartCodeName
+                                </td>
+                                <td>
+                                    @item.Quantity
                                 </td>
 
 

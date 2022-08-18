@@ -4,6 +4,7 @@ using Auto_Part_WebUI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -103,17 +104,15 @@ namespace Auto_Part_WebUI.Controllers
 
         public IActionResult Basket()
         {
-            if(Request.Cookies.TryGetValue("cards",out string cards))
+            if (Request.Cookies.TryGetValue("cards", out string cards))
             {
-                int[] idsFromCookie = cards.Split(",").Where(CheckIsNumber)
-                        .Select(item => int.Parse(item))
-                        .ToArray();
+                var result = JsonConvert.DeserializeObject(cards);
 
-                var products = from p in db.Products.Where(p => p.DeletedById == null)
-                               where idsFromCookie.Contains(p.Id) && p.DeletedById == null
-                               select p;
-                return View(products.ToList());
-                               
+                //var products = from p in db.Products.Where(p => p.DeletedById == null)
+                //               where idsFromCookie.Contains(p.Id) && p.DeletedById == null
+                //               select p;
+                return View(result);
+
             }
 
             return View(new List<Product>());

@@ -66,11 +66,11 @@
                 <div class="product-form product-qty">
                     <label>Miqdar:</label>
                     <div class="product-form-group">
-                        <div class="input-group">
+                        @*<div class="input-group">
                             <button onclick="quantityAction()" class="quantity-minus quantity-action d-icon-minus"></button>
                             <input onchange="quantityAction()" id="qty" class="quantity form-control" type="number" min="1" max="1000000">
                             <button onclick="quantityAction()" class="quantity-plus quantity-action d-icon-plus"></button>
-                        </div>
+                        </div>*@
                         <button data-item-id="@Model.Product.Id" onclick="addToCart(event)" class="btn-product btn-cart">
                             <i class="d-icon-bag"></i>Səbətə Əlavə Et
                         </button>
@@ -208,8 +208,8 @@
                 <text>
                 if (@pricing.TypeId == typeId) {
                     let price = @pricing.Price;
-                    let quantity = $('.quantity').val();
-                    let totalPrice = price * quantity;
+                    //let quantity = $('.quantity').val();
+                    let totalPrice = price;
                     document.querySelector('#product-price-type').textContent = totalPrice;
                 }
                 </text>
@@ -227,8 +227,8 @@
                         <text>
                         if (@pricing.TypeId == typeId) {
                             let price = @pricing.Price;
-                            let quantity = $('.quantity').val();
-                            let totalPrice = price * quantity;
+                            //let quantity = $('.quantity').val();
+                            let totalPrice = price;
                             document.querySelector('#product-price-type').textContent = totalPrice;
                         }
                         </text>
@@ -237,36 +237,42 @@
             }
 
         }
-            let types = document.querySelectorAll('.size');
-            for (var i = 0; i < types.length; i++) {
-                if (types[i].getAttribute('class') == 'size active') {
-                    let idName = types[i].getAttribute('id');
-                    let typeId = idName.substring(5);
-                }
-            }
+            
 
         function addToCart(ev) {
             ev.preventDefault();
             ev.stopPropagation();
             let data = $(ev.currentTarget).data();
-            addToBasket(data.itemId);
+            let price = $('#product-price-type').html();
+            //let qty = $('#qty').val();
+            let types = document.querySelectorAll('.size');
+            for (var i = 0; i < types.length; i++) {
+                if (types[i].getAttribute('class') == 'size active') {
+                    let idName = types[i].getAttribute('id');
+                    let typeId = idName.substring(5);
+                    addToBasket(data.itemId, price, typeId, 1);
+                }
+            }
+            
 
             console.log($.cookie('cards'));
             showCardCount();
         }
         function readFromBasket() {
             if ($.cookie('cards') != undefined) {
-                return $.cookie('cards').split(',');
+                return JSON.parse($.cookie('cards'));
             }
             return [];
         }
-        function addToBasket(cardId) {
+        function addToBasket(cardId,cardPrice,cardType,cardQty) {
             let items = readFromBasket();
-            let length = items.filter(item => item == cardId).length;
-            if (length > 0) return;
-            items.push(cardId);
 
-            $.cookie('cards', items.toString(), { expires: 7, path: '/' });
+            let filteredArr = items.filter(item => item.Id == cardId && item.typeId == cardType);
+            if (filteredArr.length > 0) {
+                return;
+            }
+            items.push({ 'Id': cardId, 'price': cardPrice, 'typeId': cardType, 'qty': cardQty })
+            $.cookie('cards', JSON.stringify(items), { expires: 7, path:'/' });
         }
 
         function showCardCount() {

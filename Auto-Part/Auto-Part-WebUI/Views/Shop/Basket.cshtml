@@ -1,4 +1,4 @@
-﻿@model List<Product>
+﻿@model object
 @{
     ViewData["Title"] = "Basket";
 }
@@ -22,8 +22,11 @@
                         </tr>
                     </thead>
                     <tbody>
-
-                        @foreach (var item in Model)
+                        @*@foreach (var item in Model)
+                        {
+                            i
+                        }*@
+                        @*@foreach (var item in Model)
                         {
 
                             <tr data-item-price="@(item.Id+20)" data-item-quantity=1>
@@ -60,7 +63,7 @@
                                     </a>
                                 </td>
                             </tr>
-                        }
+                        }*@
                     </tbody>
                 </table>
                 <div class="cart-actions mb-6 pt-4">
@@ -239,7 +242,7 @@
 
             console.log(ids);
             console.log(types);*@
-        
+
         //getTypeId();
 
     </script>
