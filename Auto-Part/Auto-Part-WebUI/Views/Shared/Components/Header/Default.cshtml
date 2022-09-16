@@ -5,20 +5,29 @@
                 <p class="welcome-msg">Eco-Parts Onlayn Marketimizə Xoş Gəldiniz!</p>
             </div>
             <div class="header-right">
-                
+
                 <!-- End DropDown Menu -->
                 <div class="dropdown ml-5">
-                    
+
                 </div>
                 <!-- End DropDown Menu -->
                 <span class="divider"></span>
                 <a asp-controller="home" asp-action="contact" class="contact d-lg-show"><i class="d-icon-map"></i>Bizimlə Əlaqə</a>
-                <a href="~/assets/#" class="help d-lg-show"><i class="d-icon-info"></i>Need Help,</a>
-                <a  asp-action="SignIn" asp-controller="account" >
-                    <i style="margin-right: 3px;" class="d-icon-user"></i>Daxil Ol
-                </a>
-                <span class="delimiter">/</span>
-                <a class="ml-0" asp-action="Register" asp-controller="account" >Qeydiyyat</a>
+                <a href="~/assets/#" class="help d-lg-show"><i class="d-icon-info"></i>Need Help</a>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-action="Profile" asp-controller="account">
+                        <i style="margin-right: 3px;" class="d-icon-user"></i>@User.GetPrincipalName()
+                    </a>
+                }
+                else
+                {
+                    <a asp-action="SignIn" asp-controller="account">
+                        <i style="margin-right: 3px;" class="d-icon-user"></i>Daxil Ol
+                    </a>
+                    <span class="delimiter">/</span>
+                    <a class="ml-0" asp-action="Register" asp-controller="account">Qeydiyyat</a>
+                }
             </div>
         </div>
     </div>
@@ -35,14 +44,13 @@
                 <!-- End Logo -->
 
                 <div class="header-search hs-simple">
-                    <form action="#" method="get" class="input-wrapper">
+                    <form class="input-wrapper" method="get" asp-controller="Shop" asp-action="Search">
                         <div class="select-box">
                             <select asp-items="@ViewBag.Categories">
                                 <option value="">All Categories</option>
                             </select>
                         </div>
-                        <input type="text" class="form-control" name="search" id="search"
-                               placeholder="Search..." required="">
+                        <input type="text" class="form-control" id="search" name="query" placeholder="Axtardığınız məhsulun kodunu daxil edin ...">
                         <button class="btn btn-search" type="submit"><i class="d-icon-search"></i></button>
                     </form>
                 </div>
@@ -59,8 +67,8 @@
                     </div>
                 </a>
                 <span class="divider"></span>
-                <a href="~/assets/wishlist.html" class="wishlist">
-                    <i class="d-icon-heart"></i>
+                <a asp-action="wishlist" asp-controller="shop" class="wishlist">
+                    <i class="d-icon-heart"><span class="wishlist-count">2</span></i>
                 </a>
                 <span class="divider"></span>
                 <div class="dropdown cart-dropdown type2 cart-offcanvas mr-0 mr-lg-2">

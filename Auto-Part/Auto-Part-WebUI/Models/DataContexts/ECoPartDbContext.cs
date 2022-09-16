@@ -22,6 +22,8 @@ namespace Auto_Part_WebUI.Models.DataContexts
         public DbSet<PartCode> PartCodes { get; set; }
         public DbSet<ProductPricing> ProductPricings { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

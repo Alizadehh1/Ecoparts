@@ -1,4 +1,5 @@
-﻿using Auto_Part_WebUI.Models.DataContexts;
+﻿using Auto_Part_WebUI.AppCode.Extensions;
+using Auto_Part_WebUI.Models.DataContexts;
 using Auto_Part_WebUI.Models.Entities;
 using Auto_Part_WebUI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace Auto_Part_WebUI.Controllers
 {
-    [Authorize(Policy = "shop")]
     public class ShopController : Controller
     {
         readonly ECoPartDbContext db;
@@ -27,6 +27,9 @@ namespace Auto_Part_WebUI.Controllers
 
             var model = new ShopViewModel();
             model.Brands = db.Brands
+                .Where(b => b.DeletedById == null)
+                .ToList();
+            model.Categories = db.Categories
                 .Where(b => b.DeletedById == null)
                 .ToList();
             model.Pricings = db.ProductPricings
@@ -58,21 +61,58 @@ namespace Auto_Part_WebUI.Controllers
                 .Include(p => p.Category)
                 .Where(b => b.DeletedById == null && b.Category.Brand.Id == model.Product.Category.Brand.Id && b.Id != id)
                 .ToList();
-            
+
             return View(model);
         }
         [Authorize(Policy = "shop.categories")]
-        public IActionResult Categories(int id, int pageIndex = 1, int pageSize = 5)
+        public IActionResult Brands(int id, int pageIndex = 1, int pageSize = 5)
         {
             var model = new ShopViewModel();
-            model.Categories=db.Categories
+            model.Categories = db.Categories
                 .Include(c => c.Children)
                 .Where(c => c.BrandId == id && c.DeletedById == null)
                 .ToList();
             ViewBag.Brand = db.Brands
-                .Where(c=>c.Id==id && c.DeletedById==null)
+                .Where(c => c.Id == id && c.DeletedById == null)
+                .ToList();
+            model.Pricings = db.ProductPricings
+                .Where(pc => pc.DeletedById == null)
+                .ToList();
+            model.Types = db.ProductTypes
+                .Where(pt => pt.DeletedById == null)
+                .ToList();
+            model.Brands = db.Brands
+                .Where(b => b.DeletedById == null)
+                .ToList();
+            model.Types = db.ProductTypes
+                .Where(b => b.DeletedById == null)
                 .ToList();
             var query = db.Products.Include(p => p.Category).Where(b => b.DeletedById == null && b.Category.Brand.Id == id);
+            model.PagedViewModel = new PagedViewModel<Product>(query, pageIndex, pageSize);
+            return View(model);
+        }
+        public IActionResult Categories(int id, int pageIndex = 1, int pageSize = 5)
+        {
+            var model = new ShopViewModel();
+            model.Category = db.Categories
+                .Include(c => c.Children)
+                .FirstOrDefault(c => c.Id == id && c.DeletedById == null);
+            model.Pricings = db.ProductPricings
+                .Where(pc => pc.DeletedById == null)
+                .ToList();
+            model.Types = db.ProductTypes
+                .Where(pt => pt.DeletedById == null)
+                .ToList();
+            model.Brands = db.Brands
+                .Where(b => b.DeletedById == null)
+                .ToList();
+            model.Categories = db.Categories
+                .Where(b => b.DeletedById == null)
+                .ToList();
+            model.Types = db.ProductTypes
+                .Where(b => b.DeletedById == null)
+                .ToList();
+            var query = db.Products.Include(p => p.Category).Where(b => b.DeletedById == null && b.CategoryId == id);
             model.PagedViewModel = new PagedViewModel<Product>(query, pageIndex, pageSize);
             return View(model);
         }
@@ -84,7 +124,7 @@ namespace Auto_Part_WebUI.Controllers
                 return RedirectToAction("Index", "Shop");
             }
             var model = new ShopViewModel();
-            model.Products = await db.Products.Include(p => p.Category).Where(p => p.DeletedById==null && p.ForSearch.ToLower().Contains(query.ToLower())).ToListAsync();
+            model.Products = await db.Products.Include(p => p.Category).Where(p => p.DeletedById == null && p.ForSearch.ToLower().Contains(query.ToLower())).ToListAsync();
             model.Pricings = db.ProductPricings
                 .Where(pc => pc.DeletedById == null)
                 .ToList();
@@ -104,19 +144,92 @@ namespace Auto_Part_WebUI.Controllers
 
         public IActionResult Basket()
         {
-            if (Request.Cookies.TryGetValue("cards", out string cards))
+            if (Request.Cookies.TryGetValue("cards", out string cards) && Request.Cookies.TryGetValue("prices", out string prices))
             {
-                var result = JsonConvert.DeserializeObject(cards);
+                int[] productIdsFromCookie = cards.Split(",").Where(CheckIsNumber)
+                        .Select(item => int.Parse(item))
+                        .ToArray();
 
-                //var products = from p in db.Products.Where(p => p.DeletedById == null)
-                //               where idsFromCookie.Contains(p.Id) && p.DeletedById == null
-                //               select p;
-                return View(result);
+                double[] pricesFromCookie = prices.Split(",").Where(CheckIsNumber)
+                        .Select(item => double.Parse(item))
+                        .ToArray();
+
+
+
+
+
+
+                var products = (from p in db.Products.Where(p => p.DeletedById == null)
+                                where productIdsFromCookie.Contains(p.Id) && p.DeletedById == null
+                                join pr in db.ProductPricings on p.Id equals pr.ProductId
+                                where pricesFromCookie.Contains(pr.Price) && p.Id == pr.ProductId && pr.DeletedById == null
+                                select Tuple.Create(p.Id, p.Name, p.ImagePath, pr.Price)).ToList();
+                //select new { p.Name, p.ImagePath, p.Id, pr.TypeId, pr.Price }).ToList();
+
+                return View(products);
+
+            }
+
+            return View(new List<Tuple<int, string, string, double>>());
+
+        }
+
+        public IActionResult Wishlist()
+        {
+            if (Request.Cookies.TryGetValue("cardsForWishlist", out string cardsForCookie))
+            {
+                int[] idsFromCookie = cardsForCookie.Split(",").Where(CheckIsNumber)
+                        .Select(item => int.Parse(item))
+                        .ToArray();
+
+                var products = from p in db.Products.Where(p => p.DeletedById == null)
+                               where idsFromCookie.Contains(p.Id) && p.DeletedById == null
+                               select p;
+
+                return View(products.ToList());
 
             }
 
             return View(new List<Product>());
 
+        }
+
+        public async Task<IActionResult> PlaceOrder(string productIds, string totalAmount,string quantities,string prices)
+        {
+            int[] productId = productIds.Split(",").Where(CheckIsNumber)
+                        .Select(item => int.Parse(item))
+                        .ToArray();
+            int[] quantity = quantities.Split(",").Where(CheckIsNumber)
+                        .Select(item => int.Parse(item))
+                        .ToArray();
+            int[] price = prices.Split(",").Where(CheckIsNumber)
+                        .Select(item => int.Parse(item))
+                        .ToArray();
+
+
+            var newOrder = new Order();
+            newOrder.ECoPartUserId = User.GetUserId();
+            newOrder.TotalAmount = Convert.ToDouble(totalAmount);
+            if (productId != null)
+            {
+                newOrder.OrderItems = new List<OrderItem>();
+                int i = 0;
+                foreach (var id in productId)
+                {
+
+                    newOrder.OrderItems.Add(new OrderItem
+                    {
+                        ProductId = id,
+                        OrderId = newOrder.Id,
+                        Quantity = quantity[i],
+                        Price = price[i]
+                    });
+                    i++;
+                }
+            }
+            await db.Orders.AddAsync(newOrder);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         private bool CheckIsNumber(string value)

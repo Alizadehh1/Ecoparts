@@ -13034,7 +13034,7 @@ aside + div .product-single .product-details {
     }
 
 .wishlist {
-    margin-right: 1.5rem;
+    margin-right: 0.5rem !important;
 }
 
     .wishlist i {
@@ -17361,7 +17361,19 @@ aside + div .product-single .product-details {
     .card-description .description-title ~ p {
         line-height: 1.86;
     }
+.emptyBasket {
+    font-size: 100px;
+    color: #26c;
+}
 
+.emptyBasketText {
+    margin-top: 15px;
+}
+
+.emptyWishlist {
+    font-size: 100px;
+    color: #dc3545;
+}
 #product-tab-description li,
 .card-description li {
     position: relative;

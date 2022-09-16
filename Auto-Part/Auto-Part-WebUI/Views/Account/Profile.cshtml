@@ -1,4 +1,4 @@
-﻿
+﻿@model ProfileViewModel
 @{
     ViewData["Title"] = "Profile";
 }
@@ -16,29 +16,23 @@
             <h2 class="title title-center mb-10">My Account</h2>
             <div class="tab tab-vertical gutter-lg">
                 <ul class="nav nav-tabs mb-4 col-lg-3 col-md-4" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#dashboard">Dashboard</a>
+                    <li style="cursor:pointer" class="nav-item">
+                        <a class="nav-link active" onclick="tabDashboard(event)">Dashboard</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#orders">Orders</a>
+                    <li style="cursor:pointer" class="nav-item">
+                        <a onclick="tabOrder(event)" class="nav-link">Orders</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#downloads">Downloads</a>
+                    <li style="cursor:pointer" class="nav-item">
+                        <a class="nav-link" onclick="tabAccount(event)">Account details</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#address">Address</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#account">Account details</a>
-                    </li>
-                    <li class="nav-item">
+                    <li style="cursor:pointer;" onmouseout="this.style.color='red'" class="nav-item">
                         <a class="nav-link" asp-action="logout">Logout</a>
                     </li>
                 </ul>
                 <div class="tab-content col-lg-9 col-md-8">
-                    <div class="tab-pane active" id="dashboard">
+                    <div class="tab-pane active in" id="dashboard">
                         <p class="mb-0">
-                            Hello <span>User</span> (not <span>User</span>? <a asp-action="logout" class="text-primary">Log out</a>)
+                            Hello <span>@User.GetPrincipalName()</span> (not <span>@User.GetPrincipalName()</span>? <a asp-action="logout" class="text-primary">Log out</a>)
                         </p>
                         <p class="mb-8">
                             From your account dashboard you can view your <a href="#orders" class="link-to-tab text-primary">recent orders</a>, manage your shipping and billing
@@ -58,48 +52,29 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="order-number"><a href="#">#3596</a></td>
-                                    <td class="order-date"><time>February 24, 2021</time></td>
-                                    <td class="order-status"><span>On hold</span></td>
-                                    <td class="order-total"><span>$900.00 for 5 items</span></td>
-                                    <td class="order-action"><a href="#" class="btn btn-primary btn-link btn-underline">View</a></td>
-                                </tr>
-                                <tr>
-                                    <td class="order-number"><a href="#">#3593</a></td>
-                                    <td class="order-date"><time>February 21, 2021</time></td>
-                                    <td class="order-status"><span>On hold</span></td>
-                                    <td class="order-total"><span>$290.00 for 2 items</span></td>
-                                    <td class="order-action"><a href="#" class="btn btn-primary btn-link btn-underline">View</a></td>
-                                </tr>
-                                <tr>
-                                    <td class="order-number"><a href="#">#2547</a></td>
-                                    <td class="order-date"><time>January 4, 2021</time></td>
-                                    <td class="order-status"><span>On hold</span></td>
-                                    <td class="order-total"><span>$480.00 for 8 items</span></td>
-                                    <td class="order-action"><a href="#" class="btn btn-primary btn-link btn-underline">View</a></td>
-                                </tr>
-                                <tr>
-                                    <td class="order-number"><a href="#">#2549</a></td>
-                                    <td class="order-date"><time>January 19, 2021</time></td>
-                                    <td class="order-status"><span>On hold</span></td>
-                                    <td class="order-total"><span>$680.00 for 5 items</span></td>
-                                    <td class="order-action"><a href="#" class="btn btn-primary btn-link btn-underline">View</a></td>
-                                </tr>
-                                <tr>
-                                    <td class="order-number"><a href="#">#4523</a></td>
-                                    <td class="order-date"><time>Jun 6, 2021</time></td>
-                                    <td class="order-status"><span>On hold</span></td>
-                                    <td class="order-total"><span>$564.00 for 3 items</span></td>
-                                    <td class="order-action"><a href="#" class="btn btn-primary btn-link btn-underline">View</a></td>
-                                </tr>
-                                <tr>
-                                    <td class="order-number"><a href="#">#4526</a></td>
-                                    <td class="order-date"><time>Jun 19, 2021</time></td>
-                                    <td class="order-status"><span>On hold</span></td>
-                                    <td class="order-total"><span>$123.00 for 8 items</span></td>
-                                    <td class="order-action"><a href="#" class="btn btn-primary btn-link btn-underline">View</a></td>
-                                </tr>
+                                @foreach (var item in Model.Order)
+                                {
+                                    <tr>
+                                        <td class="order-number"><a href="#">#@item.Id</a></td>
+                                        <td class="order-date"><time>@item.CreatedDate.ToString("MMMM MM, yyyy")</time></td>
+                                        <td class="order-status">
+                                            @if (item.isConfirmed)
+                                            {
+                                                <span>Təsdiqlənib</span>
+                                            }
+                                            else if (item.DeletedById != null)
+                                            {
+                                                <span>Ləğv olunub</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Gözləmədə</span>
+                                            }
+                                        </td>
+                                        <td class="order-total"><span>@item.TotalAmount ₼ for @item.OrderItems.Where(oi => oi.OrderId == item.Id).Count() items</span></td>
+                                        <td class="order-action"><a href="#" class="btn btn-primary btn-link btn-underline">View</a></td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -138,45 +113,81 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="account">
-                        <form action="#" class="form">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <label>First Name *</label>
-                                    <input type="text" class="form-control" name="first_name" required="">
-                                </div>
-                                <div class="col-sm-6">
-                                    <label>Last Name *</label>
-                                    <input type="text" class="form-control" name="last_name" required="">
-                                </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>First Name</label>
+                                <p class="form-control">@Model.ECoPartUser.Name</p>
                             </div>
+                            <div class="col-sm-6">
+                                <label>Last Name</label>
+                                <p class="form-control">@Model.ECoPartUser.Surname</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Əlaqə Nömrəsi</label>
+                                <p class="form-control">@Model.ECoPartUser.PhoneNumber</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Mağaza Adı</label>
+                                <p class="form-control">@Model.ECoPartUser.StoreName</p>
+                            </div>
+                        </div>
 
-                            <label>Display Name *</label>
-                            <input type="text" class="form-control mb-0" name="display_name" required="">
-                            <small class="d-block form-text mb-7">
-                                This will be how your name will be displayed
-                                in the account section and in reviews
-                            </small>
-
-                            <label>Email Address *</label>
-                            <input type="email" class="form-control" name="email" required="">
-                            <fieldset>
-                                <legend>Password Change</legend>
-                                <label>Current password (leave blank to leave unchanged)</label>
-                                <input type="password" class="form-control" name="current_password">
-
-                                <label>New password (leave blank to leave unchanged)</label>
-                                <input type="password" class="form-control" name="new_password">
-
-                                <label>Confirm new password</label>
-                                <input type="password" class="form-control" name="confirm_password">
-                            </fieldset>
-
-                            <button type="submit" class="btn btn-primary">SAVE CHANGES</button>
-                        </form>
+                        <label>Email Address</label>
+                        <p class="form-control">@Model.ECoPartUser.Email</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </main>
+@section css{
+    <style>
+        a.active {
+            color: #26c !important;
+        }
+    </style>
+}
+@section js{
+    <script>
+        function tabOrder(e) {
+            let tabPanes = document.querySelectorAll('.tab-pane');
+            let navLink = document.querySelectorAll('.nav-link');
+            for (var i = 0; i < tabPanes.length; i++) {
+                $(tabPanes[i]).removeClass("active");
+            }
+            for (var i = 0; i < tabPanes.length; i++) {
+                $(navLink[i]).removeClass("active");
+            }
+            let order = $('#orders');
+            $(e.currentTarget).addClass("active");
+            order.addClass('active');
+        }
+        function tabDashboard(e) {
+            let tabPanes = document.querySelectorAll('.tab-pane');
+            let navLink = document.querySelectorAll('.nav-link');
+            for (var i = 0; i < tabPanes.length; i++) {
+                $(tabPanes[i]).removeClass("active");
+            }
+            for (var i = 0; i < tabPanes.length; i++) {
+                $(navLink[i]).removeClass("active");
+            }
+            let dashboard = $('#dashboard');
+            $(e.currentTarget).addClass("active");
+            dashboard.addClass('active');
+        }
+        function tabAccount(e) {
+            let tabPanes = document.querySelectorAll('.tab-pane');
+            let navLink = document.querySelectorAll('.nav-link');
+            for (var i = 0; i < tabPanes.length; i++) {
+                $(tabPanes[i]).removeClass("active");
+            }
+            for (var i = 0; i < tabPanes.length; i++) {
+                $(navLink[i]).removeClass("active");
+            }
+            let account = $('#account');
+            $(e.currentTarget).addClass("active");
+            account.addClass('active');
 
+        }
+    </script>
+}

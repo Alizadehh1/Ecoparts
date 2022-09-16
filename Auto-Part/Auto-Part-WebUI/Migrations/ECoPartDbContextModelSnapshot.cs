@@ -293,6 +293,72 @@ namespace Auto_Part_WebUI.Migrations
                     b.ToTable("UserTokens", "Membership");
                 });
 
+            modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CreatedById")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeletedById")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ECoPartUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ECoPartUserId1")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalAmount")
+                        .HasColumnType("float");
+
+                    b.Property<bool>("isConfirmed")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ECoPartUserId1");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
+                });
+
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.PartCode", b =>
                 {
                     b.Property<int>("Id")
@@ -359,9 +425,6 @@ namespace Auto_Part_WebUI.Migrations
 
                     b.Property<string>("PartCodeName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -506,6 +569,34 @@ namespace Auto_Part_WebUI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Order", b =>
+                {
+                    b.HasOne("Auto_Part_WebUI.Models.Entities.Membership.ECoPartUser", "ECoPartUser")
+                        .WithMany()
+                        .HasForeignKey("ECoPartUserId1");
+
+                    b.Navigation("ECoPartUser");
+                });
+
+            modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.OrderItem", b =>
+                {
+                    b.HasOne("Auto_Part_WebUI.Models.Entities.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Auto_Part_WebUI.Models.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Product", b =>
                 {
                     b.HasOne("Auto_Part_WebUI.Models.Entities.Brand", null)
@@ -550,6 +641,11 @@ namespace Auto_Part_WebUI.Migrations
                     b.Navigation("Children");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Order", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Product", b =>

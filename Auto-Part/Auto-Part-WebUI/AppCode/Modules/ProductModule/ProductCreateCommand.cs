@@ -1,8 +1,6 @@
 ﻿using Auto_Part_WebUI.AppCode.Extensions;
 using Auto_Part_WebUI.Models.DataContexts;
 using Auto_Part_WebUI.Models.Entities;
-using FluentValidation;
-using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,13 +8,12 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
 {
-    public class ProductCreateCommand : IRequest<ProductCreateCommandResponse>
+    public class ProductCreateCommand : IRequest<Product>
     {
         public string Name { get; set; }
         public int CategoryId { get; set; }
@@ -28,44 +25,32 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
         public IFormFile File { get; set; }
         public string ImagePath { get; set; }
         public string ForSearch { get; set; }
-        public class ProductCreateCommandHandler : IRequestHandler<ProductCreateCommand, ProductCreateCommandResponse>
+        public class ProductCreateCommandHandler : IRequestHandler<ProductCreateCommand, Product>
         {
             readonly ECoPartDbContext db;
             readonly IActionContextAccessor ctx;
             readonly IWebHostEnvironment env;
-            readonly IValidator<ProductCreateCommand> validator;
 
             public ProductCreateCommandHandler(ECoPartDbContext db,
                 IActionContextAccessor ctx,
-                IWebHostEnvironment env,
-                IValidator<ProductCreateCommand> validator)
+                IWebHostEnvironment env)
             {
                 this.db = db;
                 this.ctx = ctx;
                 this.env = env;
-                this.validator = validator;
             }
 
-            public async Task<ProductCreateCommandResponse> Handle(ProductCreateCommand request, CancellationToken cancellationToken)
+            public async Task<Product> Handle(ProductCreateCommand request, CancellationToken cancellationToken)
             {
                 if (request?.File == null)
                 {
                     ctx.AddModelError("ImagePath", "Image Cannot be empty");
                 }
 
-                var result = validator.Validate(request);
 
-
-
-                if (!result.IsValid)
+                if (ctx.ModelIsValid())
                 {
-                    var response = new ProductCreateCommandResponse
-                    {
-                        Product = null,
-                        ValidationResult = result
-                    };
-
-                    return response;
+                    return null;
                 }
 
                 var product = new Product();
@@ -114,24 +99,12 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
                 try
                 {
                     await db.SaveChangesAsync(cancellationToken);
-                    var response = new ProductCreateCommandResponse
-                    {
-                        Product = product,
-                        ValidationResult = result
-                    };
-                    return response;
+                    return product;
                 }
                 catch (Exception ex)
                 {
-                    var response = new ProductCreateCommandResponse
-                    {
-                        Product = product,
-                        ValidationResult = result
-                    };
-
-                    response.ValidationResult.Errors.Add(new ValidationFailure("Name", "Xeta bash verdi,Biraz sonra yeniden yoxlayin"));
-
-                    return response;
+                    ctx.AddModelError("Name", "Xeta bash verdi,Biraz sonra yeniden yoxlayin");
+                    return product;
                 }
 
             l1:
@@ -141,11 +114,4 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
     }
 
 
-
-
-    public class ProductCreateCommandResponse
-    {
-        public Product Product { get; set; }
-        public ValidationResult ValidationResult { get; set; }
-    }
 }

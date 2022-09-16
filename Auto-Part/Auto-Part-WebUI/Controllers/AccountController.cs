@@ -2,10 +2,12 @@
 using Auto_Part_WebUI.Models.DataContexts;
 using Auto_Part_WebUI.Models.Entities.Membership;
 using Auto_Part_WebUI.Models.FormModels;
+using Auto_Part_WebUI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -39,9 +41,13 @@ namespace Auto_Part_WebUI.Controllers
             return View();
         }
         [Route("/profile.html")]
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile()
         {
-            return View();
+            var userId = User.GetUserId();
+            var viewModel = new ProfileViewModel();
+            viewModel.Order = db.Orders.Where(o => o.ECoPartUserId == userId).Include(o => o.OrderItems).ToList();
+            viewModel.ECoPartUser = await userManager.FindByIdAsync(userId);
+            return View(viewModel);
         }
         [Route("/accessdenied.html")]
         public IActionResult AccessDenied()

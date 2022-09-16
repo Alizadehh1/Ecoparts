@@ -27,10 +27,7 @@
                                 <label class="product-label label-new">new</label>
                             </div>
                             <div class="product-action-vertical">
-                                <a href="#" class="btn-product-icon btn-cart" data-toggle="modal"
-                                   data-target="#addCartModal" title="Add to cart">
-                                    <i class="d-icon-bag"></i>
-                                </a>
+                                <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"><i class="d-icon-heart"></i></a>
                             </div>
                             <div class="product-action">
                                 <a href="#" class="btn-product btn-quickview" title="Quick View">
@@ -55,7 +52,7 @@
                                         {
                                             if (type.Id == price.TypeId)
                                             {
-                                                <ins class="new-price">@price.Price&#8380;</ins>
+                                                <a class="price" style="font-size:14px;">@price.Price&#8380;<span style="color: #aaa;margin-left:0.5rem;font-size:14px;">(@type.Name)</span></a>
                                             }
                                         }
                                     }
@@ -68,4 +65,5 @@
         </div>
     </div>
 </div>
+
 

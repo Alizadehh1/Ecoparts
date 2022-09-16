@@ -38,6 +38,7 @@
     <link rel="stylesheet" type="text/css" href="~/assets/vendor/magnific-popup/magnific-popup.min.css">
     <link rel="stylesheet" type="text/css" href="~/assets/vendor/owl-carousel/owl.carousel.min.css">
     <link href="~/libs/toastr.js/toastr.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/libs/tab-control/tab-control.css">
     <!-- Main CSS File -->
     @RenderSection("css", required: false)
     <link rel="stylesheet" type="text/css" href="~/assets/css/style.min.css">
@@ -50,167 +51,7 @@
 
     <div class="page-wrapper">
         <h1 class="d-none">Riode - Responsive eCommerce HTML Template</h1>
-        <header class="header">
-            <div class="header-top">
-                <div class="container">
-                    <div class="header-left">
-                        <p class="welcome-msg">Eco-Parts Onlayn Marketimizə Xoş Gəldiniz!</p>
-                    </div>
-                    <div class="header-right">
-                        <div class="dropdown">
-
-                        </div>
-                        <div class="dropdown ml-5">
-
-                        </div>
-                        <span class="divider"></span>
-                        <a asp-controller="home" asp-action="contact" class="contact d-lg-show"><i class="d-icon-map"></i>Bizimlə Əlaqə</a>
-                        <a href="~/assets/#" class="help d-lg-show"><i class="d-icon-info"></i> Need Help</a>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <a asp-action="Profile" asp-controller="account">
-                                <i style="margin-right: 3px;" class="d-icon-user"></i>@User.GetPrincipalName()
-                            </a>
-                        }
-                        else
-                        {
-                            <a asp-action="SignIn" asp-controller="account">
-                                <i style="margin-right: 3px;" class="d-icon-user"></i>Daxil Ol
-                            </a>
-                            <span class="delimiter">/</span>
-                            <a class="ml-0" asp-action="Register" asp-controller="account">Qeydiyyat</a>
-                        }
-
-
-                    </div>
-                </div>
-            </div>
-            <div class="header-middle sticky-header fix-top sticky-content">
-                <div class="container">
-                    <div class="header-left">
-                        <a href="~/assets/#" class="mobile-menu-toggle">
-                            <i class="d-icon-bars2"></i>
-                        </a>
-                        <a asp-action="index" asp-controller="home" class="logo">
-                            <img src="~/assets/images/demos/demo23/logo.png" alt="logo" width="153" height="44" />
-                        </a>
-                        <div class="header-search hs-simple">
-                            <form class="input-wrapper" method="get" asp-controller="Shop" asp-action="Search">
-                                <input type="text" class="form-control" id="search" name="query" placeholder="Axtardığınız məhsulun kodunu daxil edin ...">
-                                <button class="btn btn-search" type="submit"><i class="d-icon-search"></i></button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="header-right">
-                        <a href="~/assets/tel:#" class="icon-box icon-box-side">
-                            <div class="icon-box-icon mr-0 mr-lg-2">
-                                <i class="d-icon-phone"></i>
-                            </div>
-                            <div class="icon-box-content d-lg-show">
-                                <h4 class="icon-box-title">Bizimlə Əlaqə:</h4>
-                                <p>+994507779990</p>
-                            </div>
-                        </a>
-                        <span class="divider"></span>
-                        <a href="~/assets/wishlist.html" class="Seçilmişlər">
-                            <i class="d-icon-heart"></i>
-                        </a>
-                        <span class="divider"></span>
-                        <div class="dropdown cart-dropdown type2 cart-offcanvas mr-0 mr-lg-2">
-                            <a asp-controller="shop" asp-action="Basket" class="cart-toggle label-block link">
-                                <div class="cart-label d-lg-show">
-                                    <span class="cart-name">Səbət:</span>
-                                    <span class="cart-price">$0.00</span>
-                                </div>
-                                <i class="d-icon-bag"><span class="cart-count">0</span></i>
-                            </a>
-                            <div class="cart-overlay"></div>
-                            <div class="dropdown-box">
-                                <div class="cart-header">
-                                    <h4 class="cart-title">Shopping Cart</h4>
-                                    <a href="~/assets/#" class="btn btn-dark btn-link btn-icon-right btn-close">
-                                        close<i class="d-icon-arrow-right"></i><span class="sr-only">Cart</span>
-                                    </a>
-                                </div>
-                                <div class="products scrollable">
-                                    <div class="product product-cart">
-                                        <figure class="product-media">
-                                            <a href="~/assets/product.html">
-                                                <img src="~/assets/images/cart/product-1.jpg" alt="product" width="80"
-                                                     height="88" />
-                                            </a>
-                                            <button class="btn btn-link btn-close">
-                                                <i class="fas fa-times"></i><span class="sr-only">Close</span>
-                                            </button>
-                                        </figure>
-                                        <div class="product-detail">
-                                            <a href="~/assets/product.html" class="product-name">Riode White Trends</a>
-                                            <div class="price-box">
-                                                <span class="product-quantity">1</span>
-                                                <span class="product-price">$21.00</span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="product product-cart">
-                                        <figure class="product-media">
-                                            <a href="~/assets/product.html">
-                                                <img src="~/assets/images/cart/product-2.jpg" alt="product" width="80"
-                                                     height="88" />
-                                            </a>
-                                            <button class="btn btn-link btn-close">
-                                                <i class="fas fa-times"></i><span class="sr-only">Close</span>
-                                            </button>
-                                        </figure>
-                                        <div class="product-detail">
-                                            <a href="~/assets/product.html" class="product-name">
-                                                Dark Blue Women’s
-                                                Leomora Hat
-                                            </a>
-                                            <div class="price-box">
-                                                <span class="product-quantity">1</span>
-                                                <span class="product-price">$118.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="cart-total">
-                                    <label>Subtotal:</label>
-                                    <span class="price">$139.00</span>
-                                </div>
-                                <div class="cart-action">
-                                    <a href="~/assets/cart.html" class="btn btn-dark btn-link">View Cart</a>
-                                    <a href="~/assets/checkout.html" class="btn btn-dark"><span>Go To Checkout</span></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="header-search hs-toggle mobile-search">
-                            <a href="~/assets/#" class="search-toggle">
-                                <i class="d-icon-search"></i>
-                            </a>
-                            <form action="#" class="input-wrapper">
-                                <input type="text" class="form-control" name="search" autocomplete="off"
-                                       placeholder="Search your keyword..." required />
-                                <button class="btn btn-search" type="submit">
-                                    <i class="d-icon-search"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="header-bottom d-lg-show">
-                <div class="container">
-                    <div class="header-left">
-                        <partial name="_Navbar" />
-                    </div>
-                    <div class="header-right">
-                        <a href="~/assets/https://d-themes.com/buynow/riodehtml" target="_blank" class="ml-6">Toyota Prius!</a>
-                    </div>
-                </div>
-            </div>
-        </header>
+        @await Component.InvokeAsync("Header")
 
         <main class="main">
             @RenderBody();
@@ -299,7 +140,7 @@
                                         <a href="~/assets/#">Sign in</a>
                                     </li>
                                     <li>
-                                        <a asp-action="Basket" asp-controller="shop"  >View Cart</a>
+                                        <a asp-action="Basket" asp-controller="shop">View Cart</a>
                                     </li>
                                     <li>
                                         <a href="~/assets/wishlist.html">My Wishlist</a>
@@ -573,11 +414,37 @@
     <script src="~/assets/vendor/isotope/isotope.pkgd.min.js"></script>
     <script src="~/assets/vendor/jquery.plugin/jquery.plugin.min.js"></script>
     <script src="~/assets/vendor/jquery.countdown/jquery.countdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="~/libs/toastr.js/toastr.min.js"></script>
     <script src="~/assets/js/main.min.js"></script>
     <script src="~/admin/files/assets/js/customize.js"></script>
-
+    <script src="~/libs/tab-control/tab-control.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script>
+        $(document).ready(function () {
+            function showCardCount() {
+                let items = ($.cookie('cards') || '').split(',');
+                $('span.cart-count').html(items.length - 1);
+
+            }
+            showCardCount();
+            function showCartPrice() {
+                let items = ($.cookie('prices') || '').split(',');
+                console.log(items);
+                let totalPrice = 0;
+                for (var i = 1; i < items.length; i++) {
+                    totalPrice = totalPrice + parseFloat(items[i]);
+                }
+                $('span.cart-price').html(totalPrice + "₼");
+            }
+            showCartPrice();
+            function showWishlistCount() {
+                let items = ($.cookie('cardsForWishlist') || '').split(',');
+                $('.wishlist-count').html(items.length - 1);
+
+            }
+            showWishlistCount();
+        });
         @*let btn = document.getElementById('btnSubs');
         $(document).ready(function () {
             $('#subscribeForm').submit(function (e) {
@@ -612,6 +479,19 @@
         });*@
     </script>
     @RenderSection("js", required: false)
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/6306afae37898912e964fd3b/1gb91sh0v';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+    <!--End of Tawk.to Script-->
 </body>
 
 

@@ -30,7 +30,7 @@ namespace Auto_Part_WebUI.AppCode.Extensions
         {
             //bool hasChild = category.Children.Any();
             sb.Append($"<li {(hasChild ? "class=with-ul" : "")}>" +
-                $"<a href=\"#\">{category.Name}");
+                $"<a href=\"/shop/categories/{category.Id}\">{category.Name}");
             if (hasChild)
                 sb.Append("<i class=\"fas fa-chevron-down\"></i>");
             sb.Append("</a>");

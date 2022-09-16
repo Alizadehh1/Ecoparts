@@ -2,7 +2,7 @@
 <nav class="breadcrumb-nav">
     <div class="container">
         <ul class="breadcrumb">
-            <li><a href="demo1.html"><i class="d-icon-home"></i></a></li>
+            <li><a asp-action="index" asp-controller="home"><i class="d-icon-home"></i></a></li>
             <li>Shop</li>
         </ul>
     </div>
@@ -17,13 +17,8 @@
                 <div class="sidebar-content">
                     <div class="sticky-sidebar" data-sticky-options="{'top': 10}">
                         <div class="widget widget-collapsible">
-                            <h3 class="widget-title">Markalar</h3>
-                            <ul class="widget-body filter-items search-ul">
-                                @foreach (var item in Model.Brands)
-                                {
-                                    <li><a asp-action="categories" asp-route-id="@item.Id">@item.Name</a></li>
-                                }
-                            </ul>
+                            <h3 class="widget-title">Kateqoriyalar</h3>
+                            @Extension.GetCategoriesRaw(Model.Categories)
                         </div>
                         <div class="widget widget-collapsible">
                             <h3 class="widget-title">Price</h3>
@@ -45,28 +40,22 @@
                             </div>
                         </div>
                         <div class="widget widget-collapsible">
-                            <h3 class="widget-title">Size</h3>
-                            <ul class="widget-body filter-items">
-                                <li><a href="#">Small<span>(2)</span></a></li>
-                                <li><a href="#">Medium<span>(1)</span></a></li>
-                                <li><a href="#">Large<span>(9)</span></a></li>
-                                <li><a href="#">Extra Large<span>(1)</span></a></li>
+                            <h3 class="widget-title">Maşın markaları</h3>
+                            <ul class="widget-body filter-items search-ul" style="display: block;">
+                                @foreach (var item in Model.Brands)
+                                {
+                                    <li><a asp-action="brands" asp-route-id="@item.Id">@item.Name</a></li>
+
+                                }
                             </ul>
                         </div>
                         <div class="widget widget-collapsible">
-                            <h3 class="widget-title">Color</h3>
+                            <h3 class="widget-title">Keyfiyyət</h3>
                             <ul class="widget-body filter-items">
-                                <li><a href="#">Black<span>(2)</span></a></li>
-                                <li><a href="#">Blue<span>(1)</span></a></li>
-                                <li><a href="#">Green<span>(9)</span></a></li>
-                            </ul>
-                        </div>
-                        <div class="widget widget-collapsible">
-                            <h3 class="widget-title">Brands</h3>
-                            <ul class="widget-body filter-items">
-                                <li><a href="#">Black<span>(2)</span></a></li>
-                                <li><a href="#">Blue<span>(1)</span></a></li>
-                                <li><a href="#">Green<span>(9)</span></a></li>
+                                @foreach (var item in Model.Types)
+                                {
+                                    <li><a href="#">@item.Name<span>(2)</span></a></li>
+                                }
                             </ul>
                         </div>
 
@@ -275,13 +264,9 @@
                                         <img src="~/uploads/images/@item.ImagePath" alt="product" width="234"
                                              height="259">
                                     </a>
-                                    @*<div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-cart" data-item-id="@item.Id"
-                                           onclick="addToCart(event)"
-                                           title="Add to cart">
-                                            <i class="d-icon-bag"></i>
-                                        </a>
-                                    </div>*@
+                                    <div class="product-action-vertical">
+                                        <a data-item-id="@item.Id" onclick="addToWishlist(event)" class="btn-product-icon btn-wishlist" title="Seçilmişlərə əlavə et"><i class="d-icon-heart"></i></a>
+                                    </div>
                                     <div class="product-action">
                                         <a href="#" class="btn-product btn-quickview" title="Quick View">
                                             Quick
@@ -306,7 +291,7 @@
                                                 {
                                                     if (type.Id == price.TypeId)
                                                     {
-                                                        <span class="price">@price.Price&#8380;</span>
+                                                        <a class="price" style="font-size:14px;">@price.Price&#8380;<span style="color: #aaa;margin-left:0.5rem;font-size:14px;">(@type.Name)</span></a>
                                                     }
                                                 }
                                             }
@@ -326,42 +311,48 @@
     </div>
 </div>
 @section css{
-
-
     <link rel="stylesheet" type="text/css" href="~/assets/css/pagination.css" />
 }
-@*@section js{
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+@section js{
     <script>
-            function addToCart(ev) {
-                ev.preventDefault();
-                ev.stopPropagation();
-                let data = $(ev.currentTarget).data();
-                addToBasket(data.itemId);
+        function addToWishlist(ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            let data = $(ev.currentTarget).data();
+            addToCookie(data.itemId);
 
-                showCardCount();
-            }
-        function readFromBasket() {
-            if ($.cookie('cards') != undefined) {
-                return ($.cookie('cards') || '').split(',');
-            }
-            return [];
+            console.log(readFromCookie())
         }
-        function addToBasket(cardId) {
-            let items = readFromBasket();
+        function readFromCookie() {
+            return ($.cookie('cardsForWishlist') || '').split(',');
+        }
+        function addToCookie(cardId) {
+            let items = readFromCookie();
             let length = items.filter(item => item == cardId).length;
             if (length > 0) return;
             items.push(cardId);
-
-            $.cookie('cards', items.filter(item => item.length > 0).toString(), { expires: 7, path: '/' });
+            $.cookie('cardsForWishlist', items.toString(), { expires: 7, path: '/' });
+            $.ajax({
+                success: function (response) {
+                    if (response.error == true) {
+                        toastr.error(response.message, "Error!");
+                        return;
+                    }
+                    toastr.success("Successfully Added", response.message)
+                    showWishlistCount();
+                },
+                error: function (response) {
+                    toastr["error"]("Unsuccessfully", "Data has not been deleted")
+                }
+            })
         }
 
-        function showCardCount() {
-            let items = readFromBasket();
-            $('.cart-count').html(items.length);
+        function showWishlistCount() {
+            let items = readFromCookie();
+            $('.wishlist-count').html(items.length - 1);
 
         }
-        showCardCount();
+        showWishlistCount();
 
     </script>
-}*@
+}

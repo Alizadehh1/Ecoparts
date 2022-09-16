@@ -12249,6 +12249,7 @@ figure:hover .overlay-visible {
 
         .header-middle .header-right .divider {
             display: none;
+            
         }
 
     .header-middle .header-center {
@@ -12742,6 +12743,29 @@ figure:hover .overlay-visible {
     background-color: #26c;
     color: #fff;
     z-index: 1;
+}
+.wishlist-count {
+    position: relative;
+    right: 9px;
+    top: -16px;
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #dc3545;
+    color: #fff;
+    z-index: 1;
+    display: inline-block;
+    transition: color 0.4s;
+    font-size: 1.3rem;
+    font-weight: 600;
+    line-height: 25px;
+    width: 1.9rem;
+    height: 1.9rem;
+    font-size: 1.1rem;
+    line-height: 1.8rem;
 }
 
 .cart-dropdown.type2 .label-block .cart-count {

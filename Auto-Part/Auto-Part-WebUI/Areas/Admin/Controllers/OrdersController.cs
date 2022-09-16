@@ -1,0 +1,103 @@
+﻿using Auto_Part_WebUI.Models.DataContexts;
+using Auto_Part_WebUI.Models.Entities;
+using Auto_Part_WebUI.Models.Entities.Membership;
+using Auto_Part_WebUI.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Auto_Part_WebUI.Areas.Admin.Controllers
+{
+    [Area("Admin")]
+    public class OrdersController : Controller
+    {
+        private readonly ECoPartDbContext db;
+        private readonly UserManager<ECoPartUser> userManager;
+
+        public OrdersController(ECoPartDbContext db, UserManager<ECoPartUser> userManager)
+        {
+            this.db = db;
+            this.userManager = userManager;
+        }
+        public IActionResult Index(int pageIndex = 1, int pageSize = 2)
+        {
+            var viewModel = new OrderViewModel();
+            var query = db.Orders
+                .Include(o => o.OrderItems);
+            viewModel.Users = db.Users.ToList();
+            viewModel.PagedViewModel = new PagedViewModel<Order>(query, pageIndex, pageSize);
+            return View(viewModel);
+        }
+        public IActionResult Details(int id)
+        {
+            var viewModel = new OrderViewModel();
+            viewModel.Order = db.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi=>oi.Product)
+                .FirstOrDefault(o => o.Id == id);
+            viewModel.Orders = db.Orders
+                .Where(o => o.Id == id)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .ToList();
+            viewModel.Products = db.Products
+                .Where(p => p.DeletedById == null)
+                .Include(p=>p.Pricings)
+                .ToList();
+            viewModel.Users = db.Users.ToList();
+            return View(viewModel);
+        }
+        [HttpPost]
+        public IActionResult Confirm([FromRoute]int id)
+        {
+            var entity = db.Orders.Include(o=>o.OrderItems).FirstOrDefault(b => b.Id == id && b.DeletedById == null);
+            if (entity == null)
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = "Movcud deyil"
+                });
+            }
+            entity.isConfirmed = true;
+            var orderItems = entity.OrderItems.Where(oi => oi.OrderId == entity.Id);
+            foreach (var orderItem in orderItems)
+            {
+                var product = db.Products.FirstOrDefault(p => p.Id == orderItem.ProductId);
+                product.Quantity = product.Quantity - orderItem.Quantity;
+            }
+            db.SaveChanges();
+            return Json(new
+            {
+                error = false,
+                message = "Ugurla Təsdiqləndi"
+            });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Cancel([FromRoute]int id)
+        {
+            var entity = db.Orders.FirstOrDefault(b => b.Id == id && b.isConfirmed == false);
+            if (entity == null)
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = "Movcud deyil"
+                });
+            }
+            var user = await userManager.GetUserAsync(User);
+            entity.DeletedById = user.Id;
+            entity.DeletedDate = DateTime.UtcNow.AddHours(4);
+            db.SaveChanges();
+            db.SaveChanges();
+            return Json(new
+            {
+                error = false,
+                message = "Ugurla Təsdiqləndi"
+            });
+        }
+    }
+}

@@ -6,7 +6,7 @@
     <div class="container">
         <div class="product product-single row mb-4">
             <div class="col-md-6">
-                <div  class="mt-10 product-gallery pg-vertical">
+                <div class="mt-10 product-gallery pg-vertical">
                     <div class="product-single-carousel owl-carousel owl-theme owl-nav-inner row cols-1">
                         <figure class="product-image">
                             <img src="~/uploads/images/@Model.Product.ImagePath"
@@ -64,19 +64,18 @@
                 <hr class="product-divider">
 
                 <div class="product-form product-qty">
-                    <label>Miqdar:</label>
                     <div class="product-form-group">
-                        @*<div class="input-group">
-                            <button onclick="quantityAction()" class="quantity-minus quantity-action d-icon-minus"></button>
-                            <input onchange="quantityAction()" id="qty" class="quantity form-control" type="number" min="1" max="1000000">
-                            <button onclick="quantityAction()" class="quantity-plus quantity-action d-icon-plus"></button>
-                        </div>*@
                         <button data-item-id="@Model.Product.Id" onclick="addToCart(event)" class="btn-product btn-cart">
                             <i class="d-icon-bag"></i>Səbətə Əlavə Et
                         </button>
                     </div>
                 </div>
                 <hr class="product-divider mb-3">
+                <div class="product-footer">
+                    <div class="product-action">
+                        <a data-item-id="@Model.Product.Id" onclick="addToWishlist(event)"  class="btn-product btn-wishlist mr-6"><i class="d-icon-heart"></i>Seçilmişlərə əlavə et</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -154,11 +153,7 @@
                                  height="259">
                         </a>
                         <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-cart" data-item-id="@item.Id"
-                               onclick="addToCart(event)"
-                               title="Add to cart">
-                                <i class="d-icon-bag"></i>
-                            </a>
+                            <a data-item-id="@item.Id" onclick="addToWishlist(event)" class="btn-product-icon btn-wishlist" title="Seçilmişlərə əlavə et"><i class="d-icon-heart"></i></a>
                         </div>
                         <div class="product-action">
                             <a href="#" class="btn-product btn-quickview" title="Quick View">
@@ -237,7 +232,7 @@
             }
 
         }
-            
+
 
         function addToCart(ev) {
             ev.preventDefault();
@@ -250,39 +245,107 @@
                 if (types[i].getAttribute('class') == 'size active') {
                     let idName = types[i].getAttribute('id');
                     let typeId = idName.substring(5);
-                    addToBasket(data.itemId, price, typeId, 1);
+                    addToBasket(data.itemId, price);
                 }
             }
-            
 
-            console.log($.cookie('cards'));
+
+            console.log(readFromBasket());
             showCardCount();
         }
         function readFromBasket() {
-            if ($.cookie('cards') != undefined) {
-                return JSON.parse($.cookie('cards'));
-            }
-            return [];
+            return ($.cookie('cards') || '').split(',');
         }
-        function addToBasket(cardId,cardPrice,cardType,cardQty) {
+        function readFromBasketPrices() {
+            return ($.cookie('prices') || '').split(',');
+        }
+        function addToBasket(cardId,cardPrice) {
             let items = readFromBasket();
+            let prices = readFromBasketPrices();
 
-            let filteredArr = items.filter(item => item.Id == cardId && item.typeId == cardType);
-            if (filteredArr.length > 0) {
+            let length = items.filter(item => item == cardId).length;
+            let length1 = prices.filter(item => item == cardPrice).length;
+            if (length > 0 && length1 > 0) {
                 return;
             }
-            items.push({ 'Id': cardId, 'price': cardPrice, 'typeId': cardType, 'qty': cardQty })
-            $.cookie('cards', JSON.stringify(items), { expires: 7, path:'/' });
+            items.push(cardId)
+            prices.push(cardPrice)
+            $.cookie('cards', items.toString(), { expires: 7, path: '/' });
+            $.cookie('prices', prices.toString(), { expires: 7, path: '/' });
+            $.ajax({
+                success: function (response) {
+                    if (response.error == true) {
+                        toastr.error(response.message, "Error!");
+                        return;
+                    }
+                    toastr.success("Successfully Added", response.message)
+                    showCardCount();
+                    showCartPrice();
+                },
+                error: function (response) {
+                    toastr["error"]("Unsuccessfully", "Data has not been deleted")
+                }
+            })
         }
 
         function showCardCount() {
             let items = readFromBasket();
-            $('.cart-count').html(items.length);
+            $('span.cart-count').html(items.length - 1);
 
         }
         showCardCount();
+        function showCartPrice() {
+            let items = ($.cookie('prices') || '').split(',');
+            console.log(items);
+            let totalPrice = 0;
+            for (var i = 1; i < items.length; i++) {
+                totalPrice = totalPrice + parseFloat(items[i]);
+            }
+            $('span.cart-price').html(totalPrice + "₼");
+        }
+        showCartPrice();
+    </script>
+    <script>
+        function addToWishlist(ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            let data = $(ev.currentTarget).data();
+            addToCookie(data.itemId);
+
+            console.log(readFromCookie())
+        }
+        function readFromCookie() {
+            return ($.cookie('cardsForWishlist') || '').split(',');
+        }
+        function addToCookie(cardId) {
+            let items = readFromCookie();
+            let length = items.filter(item => item == cardId).length;
+            if (length > 0) return;
+            items.push(cardId);
+            $.cookie('cardsForWishlist', items.toString(), { expires: 7, path: '/' });
+            $.ajax({
+                success: function (response) {
+                    if (response.error == true) {
+                        toastr.error(response.message, "Error!");
+                        return;
+                    }
+                    toastr.success("Successfully Added", response.message)
+                    showWishlistCount();
+                },
+                error: function (response) {
+                    toastr["error"]("Unsuccessfully", "Data has not been deleted")
+                }
+            })
+        }
+
+        function showWishlistCount() {
+            let items = readFromCookie();
+            $('.wishlist-count').html(items.length - 1);
+
+        }
+        showWishlistCount();
+
     </script>
 
-    
 }
 

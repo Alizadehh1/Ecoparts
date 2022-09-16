@@ -57,6 +57,12 @@
                         </div>
                         <div class="col-12 col-lg-6">
                             <div class="form-group">
+                                <label asp-for="Quantity" class="control-label"></label>
+                                <input asp-for="Quantity" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <div class="form-group">
                                 <label asp-for="CategoryId" class="control-label"></label>
                                 <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
                             </div>
@@ -73,7 +79,7 @@
                                         <th>Dəyər</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="myTable">
 
                                     @foreach (var code in ViewBag.Codes)
                                     {
@@ -83,7 +89,6 @@
                                             </td>
                                             <th>
                                                 <p id="code-@code.Id">@code.Name</p>
-
                                             </th>
                                         </tr>
                                     }
@@ -122,6 +127,9 @@
                             </table>
                         </div>
                     </div>
+                    <div class="col-md-12 text-center">
+                        <ul class="pagination pagination-lg pager" id="myPager"></ul>
+                    </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
@@ -137,43 +145,35 @@
 
 
 @section css{
-    <link rel="stylesheet" type="text/css" href="~/libs/multiple-imager-js/css/imager.css">
     <link rel="stylesheet" type="text/css" href="~/libs/tab-control/tab-control.css">
-
-
 }
 
 @section js{
-    <script src="~/libs/multiple-imager-js/js/imager.js"></script>
     <script src="~/libs/tab-control/tab-control.js"></script>
     <script>
 
-        const selectColors = `@Html.DropDownList("ColorId",@ViewBag.Colors,null,htmlAttributes:new {
+        const selectTypes = `@Html.DropDownList("TypeId",@ViewBag.Types,null,htmlAttributes:new {
                 @class="form-control select2",
                 id="#s1#"
                 })`;
-        const selectSizes = `@Html.DropDownList("SizeId",@ViewBag.Sizes,null,htmlAttributes:new {
-                @class="form-control select2",
-                id="#s2#"
-                })`;
+        function readFile(input) {
+            let file = input.files[0];
+
+            let reader = new FileReader();
+
+
+            reader.onload = function () {
+                console.log(reader.result);
+                $('#file-viewer').css('background-image', `url(${reader.result})`)
+            };
+
+            reader.onerror = function () {
+                console.log(reader.error);
+            };
+            reader.readAsDataURL(file);
+        }
 
         $(document).ready(function () {
-
-
-            $('#viewer1').imgadd({
-                tnWidth: '120px',
-                tnHeight: '120px',
-                fontSize: '55px',
-                plusInnerHtml: '',
-                plusBtnClass: undefined
-            });
-
-            $('#pricing select').each(function (index, item) {
-                let selectedId = $(item).attr('selected-id');
-                $(item).val(selectedId).trigger('change');
-
-            });
-
 
 
 
@@ -187,42 +187,45 @@
                 let formData = new FormData(e.currentTarget);
 
                 let indexer = 0;
-                $('input[data-specification-id]').each(function (index, item) {
-                    const id = $(item).data('specification-id');
-                    const value = $(item).val();
+                let selected = 0;
+                const valuesArr = [];
+                const idsArr = [];
+                $('input[data-code-id]').each(function (index, item) {
 
-
-                    if (value.length == 0)
-                        return;
-                    console.log(id, value);
-
-                    formData.set(`Specification[${indexer}].Id`, id);
-                    formData.set(`Specification[${indexer}].Value`, value);
+                    if (item.checked) {
+                        const id = $(item).data('code-id');
+                        const idName = `code-${id}`;
+                        const value = $(`#${idName}`).text();
+                        valuesArr.push(value);
+                        idsArr.push(id);
+                        selected++;
+                    }
                     indexer++;
+                    console.log(indexer);
+                    if (valuesArr.length == selected) {
+                        let text = valuesArr.toString();
+                        let text1 = idsArr.toString();
+                        formData.set(`Values`, text);
+                        formData.set(`Ids`, text1);
+                    }
                 });
 
                 let pricing = [];
                 $('#pricing tbody tr').each(function (index, item) {
-                    const colorId = $(item).find('td:nth-child(1) select').val();
-                    const sizeId = $(item).find('td:nth-child(2) select').val();
-                    const value = $(item).find('td:nth-child(3) input').val();
+                    const typeId = $(item).find('td:nth-child(1) select').val();
+                    const value = $(item).find('td:nth-child(2) input').val();
 
-                    const filtered = pricing.filter((pItem) => {
-                        return pItem.colorId == colorId && pItem.sizeId == sizeId;
-                    });
-                    if (filtered.length > 0) {
-                        return;
-                    }
+
                     pricing.push({
-                        colorId: colorId,
-                        sizeId: sizeId,
+                        typeId: typeId,
                         price: value
                     });
                 });
-                $(pricing).each(function (index,item) {
-                    formData.set(`Pricing[${index}].SizeId`, item.sizeId);
-                    formData.set(`Pricing[${index}].ColorId`, item.colorId);
+                $(pricing).each(function (index, item) {
+                    formData.set(`Pricing[${index}].TypeId`, item.typeId);
                     formData.set(`Pricing[${index}].Price`, item.price);
+                    console.log(index);
+                    index++;
                 });
                 /*
 
@@ -238,14 +241,6 @@
                     },
                     success: function (response) {
                         if (response.error == undefined) {
-                            let errors = response.errors.map(err => {
-                                return {
-                                    propertyName: err.propertyName,
-                                    errorMessage: err.errorMessage
-                                };
-                            });
-
-                            showErrors(errors);
                             return;
                         }
                         else if (response.error == true) {
@@ -272,48 +267,48 @@
 
 
 
-        function showErrors(errors) {
-            errors = errors.filter(function (item, index, arr) {
-                return arr.map(a => a.propertyName).indexOf(item.propertyName) == index;
-            });
+        //function showErrors(errors) {
+        //    errors = errors.filter(function (item, index, arr) {
+        //        return arr.map(a => a.propertyName).indexOf(item.propertyName) == index;
+        //    });
 
-            console.log(errors);
-            $(`#productCreate span.error`).html('');
+        //    console.log(errors);
+        //    $(`#productCreate span.error`).html('');
 
-            $(errors).each(function (index, item) {
+        //    $(errors).each(function (index, item) {
 
-                const el = $(`#productCreate input[name="${item.propertyName}"]`);
-                $(el).focus(function () {
-                const elError = el.next();
-                    elError.html('');
-                });
-                let spanError = $(el).next('span.error');
+        //        const el = $(`#productCreate input[name="${item.propertyName}"]`);
+        //        $(el).focus(function () {
+        //        const elError = el.next();
+        //            elError.html('');
+        //        });
+        //        let spanError = $(el).next('span.error');
 
-                if (spanError.length == 0) {
-                    spanError = $('<span/>', {
-                        class: 'error',
-                        style: 'color: crimson',
-                        html: item.errorMessage
-                    });
+        //        if (spanError.length == 0) {
+        //            spanError = $('<span/>', {
+        //                class: 'error',
+        //                style: 'color: crimson',
+        //                html: item.errorMessage
+        //            });
 
-                    $(spanError).insertAfter(el);
-                }
-                else {
-                    $(spanError).html(item.errorMessage);
-                }
-
-
+        //            $(spanError).insertAfter(el);
+        //        }
+        //        else {
+        //            $(spanError).html(item.errorMessage);
+        //        }
 
 
-            });
-        }
 
-        function blurring(errors) {
-            $(`#productCreate input[name=""]`).focus(function (item) {
-                $(`#productCreate span.error`).html('');
-            });
 
-        }
+        //    });
+        //}
+
+        //function blurring(errors) {
+        //    $(`#productCreate input[name=""]`).focus(function (item) {
+        //        $(`#productCreate span.error`).html('');
+        //    });
+
+        //}
 
 
 
@@ -326,8 +321,7 @@
 
             const tBody = $(e.currentTarget).closest('table').find('tbody');
             const tr = $(`<tr>
-                            <td>${(selectColors.replace('#s1#',  newid()))}</td>
-                            <td>${(selectSizes.replace('#s2#',  newid()))}</td>
+                            <td>${(selectTypes.replace('#s1#',  newid()))}</td>
                             <td><input type="text"/></td>
                             </tr>`);
 
@@ -354,6 +348,151 @@
                 return v.toString(16);
             });
         }
+    </script>
+
+    <script>
+        $.fn.pageMe = function (opts) {
+            var $this = this,
+                defaults = {
+                    perPage: 7,
+                    showPrevNext: false,
+                    hidePageNumbers: false
+                },
+                settings = $.extend(defaults, opts);
+
+            var listElement = $this;
+            var perPage = settings.perPage;
+            var children = listElement.children();
+            var pager = $('.pager');
+
+            if (typeof settings.childSelector != "undefined") {
+                children = listElement.find(settings.childSelector);
+            }
+
+            if (typeof settings.pagerSelector != "undefined") {
+                pager = $(settings.pagerSelector);
+            }
+
+            var numItems = children.length;
+
+            var numPages = Math.ceil(numItems / perPage);
+
+            pager.data("curr", 0);
+
+            if (settings.showPrevNext) {
+                $('<li class="page-item"><a href="#" class="prev_link">«</a></li>').appendTo(pager);
+            }
+
+            var curr = 0;
+            // Added class and id in li start
+            while (numPages > curr && (settings.hidePageNumbers == false)) {
+                $('<li id="pg' + (curr + 1) + '" class="pg page-item"><a href="#" class="page-link">' + (curr + 1) + '</a></li>').appendTo(pager);
+                curr++;
+            }
+            // Added class and id in li end
+
+            if (settings.showPrevNext) {
+                $('<li><a href="#" class="next_link">»</a></li>').appendTo(pager);
+            }
+
+            pager.find('.page-link:first').addClass('active');
+            pager.find('.prev_link').hide();
+            if (numPages <= 1) {
+                pager.find('.next_link').hide();
+            }
+            pager.children().eq(1).addClass("active");
+
+            children.hide();
+            children.slice(0, perPage).show();
+            if (numPages > 3) {
+                $('.pg').hide();
+                $('#pg1,#pg2,#pg3').show();
+                $("#pg3").after($("<li class='ell'>").html("<span>...</span>"));
+            }
+
+            pager.find('li .page-link').click(function () {
+                var clickedPage = $(this).html().valueOf() - 1;
+                goTo(clickedPage, perPage);
+                return false;
+            });
+            pager.find('li .prev_link').click(function () {
+                previous();
+                return false;
+            });
+            pager.find('li .next_link').click(function () {
+                next();
+                return false;
+            });
+
+            function previous() {
+                var goToPage = parseInt(pager.data("curr")) - 1;
+                goTo(goToPage);
+            }
+
+            function next() {
+                goToPage = parseInt(pager.data("curr")) + 1;
+                goTo(goToPage);
+            }
+
+            function goTo(page) {
+                var startAt = page * perPage,
+                    endOn = startAt + perPage;
+
+                // Added few lines from here start
+
+                $('.pg').hide();
+                $(".ell").remove();
+                var prevpg = $("#pg" + page).show();
+                var currpg = $("#pg" + (page + 1)).show();
+                var nextpg = $("#pg" + (page + 2)).show();
+                if (prevpg.length == 0) nextpg = $("#pg" + (page + 3)).show();
+                if (prevpg.length == 1 && nextpg.length == 0) {
+                    prevpg = $("#pg" + (page - 1)).show();
+                }
+                $("#pg1").show()
+                if (curr > 3) {
+                    if (page > 1) prevpg.before($("<li class='ell'>").html("<span>...</span>"));
+                    if (page < curr - 2) nextpg.after($("<li class='ell'>").html("<span>...</span>"));
+                }
+
+                if (page <= numPages - 3) {
+                    $("#pg" + numPages.toString()).show();
+                }
+                currpg.addClass("active").siblings().removeClass("active");
+                // Added few lines till here end
+
+
+                children.css('display', 'none').slice(startAt, endOn).show();
+
+                if (page >= 1) {
+                    pager.find('.prev_link').show();
+                } else {
+                    pager.find('.prev_link').hide();
+                }
+
+                if (page < (numPages - 1)) {
+                    pager.find('.next_link').show();
+                } else {
+                    pager.find('.next_link').hide();
+                }
+
+                pager.data("curr", page);
+                /*pager.children().removeClass("active");
+                pager.children().eq(page + 1).addClass("active");*/
+
+            }
+        };
+
+        $(document).ready(function () {
+
+            $('#myTable').pageMe({
+                pagerSelector: '#myPager',
+                showPrevNext: true,
+                hidePageNumbers: false,
+                perPage: 5
+            });
+
+        });
     </script>
 }
 

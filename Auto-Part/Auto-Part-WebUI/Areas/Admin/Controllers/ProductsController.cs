@@ -58,6 +58,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             ViewData["CategoryId"] = new SelectList(db.Categories.Where(c=>c.DeletedById==null), "Id", "Name");
             ViewData["Types"] = new SelectList(db.ProductTypes.Where(c => c.DeletedById == null), "Id", "Name");
             ViewBag.Codes = db.PartCodes.Where(ppc => ppc.DeletedById == null)
+                .OrderBy(pc=>pc.Name)
                .ToList();
             return View();
         }
@@ -68,12 +69,12 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             var product = await mediator.Send(command);
 
 
-            if (product?.ValidationResult != null && !product.ValidationResult.IsValid)
+            if (ModelState.IsValid)
             {
-                return Json(product.ValidationResult);
+                return RedirectToAction(nameof(Index));
             }
 
-            return Json(new CommandJsonResponse(false, $"Ugurlu emeliyyat, yeni mehsulun kodu:{product.Product.Id}"));
+            return View(command);
         }
         [Authorize(Policy = "admin.products.edit")]
         public async Task<IActionResult> Edit(int? id)
@@ -97,21 +98,20 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             return View(product);
         }
 
-        //[HttpPost]
-        //[Authorize(Policy = "admin.products.edit")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(ProductEditCommand model)
-        //{
+        [HttpPost]
+        [Authorize(Policy = "admin.products.edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit([FromRoute] int id, ProductEditCommand model)
+        {
+            if (id != model.Id)
+            {
+                return NotFound();
+            }
+            var product = await mediator.Send(model);
 
-        //    var product = await mediator.Send(model);
 
-        //    if (product?.ValidationResult != null && !product.ValidationResult.IsValid)
-        //    {
-        //        return Json(product.ValidationResult);
-        //    }
-
-        //    return Json(new CommandJsonResponse(false, $"Ugurlu emeliyyat, yeni mehsulun kodu:{product.Product.Id}"));
-        //}
+            return RedirectToAction(nameof(Index));
+        }
 
     }
 }

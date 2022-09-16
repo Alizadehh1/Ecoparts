@@ -1,4 +1,4 @@
-﻿@model object
+﻿@model List<Tuple<int, string, string, double>>
 @{
     ViewData["Title"] = "Basket";
 }
@@ -11,63 +11,70 @@
     <div class="container mt-7 mb-2">
         <div class="row">
             <div class="col-lg-8 col-md-12 pr-lg-4">
-                <table class="shop-table cart-table">
-                    <thead>
-                        <tr>
-                            <th><span>Məhsul</span></th>
-                            <th></th>
-                            <th><span>Qiymət</span></th>
-                            <th style="text-align:center;">Ədəd</th>
-                            <th>Yekun</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @*@foreach (var item in Model)
-                        {
-                            i
-                        }*@
-                        @*@foreach (var item in Model)
-                        {
-
-                            <tr data-item-price="@(item.Id+20)" data-item-quantity=1>
-                                <td class="product-thumbnail">
-                                    <figure>
-                                        <a href="product-simple.html">
-                                            <img src="~/uploads/images/@item.ImagePath" width="100" height="100"
-                                                 alt="product">
-                                        </a>
-                                    </figure>
-                                </td>
-                                <td class="product-name">
-                                    <div class="product-name-section">
-                                        <a asp-action="details" asp-controller="shop" asp-route-id=@item.Id>
-                                            @item.Name
-                                        </a>
-                                    </div>
-                                </td>
-                                <td class="product-subtotal">
-                                    <span class="amount">@(item.Id+20)man</span>
-                                <td class="product-quantity">
-                                    <div class="input-group">
-                                        <button class="quantity-minus d-icon-minus" onclick="plusQuantity(event)"></button>
-                                        <input class="quantity form-control" type="number" min="1" max="1000000" value="1">
-                                        <button class="quantity-plus d-icon-plus" onclick="minusQuantity(event)"></button>
-                                    </div>
-                                </td>
-                                <td class="product-price">
-                                    <span class="amount">@(item.Id+20)man</span>
-                                </td>
-                                <td class="product-close">
-                                    <a href="#" class="product-remove" title="Məhsulu silin">
-                                        <i class="fas fa-times"></i>
-                                    </a>
-                                </td>
+                <div class="emptyBasketContainer">
+                    @if (Model.Count == 0)
+                    {
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                            <i class="emptyBasket fa-solid fa-cart-shopping"></i>
+                            <h1 class="emptyBasketText">Your Cart is empty</h1>
+                        </div>
+                    }
+                </div>
+                @if (Model.Count > 0)
+                {
+                    <table class="shop-table cart-table shipping">
+                        <thead>
+                            <tr>
+                                <th><span>Məhsul</span></th>
+                                <th>Adı</th>
+                                <th>Qiymət</th>
+                                <th style="text-align:center;">Ədəd</th>
+                                <th>Yekun</th>
                             </tr>
-                        }*@
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr id="entityTr" data-id="@item.Item1" data-entity-id="@item.Item1-@item.Item4" data-price="@item.Item4" data-quantity="1">
+                                    <td class="product-thumbnail">
+                                        <figure>
+                                            <a href="product-simple.html">
+                                                <img src="~/uploads/images/@item.Item3" width="100" height="100"
+                                                     alt="product">
+                                            </a>
+                                        </figure>
+                                    </td>
+                                    <td class="product-name">
+                                        <div class="product-name-section">
+                                            <a asp-action="details" asp-controller="shop" asp-route-id=@item.Item1>
+                                                @item.Item2
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td class="product-subtotal">
+                                        <span class="amount">@item.Item4 ₼</span>
+                                    <td class="product-quantity">
+                                        <div class="input-group">
+                                            <button class="quantity-minus d-icon-minus" onclick="minusQuantity(event)"></button>
+                                            <span class="quantity form-control d-flex justify-content-center align-items-center">1</span>
+                                            <button class="quantity-plus d-icon-plus" onclick="plusQuantity(event)"></button>
+                                        </div>
+                                    </td>
+                                    <td class="product-price">
+                                        <span class="amount">@item.Item4 ₼</span>
+                                    </td>
+                                    <td class="product-close">
+                                        <a onclick="removeEntity(@item.Item1,@item.Item4)" class="product-remove" title="Məhsulu silin">
+                                            <i class="fas fa-times"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
                 <div class="cart-actions mb-6 pt-4">
-                    <a href="shop.html" class="btn btn-dark btn-md btn-rounded btn-icon-left mr-4 mb-4"><i class="d-icon-arrow-left"></i>Continue Shopping</a>
+                    <a asp-action="Index" class="btn btn-dark btn-md btn-rounded btn-icon-left mr-4 mb-4"><i class="d-icon-arrow-left"></i>Continue Shopping</a>
                     <button type="submit" class="btn btn-outline btn-dark btn-md btn-rounded btn-disabled">Update Cart</button>
                 </div>
                 <div class="cart-coupon-box mb-8">
@@ -77,85 +84,27 @@
                     <button type="submit" class="btn btn-md btn-dark btn-rounded btn-outline">Apply Coupon</button>
                 </div>
             </div>
-            <aside class="col-lg-4 sticky-sidebar-wrapper">
-                <div class="sticky-sidebar" data-sticky-options="{'bottom': 20}">
-                    <div class="summary mb-4">
-                        <h3 class="summary-title text-left">Cart Totals</h3>
-                        <table class="shipping">
-                            <tr class="summary-subtotal">
-                                <td>
-                                    <h4 class="summary-subtitle">Subtotal</h4>
-                                </td>
-                                <td>
-                                    <p class="summary-subtotal-price">$426.99</p>
-                                </td>
-                            </tr>
-                            <tr class="sumnary-shipping shipping-row-last">
-                                <td colspan="2">
-                                    <h4 class="summary-subtitle">Calculate Shipping</h4>
-                                    <ul>
-                                        <li>
-                                            <div class="custom-radio">
-                                                <input type="radio" id="flat_rate" name="shipping" class="custom-control-input" checked>
-                                                <label class="custom-control-label" for="flat_rate">Flat rate</label>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="custom-radio">
-                                                <input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
-                                                <label class="custom-control-label" for="free-shipping">
-                                                    Free
-                                                    shipping
-                                                </label>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="custom-radio">
-                                                <input type="radio" id="local_pickup" name="shipping" class="custom-control-input">
-                                                <label class="custom-control-label" for="local_pickup">Local pickup</label>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </table>
-                        <div class="shipping-address">
-                            <label>Shipping to <strong>CA.</strong></label>
-                            <div class="select-box">
-                                <select name="country" class="form-control">
-                                    <option value="us" selected>United States (US)</option>
-                                    <option value="uk"> United Kingdom</option>
-                                    <option value="fr">France</option>
-                                    <option value="aus">Austria</option>
-                                </select>
-                            </div>
-                            <div class="select-box">
-                                <select name="country" class="form-control">
-                                    <option value="us" selected>California</option>
-                                    <option value="uk">Alaska</option>
-                                    <option value="fr">Delaware</option>
-                                    <option value="aus">Hawaii</option>
-                                </select>
-                            </div>
-                            <input type="text" class="form-control" name="code" placeholder="Town / City" />
-                            <input type="text" class="form-control" name="code" placeholder="ZIP" />
-                            <a href="#" class="btn btn-md btn-dark btn-rounded btn-outline">Update totals</a>
+            @if (Model.Count > 0)
+            {
+                <aside id="placingOrder" class="col-lg-4 sticky-sidebar-wrapper">
+                    <div class="sticky-sidebar" data-sticky-options="{'bottom': 20}">
+                        <div class="summary mb-4">
+                            <h3 class="summary-title text-left">Cart Totals</h3>
+                            <table class="total">
+                                <tr class="summary-subtotal">
+                                    <td>
+                                        <h4 class="summary-subtitle">Ümumi</h4>
+                                    </td>
+                                    <td>
+                                        <p class="summary-total-price summary-subtotal-price ls-s">0</p>₼
+                                    </td>
+                                </tr>
+                            </table>
+                            <a id="placeOrderBtn" onclick="placeOrder()" class="btn btn-dark btn-rounded btn-checkout">Səbəti Təsdiqlə</a>
                         </div>
-                        <table class="total">
-                            <tr class="summary-subtotal">
-                                <td>
-                                    <h4 class="summary-subtitle">Total</h4>
-                                </td>
-                                <td>
-                                    <p class="summary-total-price ls-s">$426.99</p>
-                                </td>
-                            </tr>
-                        </table>
-                        <a href="checkout.html" class="btn btn-dark btn-rounded btn-checkout">Proceed to checkout</a>
                     </div>
-                </div>
-            </aside>
+                </aside>
+            }
         </div>
     </div>
 </div>
@@ -165,6 +114,87 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
 
+        function readFromBasket() {
+            return ($.cookie('cards') || '').split(',');
+        }
+        function readFromBasketPrices() {
+            return ($.cookie('prices') || '').split(',');
+        }
+        function showCardCount() {
+            let items = readFromBasket();
+            $('span.cart-count').html(items.length - 1);
+
+        }
+        function showCartPrice() {
+            let items = ($.cookie('prices') || '').split(',');
+            console.log(items);
+            let totalPrice = 0;
+            for (var i = 1; i < items.length; i++) {
+                totalPrice = totalPrice + parseFloat(items[i]);
+            }
+            $('span.cart-price').html(totalPrice + "₼");
+        }
+        function checkCart() {
+            let items = readFromBasket();
+            var divContainer = $('<div>', {
+                class: 'd-flex flex-column justify-content-center align-items-center'
+            });
+            var iTag = $('<i>', {
+                class: 'emptyBasket fa-solid fa-cart-shopping'
+            });
+            var h1Tag = $('<h1>').text("Your Cart is empty").addClass("emptyBasketText");
+            let divTag = $('div.emptyBasketContainer');
+            if (items.length <= 1) {
+                $('table.shipping').remove();
+                $('aside#placingOrder').remove();
+                iTag.appendTo(divContainer);
+                h1Tag.appendTo(divContainer);
+                divContainer.appendTo(divTag);
+            }
+        }
+        function setTotalPrice() {
+            let items = document.querySelectorAll('td.product-price span.amount');
+            let totalPrice = 0;
+            for (var i = 0; i < items.length; i++) {
+                totalPrice = totalPrice + parseInt(items[i].textContent);
+            }
+            $('p.summary-subtotal-price').html(`${totalPrice}`);
+            console.log(totalPrice);
+        }
+        setTotalPrice();
+        function removeEntity(entityId, entityPrice) {
+            let items = readFromBasket();
+            let prices = readFromBasketPrices();
+
+            let id = entityId.toString();
+            const index = items.indexOf(id);
+            if (index > -1) {
+                items.splice(index, 1);
+                prices.splice(index, 1);
+            }
+            $.cookie('cards', items.toString(), { expires: 7, path: '/' });
+            $.cookie('prices', prices.toString(), { expires: 7, path: '/' });
+            $.ajax({
+                success: function (response) {
+                    if (response.error == true) {
+                        toastr.error(response.message, "Error!");
+                        return;
+                    }
+                    toastr.success("Successfully Deleted", response.message)
+                    $(`tr[data-entity-id=${entityId}-${entityPrice}]`).remove();
+                    showCardCount();
+                    showCartPrice();
+                    setTotalPrice();
+                    checkCart();
+                },
+                error: function (response) {
+                    toastr["error"]("Unsuccessfully", "Data has not been deleted")
+                }
+            })
+        }
+
+
+
         function plusQuantity(e) {
             e.preventDefault();
 
@@ -173,20 +203,16 @@
 
             let data = $(row).data();
 
-            let quantity = $(row).find('input.quantity')[0].value;
+            let quantity = $(row).find('span.quantity').html();
 
             if (!isNaN(quantity)) {
-                //quantity++;
-                $(row).data('item-quantity', quantity);
+                quantity++;
+                $(row).data('quantity', quantity);
             }
-
-            else {
-                return;
-            }
-
-            $(row).find('td.product-price .amount').html(`${parseFloat(data.itemPrice) * parseFloat(quantity)}man`);
-
-            console.log(parseFloat(data.itemPrice) * parseFloat(quantity));
+            $(row).find('span.quantity').html(quantity);
+            $(row).find('td.product-price .amount').html(`${(data.price * quantity)}₼`);
+            setTotalPrice();
+            console.log(data);
         }
 
         function minusQuantity(e) {
@@ -197,56 +223,63 @@
 
             let data = $(row).data();
 
-            let quantity = $(row).find('input.quantity')[0].value;
-
-            if (!isNaN(quantity)) {
-                //quantity--;
-                $(row).data('item-quantity', quantity);
-            }
-            else {
+            let quantity = $(row).find('span.quantity').html();
+            if (quantity == 1) {
                 return;
             }
+            if (!isNaN(quantity)) {
+                quantity--;
+                $(row).data('quantity', quantity);
 
-            $(row).find('td.product-price .amount').html(`${parseFloat(data.itemPrice) * parseFloat(quantity)}man`);
-
-            console.log(parseFloat(data.itemPrice) * parseFloat(quantity));
-        }
-
-
-        @*function readTypeFromCookie() {
-            if ($.cookie('types') != undefined) {
-                return $.cookie('types').split(',');
             }
-            return [];
+            $(row).find('span.quantity').html(quantity);
+            $(row).find('td.product-price .amount').html(`${(data.price * quantity)}₼`);
+            setTotalPrice();
+            console.log(data);
         }
-
-        function readFromBasket() {
-            if ($.cookie('cards') != undefined) {
-                return $.cookie('cards').split(',');
-            }
-            return [];
-        }
-
-        function getTypeId() {
-            let types = readTypeFromCookie();
-            let ids = readFromBasket();
-
-            @foreach (var pricing in Model.)
-                    {
-                        <text>
-                        if (@pricing.TypeId == typeId) {
-                            let price = @pricing.Price;
-                        }
-                        </text>
-                    }
-
-            console.log(ids);
-            console.log(types);*@
-
-        //getTypeId();
 
     </script>
+    <script>
+        function placeOrder() {
+            let items = document.querySelectorAll('#entityTr');
+            let productIds = [];
+            let quantity = [];
+            let price = [];
+            for (var i = 0; i < items.length; i++) {
+                let data = $(items[i]).data();
+                productIds.push(data.id);
+                quantity.push(data.quantity);
+                price.push(data.price);
 
+            }
+            console.log(quantity);
+            let totalAmount = $('p.summary-subtotal-price').html();
+            let itemsIds = readFromBasket();
+            let itemsPrice = readFromBasketPrices();
+            itemsIds.splice(0, itemsIds.length);
+            itemsPrice.splice(0, itemsPrice.length);
+            $.cookie('cards', itemsIds.toString(), { expires: 7, path: '/' });
+            $.cookie('prices', itemsPrice.toString(), { expires: 7, path: '/' });
+            $.ajax({
+                url: "@Url.Action("PlaceOrder")",
+                data: {
+                    productIds: productIds.toString(),
+                    quantities: quantity.toString(),
+                    totalAmount: totalAmount,
+                    prices: price.toString()
+                },
+                success: function (response) {
+                    if (response.error == true) {
+                        toastr.error(response.message, 'Error!');
+                        return;
+                    }
+                    toastr.success(response.message, 'Success!');
+
+                    location.href = `@Url.Action("Index")`;
+                }
+            });
+        }
+    </script>
 
 
 

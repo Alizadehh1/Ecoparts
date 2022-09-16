@@ -82,24 +82,26 @@
                                         <th>Dəyər</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="myTable">
                                     @foreach (var code in ViewBag.Codes)
                                     {
                                         <tr class="code-checkbox">
                                             <td class="table-row-select">
-                                                <input type="checkbox" data-code-id="@code.Id"  />
+                                                <input type="checkbox" data-code-id="@code.Id" />
                                             </td>
                                             <th>
                                                 <p id="code-@code.Id">@code.Name</p>
-                                                
+
                                             </th>
                                         </tr>
                                     }
-                                    
+
 
                                 </tbody>
                             </table>
+
                         </div>
+
                         <div class="tab-page" id="pricing" aria-title="Qiymetlendirme">
                             <table class="table table-hover">
                                 <thead>
@@ -118,6 +120,9 @@
                             </table>
                         </div>
                     </div>
+                    <div class="col-md-12 text-center">
+                        <ul class="pagination pagination-lg pager" id="myPager"></ul>
+                    </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
@@ -134,7 +139,6 @@
 
 @section css{
     <link rel="stylesheet" type="text/css" href="~/libs/tab-control/tab-control.css">
-
 
 }
 
@@ -181,7 +185,7 @@
                 const valuesArr = [];
                 const idsArr = [];
                 $('input[data-code-id]').each(function (index, item) {
-                    
+
                     if (item.checked) {
                         const id = $(item).data('code-id');
                         const idName = `code-${id}`;
@@ -205,7 +209,7 @@
                     const typeId = $(item).find('td:nth-child(1) select').val();
                     const value = $(item).find('td:nth-child(2) input').val();
 
-                    
+
                     pricing.push({
                         typeId: typeId,
                         price: value
@@ -346,6 +350,152 @@
                 return v.toString(16);
             });
         }
+    </script>
+
+
+    <script>
+        $.fn.pageMe = function (opts) {
+            var $this = this,
+                defaults = {
+                    perPage: 7,
+                    showPrevNext: false,
+                    hidePageNumbers: false
+                },
+                settings = $.extend(defaults, opts);
+
+            var listElement = $this;
+            var perPage = settings.perPage;
+            var children = listElement.children();
+            var pager = $('.pager');
+
+            if (typeof settings.childSelector != "undefined") {
+                children = listElement.find(settings.childSelector);
+            }
+
+            if (typeof settings.pagerSelector != "undefined") {
+                pager = $(settings.pagerSelector);
+            }
+
+            var numItems = children.length;
+            
+            var numPages = Math.ceil(numItems / perPage);
+
+            pager.data("curr", 0);
+
+            if (settings.showPrevNext) {
+                $('<li class="page-item"><a href="#" class="prev_link">«</a></li>').appendTo(pager);
+            }
+
+            var curr = 0;
+            // Added class and id in li start
+            while (numPages > curr && (settings.hidePageNumbers == false)) {
+                $('<li id="pg' + (curr + 1) + '" class="pg page-item"><a href="#" class="page-link">' + (curr + 1) + '</a></li>').appendTo(pager);
+                curr++;
+            }
+            // Added class and id in li end
+
+            if (settings.showPrevNext) {
+                $('<li><a href="#" class="next_link">»</a></li>').appendTo(pager);
+            }
+
+            pager.find('.page-link:first').addClass('active');
+            pager.find('.prev_link').hide();
+            if (numPages <= 1) {
+                pager.find('.next_link').hide();
+            }
+            pager.children().eq(1).addClass("active");
+
+            children.hide();
+            children.slice(0, perPage).show();
+            if (numPages > 3) {
+                $('.pg').hide();
+                $('#pg1,#pg2,#pg3').show();
+                $("#pg3").after($("<li class='ell'>").html("<span>...</span>"));
+            }
+
+            pager.find('li .page-link').click(function () {
+                var clickedPage = $(this).html().valueOf() - 1;
+                goTo(clickedPage, perPage);
+                return false;
+            });
+            pager.find('li .prev_link').click(function () {
+                previous();
+                return false;
+            });
+            pager.find('li .next_link').click(function () {
+                next();
+                return false;
+            });
+
+            function previous() {
+                var goToPage = parseInt(pager.data("curr")) - 1;
+                goTo(goToPage);
+            }
+
+            function next() {
+                goToPage = parseInt(pager.data("curr")) + 1;
+                goTo(goToPage);
+            }
+
+            function goTo(page) {
+                var startAt = page * perPage,
+                    endOn = startAt + perPage;
+
+                // Added few lines from here start
+
+                $('.pg').hide();
+                $(".ell").remove();
+                var prevpg = $("#pg" + page).show();
+                var currpg = $("#pg" + (page + 1)).show();
+                var nextpg = $("#pg" + (page + 2)).show();
+                if (prevpg.length == 0) nextpg = $("#pg" + (page + 3)).show();
+                if (prevpg.length == 1 && nextpg.length == 0) {
+                    prevpg = $("#pg" + (page - 1)).show();
+                }
+                $("#pg1").show()
+                if (curr > 3) {
+                    if (page > 1) prevpg.before($("<li class='ell'>").html("<span>...</span>"));
+                    if (page < curr - 2) nextpg.after($("<li class='ell'>").html("<span>...</span>"));
+                }
+
+                if (page <= numPages - 3) {
+                    $("#pg" + numPages.toString()).show();
+                }
+                currpg.addClass("active").siblings().removeClass("active");
+                // Added few lines till here end
+
+
+                children.css('display', 'none').slice(startAt, endOn).show();
+
+                if (page >= 1) {
+                    pager.find('.prev_link').show();
+                } else {
+                    pager.find('.prev_link').hide();
+                }
+
+                if (page < (numPages - 1)) {
+                    pager.find('.next_link').show();
+                } else {
+                    pager.find('.next_link').hide();
+                }
+
+                pager.data("curr", page);
+                /*pager.children().removeClass("active");
+                pager.children().eq(page + 1).addClass("active");*/
+
+            }
+        };
+
+        $(document).ready(function () {
+
+            $('#myTable').pageMe({
+                pagerSelector: '#myPager',
+                showPrevNext: true,
+                hidePageNumbers: false,
+                perPage: 5
+            });
+
+        });
     </script>
 }
 
