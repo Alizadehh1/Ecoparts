@@ -43,8 +43,8 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
 
             var product = await db.Products
                 .Include(p => p.Category)
-                .ThenInclude(c=>c.Brand)
-                .FirstOrDefaultAsync(m => m.Id == id && m.DeletedById==null);
+                .ThenInclude(c => c.Brand)
+                .FirstOrDefaultAsync(m => m.Id == id && m.DeletedById == null);
             if (product == null)
             {
                 return NotFound();
@@ -55,10 +55,10 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
         [Authorize(Policy = "admin.products.create")]
         public async Task<IActionResult> Create()
         {
-            ViewData["CategoryId"] = new SelectList(db.Categories.Where(c=>c.DeletedById==null), "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(db.Categories.Where(c => c.DeletedById == null), "Id", "Name");
             ViewData["Types"] = new SelectList(db.ProductTypes.Where(c => c.DeletedById == null), "Id", "Name");
             ViewBag.Codes = db.PartCodes.Where(ppc => ppc.DeletedById == null)
-                .OrderBy(pc=>pc.Name)
+                .OrderBy(pc => pc.Name)
                .ToList();
             return View();
         }
