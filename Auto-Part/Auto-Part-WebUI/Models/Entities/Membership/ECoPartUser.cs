@@ -15,5 +15,7 @@ namespace Auto_Part_WebUI.Models.Entities.Membership
         public string Name { get; set; }
         [Required]
         public string Surname { get; set; }
+        [Required]
+        public string Adress { get; set; }
     }
 }

@@ -27,6 +27,10 @@ namespace Auto_Part_WebUI.Models.FormModels
         [Required]
         [Phone]
         public string PhoneNumber { get; set; }
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string Adress { get; set; }
 
     }
 }

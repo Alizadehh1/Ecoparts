@@ -33,6 +33,7 @@
 <div class="page-body">
     <div class="card p-3">
         <div class="card-block">
+
             <form class="row" asp-action="Create" enctype="multipart/form-data" id="productCreate">
                 <div class="col-12 col-lg-6">
                     <div class="form-groupImage">
@@ -82,12 +83,25 @@
                                         <th>Dəyər</th>
                                     </tr>
                                 </thead>
+
                                 <tbody id="myTable">
+
+                                    <div id="searchForm">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input id="searchBtn" type="search" class="form-control border-dark" placeholder="Search...">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="productList" class="row">
+
+                                    </div>
                                     @foreach (var code in ViewBag.Codes)
                                     {
                                         <tr class="code-checkbox">
                                             <td class="table-row-select">
-                                                <input type="checkbox" data-code-id="@code.Id" />
+                                                <input class="partCodes" type="checkbox" data-code-id="@code.Id" />
                                             </td>
                                             <th>
                                                 <p id="code-@code.Id">@code.Name</p>
@@ -234,18 +248,7 @@
 
                     },
                     success: function (response) {
-                        if (response.error == undefined) {
-                            let errors = response.errors.map(err => {
-                                return {
-                                    propertyName: err.propertyName,
-                                    errorMessage: err.errorMessage
-                                };
-                            });
-
-                            showErrors(errors);
-                            return;
-                        }
-                        else if (response.error == true) {
+                        if (response.error == true) {
                             toastr.error(response.message, "Xəta!");
                             $(btn).removeAttr('disable');
                             return;
@@ -269,41 +272,7 @@
 
 
 
-        function showErrors(errors) {
-            errors = errors.filter(function (item, index, arr) {
-                return arr.map(a => a.propertyName).indexOf(item.propertyName) == index;
-            });
 
-            console.log(errors);
-            $(`#productCreate span.error`).html('');
-
-            $(errors).each(function (index, item) {
-
-                const el = $(`#productCreate input[name="${item.propertyName}"]`);
-                $(el).focus(function () {
-                const elError = el.next();
-                    elError.html('');
-                });
-                let spanError = $(el).next('span.error');
-
-                if (spanError.length == 0) {
-                    spanError = $('<span/>', {
-                        class: 'error',
-                        style: 'color: crimson',
-                        html: item.errorMessage
-                    });
-
-                    $(spanError).insertAfter(el);
-                }
-                else {
-                    $(spanError).html(item.errorMessage);
-                }
-
-
-
-
-            });
-        }
 
         function blurring(errors) {
             $(`#productCreate input[name=""]`).focus(function (item) {
@@ -377,7 +346,7 @@
             }
 
             var numItems = children.length;
-            
+
             var numPages = Math.ceil(numItems / perPage);
 
             pager.data("curr", 0);
@@ -492,10 +461,21 @@
                 pagerSelector: '#myPager',
                 showPrevNext: true,
                 hidePageNumbers: false,
-                perPage: 5
+                perPage: 10
             });
 
         });
+    </script>
+    <script>
+        $(document).on("keyup", "#searchBtn", function (e) {
+            e.preventDefault()
+            console.log($(this).val())
+            fetch("SearchInput" + "?key=" + $(this).val()).then(res => {
+                return res.text()
+            }).then(data => {
+                $("#productList").html(data)
+            })
+        })
     </script>
 }
 

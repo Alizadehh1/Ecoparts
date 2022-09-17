@@ -166,10 +166,14 @@
     <div class="header-bottom d-lg-show">
         <div class="container">
             <div class="header-left">
-                <partial name="_Navbar"/>
+                <partial name="_Navbar" />
             </div>
-            <div class="header-right">
-                <a href="~/assets/https://d-themes.com/buynow/riodehtml" target="_blank" class="ml-6">Buy Riode!</a>
+            <div class="select-box">
+                    <a disabled>All PopularCars</a>
+                    @foreach (var item in @ViewBag.PopularCars)
+                    {
+                        <a asp-controller="shop" asp-action="Brands" asp-route-id="@item.Id">@item.Brand.Name</a>
+                    }
             </div>
         </div>
     </div>

@@ -69,18 +69,25 @@ namespace Auto_Part_WebUI.Controllers
             {
                 ECoPartUser foundedUser = null;
 
-                foundedUser = await userManager.FindByEmailAsync(user.Email);
+                if (user.UserName.IsEmail())
+                {
+                    foundedUser = await userManager.FindByEmailAsync(user.UserName);
+                }
+                else
+                {
+                    foundedUser = await userManager.FindByNameAsync(user.UserName);
+                }
 
                 if (foundedUser == null)
                 {
-                    ViewBag.Message = "E-Poçtunuz və ya şifrəniz yanlışdır!";
+                    ViewBag.Message = "E-Poçtunuz (İstifadəçi adınız) və ya şifrəniz yanlışdır!";
                     goto end;
                 }
                 var signInResult = await signInManager.PasswordSignInAsync(foundedUser, user.Password, true, true);
 
                 if (!signInResult.Succeeded)
                 {
-                    ViewBag.Message = "E-Poçtunuz və ya şifrəniz yanlışdır!";
+                    ViewBag.Message = "E-Poçtunuz (İstifadəçi adınız) və ya şifrəniz yanlışdır!";
                     goto end;
                 }
 
@@ -121,8 +128,8 @@ namespace Auto_Part_WebUI.Controllers
                 user.StoreName = model.StoreName;
                 user.Name = model.Name;
                 user.Surname = model.Surname;
-                user.UserName = $"{model.Name}.{model.Surname}";
-
+                user.UserName = model.Username;
+                user.Adress = model.Adress;
                 user.PhoneNumberConfirmed = true;
                 var result = await userManager.CreateAsync(user,model.Password);
 

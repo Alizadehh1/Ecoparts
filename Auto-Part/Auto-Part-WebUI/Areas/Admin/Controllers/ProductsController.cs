@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -76,6 +77,18 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
 
             return View(command);
         }
+        public async Task<IActionResult> SearchInput(string key)
+        {
+            List<PartCode> partCodes = new List<PartCode>();
+            if (key != null)
+            {
+                partCodes = await db.PartCodes
+                .Where(p => p.Name.Contains(key) && p.DeletedById==null)
+                .ToListAsync();
+            }
+            return PartialView("_PartCodeListPartial", partCodes);
+        }
+
         [Authorize(Policy = "admin.products.edit")]
         public async Task<IActionResult> Edit(int? id)
         {

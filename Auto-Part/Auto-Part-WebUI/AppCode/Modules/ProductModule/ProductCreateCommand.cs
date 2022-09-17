@@ -48,10 +48,10 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
                 }
 
 
-                if (ctx.ModelIsValid())
-                {
-                    return null;
-                }
+                //if (ctx.ModelIsValid())
+                //{
+                //    return null;
+                //}
 
                 var product = new Product();
 

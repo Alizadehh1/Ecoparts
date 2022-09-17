@@ -4,14 +4,16 @@ using Auto_Part_WebUI.Models.DataContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Auto_Part_WebUI.Migrations
 {
     [DbContext(typeof(ECoPartDbContext))]
-    partial class ECoPartDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220917012520_popularcar")]
+    partial class popularcar
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -390,35 +392,6 @@ namespace Auto_Part_WebUI.Migrations
                     b.ToTable("PartCodes");
                 });
 
-            modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.PopularCar", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BrandId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CreatedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeletedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BrandId");
-
-                    b.ToTable("PopularCars");
-                });
-
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -661,17 +634,6 @@ namespace Auto_Part_WebUI.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.PopularCar", b =>
-                {
-                    b.HasOne("Auto_Part_WebUI.Models.Entities.Brand", "Brand")
-                        .WithMany()
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("Auto_Part_WebUI.Models.Entities.Product", b =>

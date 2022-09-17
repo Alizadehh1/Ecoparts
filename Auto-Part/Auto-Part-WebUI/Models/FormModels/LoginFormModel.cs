@@ -9,8 +9,7 @@ namespace Auto_Part_WebUI.Models.FormModels
     public class LoginFormModel
     {
         [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        public string UserName { get; set; }
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
