@@ -288,6 +288,7 @@
                                     <h3 class="product-name">
                                         <a asp-action="details" asp-route-id="@item.Id">@item.Name</a>
                                     </h3>
+                                    <span style="color: #aaa;margin-left:0.5rem;font-size:14px;">@item.PartCodeName</span>
                                     <div class="product-price">
                                         @foreach (var price in Model.Pricings)
                                         {

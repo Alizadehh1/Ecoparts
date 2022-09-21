@@ -224,36 +224,6 @@
                         </a>
                     </div>
                 </div>
-                <nav class="toolbox sticky-toolbox sticky-content fix-top">
-                    <div class="toolbox-left">
-                        <div class="toolbox-item toolbox-sort select-box">
-                            <label>Sort By :</label>
-                            <select name="orderby" class="form-control">
-                                <option value="default">Default</option>
-                                <option value="popularity" selected="selected">Most Popular</option>
-                                <option value="rating">Average rating</option>
-                                <option value="date">Latest</option>
-                                <option value="price-low">Sort forward price low</option>
-                                <option value="price-high">Sort forward price high</option>
-                                <option value="">Clear custom sort</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="toolbox-right">
-                        <div class="toolbox-item toolbox-show select-box">
-                            <label>Show :</label>
-                            <select name="count" class="form-control">
-                                <option value="12">12</option>
-                                <option value="24">24</option>
-                                <option value="36">36</option>
-                            </select>
-                        </div>
-                        <div class="toolbox-item toolbox-layout">
-                            <a href="shop-list.html" class="d-icon-mode-list btn-layout"></a>
-                            <a href="shop.html" class="d-icon-mode-grid btn-layout active"></a>
-                        </div>
-                    </div>
-                </nav>
                 <div class="row cols-2 cols-sm-3 product-wrapper">
                     @foreach (var item in Model.PagedViewModel.Items)
                     {
@@ -281,6 +251,7 @@
                                     <h3 class="product-name">
                                         <a asp-action="details" asp-route-id="@item.Id">@item.Name</a>
                                     </h3>
+                                    <span style="color: #aaa;margin-left:0.5rem;font-size:14px;">@item.PartCodeName</span>
                                     <div class="product-price">
 
                                         @foreach (var price in Model.Pricings)

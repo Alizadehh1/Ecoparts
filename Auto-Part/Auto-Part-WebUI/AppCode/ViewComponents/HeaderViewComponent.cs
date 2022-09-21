@@ -25,9 +25,10 @@ namespace Vapie.WebUI.AppCode.ViewComponents
                })
                .ToList();
             var popularCars = db.PopularCars
-                .Include(pc=>pc.Brand)
-                .Where(c=>c.DeletedById==null)
-               .ToList();
+                .Include(pc => pc.Brand)
+                .Where(c => c.DeletedById == null)
+                .ToList();
+
             ViewBag.Categories = new SelectList(data, "Id", "Name");
             ViewBag.PopularCars = popularCars;
             

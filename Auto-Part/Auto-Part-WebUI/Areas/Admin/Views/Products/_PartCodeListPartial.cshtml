@@ -3,7 +3,7 @@
 {
     <tr class="code-checkbox">
         <td class="table-row-select">
-            <input type="checkbox" data-code-id="@code.Id" />
+            <input id="partCodeNameSearch" type="checkbox" data-code1-id="@code.Id" />
         </td>
         <th>
             <p id="code-@code.Id">@code.Name</p>
@@ -11,31 +11,34 @@
         </th>
     </tr>
 }
-<script>
-    $('input[data-code-id]').change(function (e) {
-        if (e.currentTarget.checked) {
-            let data = $(e.currentTarget).data();
-            let codeId = data.codeId;
-            let inputs = document.querySelectorAll('.partCodes');
-            console.log(inputs)
-            for (var i = 0; i < inputs.length; i++) {
-                let data = $(inputs[i]).data();
-                if (data.codeId == codeId) {
-                    inputs[i].checked = true;
+    <script>
+
+        $('input[data-code1-id]').change(function (e) {
+            if (e.currentTarget.checked) {
+                let data = $(e.currentTarget).data();
+                let codeId = data.code1Id;
+                let inputs = document.querySelectorAll('.partCodes');
+                console.log(inputs)
+                for (var i = 0; i < inputs.length; i++) {
+                    let data = $(inputs[i]).data();
+                    if (data.codeId == codeId) {
+                        inputs[i].checked = true;
+                    }
                 }
             }
-        }
-        else if (!e.currentTarget.checked) {
-            let data = $(e.currentTarget).data();
-            let codeId = data.codeId;
-            let inputs = document.querySelectorAll('.partCodes');
-            console.log(inputs)
-            for (var i = 0; i < inputs.length; i++) {
-                let data = $(inputs[i]).data();
-                if (data.codeId == codeId) {
-                    inputs[i].checked = false;
+            else if (!e.currentTarget.checked) {
+                let data = $(e.currentTarget).data();
+                let codeId = data.code1Id;
+                let inputs = document.querySelectorAll('.partCodes');
+                console.log(inputs)
+                for (var i = 0; i < inputs.length; i++) {
+                    let data = $(inputs[i]).data();
+                    if (data.codeId == codeId) {
+                        inputs[i].checked = false;
+                    }
                 }
             }
-        }
-    });
-</script>
+        });
+    </script>
+
+

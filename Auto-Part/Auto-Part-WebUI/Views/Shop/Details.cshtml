@@ -7,11 +7,11 @@
         <div class="product product-single row mb-4">
             <div class="col-md-6">
                 <div class="mt-10 product-gallery pg-vertical">
-                    <div class="product-single-carousel owl-carousel owl-theme owl-nav-inner row cols-1">
+                    <div class="product-single-carousel row cols-1">
                         <figure class="product-image">
                             <img src="~/uploads/images/@Model.Product.ImagePath"
-                                 data-zoom-image="~/uploads/images/@Model.Product.ImagePath"
-                                 alt="Blue Pinafore Denim Dress" width="800" height="900">
+                                 data-zoom-image="/uploads/images/@Model.Product.ImagePath"
+                                 alt="@Model.Product.ForSearch" width="800" height="900">
                         </figure>
                     </div>
                 </div>
@@ -28,8 +28,8 @@
 
                     <h1 class="product-name">@Model.Product.Name</h1>
                     <div class="product-meta">
-                        Məhsul Kodu: <span class="product-sku">@Model.Product.PartCodeName</span>
-                        Aid Olduğu Maşın Brendi: <span class="product-brand">@Model.Product.Category.Brand.Name</span>
+                        Məhsul Kodu: <span class="product-sku">@Model.Product.PartCodeName</span> <br />
+                        Aid Olduğu Maşın Brendi: <span class="product-brand">@Model.Product.Category.Brand.Name</span> <br />
                         Kateqoriya: <span class="product-brand">@Model.Product.Category.Name</span>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                 <hr class="product-divider mb-3">
                 <div class="product-footer">
                     <div class="product-action">
-                        <a data-item-id="@Model.Product.Id" onclick="addToWishlist(event)"  class="btn-product btn-wishlist mr-6"><i class="d-icon-heart"></i>Seçilmişlərə əlavə et</a>
+                        <a data-item-id="@Model.Product.Id" onclick="addToWishlist(event)" style="cursor:pointer;"  class="btn-product btn-wishlist mr-6"><i class="d-icon-heart"></i>Seçilmişlərə əlavə et</a>
                     </div>
                 </div>
             </div>
@@ -178,7 +178,7 @@
                                     {
                                         if (type.Id == price.TypeId)
                                         {
-                                            <span class="price">@price.Price&#8380;</span>
+                                            <a class="price" style="font-size:14px;">@price.Price&#8380;<span style="color: #aaa;margin-left:0.5rem;font-size:14px;">(@type.Name)</span></a>
                                         }
                                     }
                                 }

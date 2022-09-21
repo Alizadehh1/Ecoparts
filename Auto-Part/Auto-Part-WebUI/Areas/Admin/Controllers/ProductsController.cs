@@ -2,12 +2,15 @@
 using Auto_Part_WebUI.AppCode.Modules.ProductModule;
 using Auto_Part_WebUI.Models.DataContexts;
 using Auto_Part_WebUI.Models.Entities;
+using Auto_Part_WebUI.Models.Entities.Membership;
 using Auto_Part_WebUI.Models.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,11 +22,13 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
     {
         private readonly ECoPartDbContext db;
         private readonly IMediator mediator;
+        private readonly UserManager<ECoPartUser> userManager;
 
-        public ProductsController(ECoPartDbContext db, IMediator mediator)
+        public ProductsController(ECoPartDbContext db, IMediator mediator, UserManager<ECoPartUser> userManager)
         {
             this.db = db;
             this.mediator = mediator;
+            this.userManager = userManager;
         }
         [Authorize(Policy = "admin.products.index")]
         public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 5)
@@ -46,6 +51,14 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                 .Include(p => p.Category)
                 .ThenInclude(c => c.Brand)
                 .FirstOrDefaultAsync(m => m.Id == id && m.DeletedById == null);
+
+            ViewBag.Pricings = db.ProductPricings
+                .Where(pc => pc.DeletedById == null)
+                .ToList();
+            ViewBag.Types = db.ProductTypes
+                .Where(pt => pt.DeletedById == null)
+                .ToList();
+
             if (product == null)
             {
                 return NotFound();
@@ -106,24 +119,45 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             }
             ViewData["CategoryId"] = new SelectList(db.Categories.Where(s => s.DeletedById == null), "Id", "Name", product.CategoryId);
             ViewData["Types"] = new SelectList(db.ProductTypes.Where(s => s.DeletedById == null), "Id", "Name");
+            ViewBag.SelectedCodes = product.PartCodeIds.Split(",");
             ViewBag.Codes = db.PartCodes.Where(ppc => ppc.DeletedById == null)
+                .OrderBy(pc=>pc.Name)
                .ToList();
             return View(product);
         }
 
         [HttpPost]
         [Authorize(Policy = "admin.products.edit")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([FromRoute] int id, ProductEditCommand model)
+        public async Task<IActionResult> Edit(ProductEditCommand model)
         {
-            if (id != model.Id)
-            {
-                return NotFound();
-            }
             var product = await mediator.Send(model);
-
-
             return RedirectToAction(nameof(Index));
+
+
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "admin.brands.delete")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var entity = db.Products.FirstOrDefault(b => b.Id == id && b.DeletedById == null);
+            if (entity == null)
+            {
+                return Json(new
+                {
+                    error = true,
+                    message = "Movcud deyil"
+                });
+            }
+            var user = await userManager.GetUserAsync(User);
+            entity.DeletedById = user.Id;
+            entity.DeletedDate = DateTime.UtcNow.AddHours(4);
+            db.SaveChanges();
+            return Json(new
+            {
+                error = false,
+                message = "Ugurla silindi"
+            });
         }
 
     }

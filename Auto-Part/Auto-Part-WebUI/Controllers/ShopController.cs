@@ -22,7 +22,7 @@ namespace Auto_Part_WebUI.Controllers
             this.db = db;
         }
         [Authorize(Policy = "shop.index")]
-        public IActionResult Index(int pageIndex = 1, int pageSize = 5)
+        public IActionResult Index(int pageIndex = 1, int pageSize = 15)
         {
 
             var model = new ShopViewModel();
@@ -65,7 +65,7 @@ namespace Auto_Part_WebUI.Controllers
             return View(model);
         }
         [Authorize(Policy = "shop.categories")]
-        public IActionResult Brands(int id, int pageIndex = 1, int pageSize = 5)
+        public IActionResult Brands(int id, int pageIndex = 1, int pageSize = 15)
         {
             var model = new ShopViewModel();
             model.Categories = db.Categories
@@ -91,7 +91,7 @@ namespace Auto_Part_WebUI.Controllers
             model.PagedViewModel = new PagedViewModel<Product>(query, pageIndex, pageSize);
             return View(model);
         }
-        public IActionResult Categories(int id, int pageIndex = 1, int pageSize = 5)
+        public IActionResult Categories(int id, int pageIndex = 1, int pageSize = 15)
         {
             var model = new ShopViewModel();
             model.Category = db.Categories

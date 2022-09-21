@@ -33,7 +33,7 @@
 <div class="page-body">
     <div class="card p-3">
         <div class="card-block">
-            <form class="row" asp-action="Create" enctype="multipart/form-data" id="productCreate">
+            <form class="row" asp-action="Edit" enctype="multipart/form-data" id="productCreate">
                 <div class="form-groupImage">
                     <label for="file1" class="control-label">Image</label>
                     <label for="file" class="photo-viewer" id="file-viewer" style="background-image:url('/uploads/images/@Model.ImagePath')"></label>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="col-12">
                     <div class="tab-control" role="tabcontrol">
-                        <div class="tab-page" id="specifications" aria-title="Xususiyyetler" selected>
+                        <div class="tab-page" id="codes" aria-title="Kodlar" selected>
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
@@ -80,12 +80,26 @@
                                     </tr>
                                 </thead>
                                 <tbody id="myTable">
+                                    <div id="searchForm">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input id="searchBtn" type="search" class="form-control border-dark" placeholder="Search...">
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="productList" class="row">
+
+                                    </div>
+                                    <span>Seçilmiş kodlar:</span>
+                                    <span id="selectedPartCodes"></span>
+                                    <br />
+                                    <a id="partCodeRefresh" class="btn btn-mat btn-info text-white"><i class="icofont-refresh"></i>Yeniləyin</a>
                                     @foreach (var code in ViewBag.Codes)
                                     {
                                         <tr class="code-checkbox">
                                             <td class="table-row-select">
-                                                <input type="checkbox" data-code-id="@code.Id" />
+                                                <input class="partCodes" type="checkbox" data-code-id="@code.Id" />
                                             </td>
                                             <th>
                                                 <p id="code-@code.Id">@code.Name</p>
@@ -95,6 +109,9 @@
 
                                 </tbody>
                             </table>
+                            <div class="col-md-12 text-center">
+                                <ul class="pagination pagination-lg pager" id="myPager"></ul>
+                            </div>
                         </div>
                         <div class="tab-page" id="pricing" aria-title="Qiymetlendirme">
                             <table class="table table-hover">
@@ -103,9 +120,12 @@
                                         <th>Növ</th>
                                         <th>Qiymət</th>
                                         <th class="table-operations">
-                                            <button class="btn btn-info" onclick="createPricing(event)">
-                                                Add row
-                                            </button>
+                                            <a class="btn btn-mat btn-success text-white" onclick="createPricing(event)">
+                                                <i class="icofont-ui-add"></i> Add row
+                                            </a>
+                                            <a class="btn btn-mat btn-danger text-white" onclick="removePricing(event)">
+                                                <i class="icofont-bin"></i> Delete Row
+                                            </a>
                                         </th>
                                     </tr>
                                 </thead>
@@ -127,13 +147,10 @@
                             </table>
                         </div>
                     </div>
-                    <div class="col-md-12 text-center">
-                        <ul class="pagination pagination-lg pager" id="myPager"></ul>
-                    </div>
                 </div>
                 <div class="col-12">
                     <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-success" />
+                        <input type="submit" value="Edit" class="btn btn-success" />
                         <a asp-action="Index" class="btn btn-primary">Back to List</a>
                     </div>
                 </div>
@@ -151,7 +168,11 @@
 @section js{
     <script src="~/libs/tab-control/tab-control.js"></script>
     <script>
-
+        window.addEventListener('touchstart', function (event) {
+            // some logic
+            event.preventDefault(); // <-- that should not be used in passive
+            // some other magic
+        });
         const selectTypes = `@Html.DropDownList("TypeId",@ViewBag.Types,null,htmlAttributes:new {
                 @class="form-control select2",
                 id="#s1#"
@@ -174,7 +195,55 @@
         }
 
         $(document).ready(function () {
+            let selectedPartCodeNames = [];
+            $('#partCodeRefresh').click(function () {
+                selectedPartCodeNames = [];
+                $('input[data-code-id]').each(function (index, item) {
+                    if (item.checked) {
 
+                        let data = $(item).data();
+                        let codeId = data.codeId;
+                        let partCodeName = $(`#code-${codeId}`).html();
+                        selectedPartCodeNames.push(partCodeName);
+                        $('#selectedPartCodes').html(selectedPartCodeNames.toString());
+                    }
+                    else if (!item.checked) {
+                        let data = $(item).data();
+                        let codeId = data.codeId;
+                        let partCodeName = $(`#code-${codeId}`).html();
+                        for (var i = 0; i < selectedPartCodeNames.length; i++) {
+                            if (selectedPartCodeNames[i] == partCodeName) {
+                                selectedPartCodeNames.splice(i, 1);
+                            }
+                        }
+                        $('#selectedPartCodes').html(selectedPartCodeNames.toString());
+                    }
+                });
+            })
+
+
+            $('input[data-code-id]').change(function changePartCodeInput(e) {
+                if (e.currentTarget.checked) {
+
+                    let data = $(e.currentTarget).data();
+                    let codeId = data.codeId;
+                    let partCodeName = $(`#code-${codeId}`).html();
+                    selectedPartCodeNames.push(partCodeName);
+                    $('#selectedPartCodes').html(selectedPartCodeNames.toString());
+                }
+                else if (!e.currentTarget.checked) {
+                    let data = $(e.currentTarget).data();
+                    let codeId = data.codeId;
+                    let partCodeName = $(`#code-${codeId}`).html();
+                    for (var i = 0; i < selectedPartCodeNames.length; i++) {
+                        if (selectedPartCodeNames[i] == partCodeName) {
+                            selectedPartCodeNames.splice(i, 1);
+                        }
+                    }
+                    $('#selectedPartCodes').html(selectedPartCodeNames.toString());
+                }
+
+            });
 
 
             $('#productCreate').submit(function (e) {
@@ -201,7 +270,6 @@
                         selected++;
                     }
                     indexer++;
-                    console.log(indexer);
                     if (valuesArr.length == selected) {
                         let text = valuesArr.toString();
                         let text1 = idsArr.toString();
@@ -224,7 +292,6 @@
                 $(pricing).each(function (index, item) {
                     formData.set(`Pricing[${index}].TypeId`, item.typeId);
                     formData.set(`Pricing[${index}].Price`, item.price);
-                    console.log(index);
                     index++;
                 });
                 /*
@@ -240,10 +307,7 @@
 
                     },
                     success: function (response) {
-                        if (response.error == undefined) {
-                            return;
-                        }
-                        else if (response.error == true) {
+                        if (response.error == true) {
                             toastr.error(response.message, "Xəta!");
                             $(btn).removeAttr('disable');
                             return;
@@ -339,7 +403,7 @@
             if ($(e.currentTarget).closest('tbody').find('tr').length == 1)
                 return;
 
-            $(e.currentTarget).closest('tr').remove();
+            $('tr.pricingTr').remove();
         }
 
         function newid() {
@@ -493,6 +557,48 @@
             });
 
         });
+    </script>
+    <script>
+        $(document).on("keyup", "#searchBtn", function (e) {
+            e.preventDefault()
+            console.log($(this).val())
+            let hostname = window.location.hostname;
+            let port = window.location.port;
+            let secure = window.location.protocol;
+            console.log(secure)
+            if (port == ' ') {
+                fetch(secure + "//" + hostname + "/admin/products/searchInput" + "?key=" + $(this).val()).then(res => {
+                    return res.text()
+                }).then(data => {
+                    $("#productList").html(data)
+                })
+            }
+            else {
+                fetch(secure + "//" + hostname + ":" + port + "/admin/products/searchInput" + "?key=" + $(this).val()).then(res => {
+                    return res.text()
+                }).then(data => {
+                    $("#productList").html(data)
+                })
+            }
+        })
+    </script>
+    <script>
+        let inputsCodes = document.querySelectorAll('.partCodes');
+        for (var i = 0; i < inputsCodes.length; i++) {
+            let data = $(inputsCodes[i]).data();
+            @foreach (var codeId in ViewBag.SelectedCodes)
+            {
+                <text>
+            if (data.codeId == @codeId) {
+                inputsCodes[i].checked = true;
+            }
+                </text>
+            }
+        }
+        @*let partCodeNames = @ViewBag.SelectedCodes
+
+            console.log(partCodeNames);*@
+        /**/
     </script>
 }
 

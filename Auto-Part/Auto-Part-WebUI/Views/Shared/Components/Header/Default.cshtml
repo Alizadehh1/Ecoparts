@@ -35,7 +35,7 @@
     <div class="header-middle sticky-header fix-top sticky-content">
         <div class="container">
             <div class="header-left">
-                <a href="~/assets/#" class="mobile-menu-toggle">
+                <a href="#" class="mobile-menu-toggle">
                     <i class="d-icon-bars2"></i>
                 </a>
                 <a asp-action="index" asp-controller="home" class="logo">
@@ -47,7 +47,7 @@
                     <form class="input-wrapper" method="get" asp-controller="Shop" asp-action="Search">
                         <div class="select-box">
                             <select asp-items="@ViewBag.Categories">
-                                <option value="">All Categories</option>
+                                <option selected hidden disabled>All Categories</option>
                             </select>
                         </div>
                         <input type="text" class="form-control" id="search" name="query" placeholder="Axtardığınız məhsulun kodunu daxil edin ...">
@@ -146,18 +146,18 @@
                     </div>
                     <!-- End Dropdown Box -->
                 </div>
-                <div class="header-search hs-toggle mobile-search">
-                    <a href="~/assets/#" class="search-toggle">
+                @*<div class="header-search hs-toggle mobile-search">
+                    <a href="#" class="search-toggle">
                         <i class="d-icon-search"></i>
                     </a>
-                    <form action="#" class="input-wrapper">
-                        <input type="text" class="form-control" name="search" autocomplete="off"
-                               placeholder="Search your keyword..." required />
+                    <form method="get" asp-controller="Shop" asp-action="Search" class="input-wrapper">
+                        <input type="text" class="form-control" id="search" name="query" placeholder="Axtardığınız məhsulun kodunu daxil edin ..." autocomplete="off"
+                                required />
                         <button class="btn btn-search" type="submit">
                             <i class="d-icon-search"></i>
                         </button>
                     </form>
-                </div>
+                </div>*@
                 <!-- End of Header Search -->
             </div>
         </div>
@@ -168,13 +168,22 @@
             <div class="header-left">
                 <partial name="_Navbar" />
             </div>
-            <div class="select-box">
-                    <a disabled>All PopularCars</a>
-                    @foreach (var item in @ViewBag.PopularCars)
-                    {
-                        <a asp-controller="shop" asp-action="Brands" asp-route-id="@item.Id">@item.Brand.Name</a>
-                    }
+            <div>
+                <nav class="main-nav ml-0">
+                    <ul class="menu">
+                        <li>
+                            <a>Populyar Maşınlar</a>
+                            <ul>
+                                @foreach (var item in @ViewBag.PopularCars)
+                                {
+                                    <li><a asp-controller="shop" asp-action="Brands" asp-route-id="@item.Brand.Id">@item.Brand.Name</a></li>
+                                }
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
             </div>
+            
         </div>
     </div>
 </header>
