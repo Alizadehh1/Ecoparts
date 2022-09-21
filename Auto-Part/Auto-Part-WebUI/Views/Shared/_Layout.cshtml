@@ -239,51 +239,7 @@
     </div>
     <a id="scroll-top" href="#" title="Top" role="button" class="scroll-top"><i class="d-icon-arrow-up"></i></a>
 
-    <div class="mobile-menu-wrapper">
-        <div class="mobile-menu-overlay">
-        </div>
-        <a class="mobile-menu-close" href="#"><i class="d-icon-times"></i></a>
-        <div class="mobile-menu-container scrollable">
-            <form method="get" asp-controller="Shop" asp-action="Search" class="input-wrapper">
-                <input type="text" class="form-control" id="search" name="query" placeholder="Axtardığınız məhsulun kodunu daxil edin ..." autocomplete="off"
-                       required />
-                <button class="btn btn-search" type="submit">
-                    <i class="d-icon-search"></i>
-                </button>
-            </form>
-            <ul class="mobile-menu mmenu-anim">
-                <li>
-                    <a asp-action="index" asp-controller="home">Home</a>
-                </li>
-                <li>
-                    <a asp-action="Index" asp-controller="Shop">Bütün Məhsullar</a>
-                </li>
-                <li>
-                    <a asp-action="About" asp-controller="Home">Haqqımızda</a>
-                </li>
-                <li>
-                    <a href="~/assets/#">Elements</a>
-                    <ul>
-                        <li><a href="~/assets/element-products.html">Products</a></li>
-                        <li><a href="~/assets/element-typography.html">Typography</a></li>
-                        <li><a href="~/assets/element-titles.html">Titles</a></li>
-                        <li><a href="~/assets/element-categories.html">Product Category</a></li>
-                        <li><a href="~/assets/element-buttons.html">Buttons</a></li>
-                        <li><a href="~/assets/element-accordions.html">Accordions</a></li>
-                        <li><a href="~/assets/element-alerts.html">Alert &amp; Notification</a></li>
-                        <li><a href="~/assets/element-tabs.html">Tabs</a></li>
-                        <li><a href="~/assets/element-testimonials.html">Testimonials</a></li>
-                        <li><a href="~/assets/element-blog-posts.html">Blog Posts</a></li>
-                        <li><a href="~/assets/element-instagrams.html">Instagrams</a></li>
-                        <li><a href="~/assets/element-cta.html">Call to Action</a></li>
-                        <li><a href="~/assets/element-icon-boxes.html">Icon Boxes</a></li>
-                        <li><a href="~/assets/element-icons.html">Icons</a></li>
-                    </ul>
-                </li>
-                <li><a href="~/assets/https://d-themes.com/buynow/riodehtml">Buy Riode!</a></li>
-            </ul>
-        </div>
-    </div>
+    @await Component.InvokeAsync("MobileMenu")
     <script src="~/assets/vendor/jquery/jquery.min.js"></script>
     <script src="~/assets/vendor/elevatezoom/jquery.elevatezoom.min.js"></script>
     <script src="~/assets/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>

@@ -11,7 +11,7 @@
                         <figure class="product-image">
                             <img src="~/uploads/images/@Model.Product.ImagePath"
                                  data-zoom-image="/uploads/images/@Model.Product.ImagePath"
-                                 alt="@Model.Product.ForSearch" width="800" height="900">
+                                 alt="@Model.Product.Name" width="800" height="900">
                         </figure>
                     </div>
                 </div>
@@ -153,13 +153,7 @@
                                  height="259">
                         </a>
                         <div class="product-action-vertical">
-                            <a data-item-id="@item.Id" onclick="addToWishlist(event)" class="btn-product-icon btn-wishlist" title="Seçilmişlərə əlavə et"><i class="d-icon-heart"></i></a>
-                        </div>
-                        <div class="product-action">
-                            <a href="#" class="btn-product btn-quickview" title="Quick View">
-                                Quick
-                                View
-                            </a>
+                            <a href="#" data-item-id="@item.Id" onclick="addToWishlist(event)" class="btn-product-icon btn-wishlist" title="Seçilmişlərə əlavə et"><i class="d-icon-heart"></i></a>
                         </div>
                     </figure>
                     <div class="product-details">

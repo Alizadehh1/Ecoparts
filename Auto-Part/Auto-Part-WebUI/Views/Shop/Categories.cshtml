@@ -7,7 +7,7 @@
 <nav class="breadcrumb-nav">
     <div class="container">
         <ul class="breadcrumb">
-            <li><a href="demo1.html"><i class="d-icon-home"></i></a></li>
+            <li><a asp-action="Index" asp-controller="Home"><i class="d-icon-home"></i></a></li>
             <li>Shop</li>
         </ul>
     </div>
@@ -28,25 +28,6 @@
                             @Extension.GetCategoriesRaw(Model.Categories)
                         </div>
                         <div class="widget widget-collapsible">
-                            <h3 class="widget-title">Price</h3>
-                            <div class="widget-body">
-                                <form action="#">
-                                    <div class="filter-price-slider"></div>
-
-                                    <div class="filter-actions">
-                                        <div class="filter-price-text mb-4">
-                                            Price:
-                                            <span class="filter-price-range"></span>
-                                        </div>
-                                        <button type="submit"
-                                                class="btn btn-dark btn-filter">
-                                            Filter
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="widget widget-collapsible">
                             <h3 class="widget-title">Maşın markaları</h3>
                             <ul class="widget-body filter-items search-ul" style="display: block;">
                                 @foreach (var item in Model.Brands)
@@ -65,161 +46,12 @@
                                 }
                             </ul>
                         </div>
-
-                        <div class="widget widget-products mt-2 mb-0">
-                            <h4 class="widget-title border-no text-normal mb-0">Our Featured</h4>
-                            <div class="widget-body">
-                                <div class="owl-carousel owl-nav-top row cols-1" data-owl-options="{
-												'items': 1,
-												'loop': true,
-												'nav': true,
-												'dots': false,
-'margin': 20											}">
-                                    <div class="products-col">
-                                        <div class="product product-list-sm">
-                                            <figure class="product-media">
-                                                <a href="demo23-product.html">
-                                                    <img src="~/assets/images/shop/product-widget1.jpg" alt="product"
-                                                         width="100" height="100">
-                                                </a>
-                                            </figure>
-                                            <div class="product-details">
-                                                <h3 class="product-name">
-                                                    <a href="demo23-product.html">Fashion Hiking Hat</a>
-                                                </h3>
-                                                <div class="product-price">
-                                                    <span class="price">$199.00</span>
-                                                </div>
-                                                <div class="ratings-container">
-                                                    <div class="ratings-full">
-                                                        <span class="ratings" style="width:100%"></span>
-                                                        <span class="tooltiptext tooltip-top"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="product product-list-sm">
-                                            <figure class="product-media">
-                                                <a href="demo23-product.html">
-                                                    <img src="~/assets/images/shop/product-widget2.jpg" alt="product"
-                                                         width="100" height="100">
-                                                </a>
-                                            </figure>
-                                            <div class="product-details">
-                                                <h3 class="product-name">
-                                                    <a href="demo23-product.html">Men's Fashion Hood</a>
-                                                </h3>
-                                                <div class="product-price">
-                                                    <span class="price">$19.00</span>
-                                                </div>
-                                                <div class="ratings-container">
-                                                    <div class="ratings-full">
-                                                        <span class="ratings" style="width:100%"></span>
-                                                        <span class="tooltiptext tooltip-top"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="product product-list-sm">
-                                            <figure class="product-media">
-                                                <a href="demo23-product.html">
-                                                    <img src="~/assets/images/shop/product-widget3.jpg" alt="product"
-                                                         width="100" height="100">
-                                                </a>
-                                            </figure>
-                                            <div class="product-details">
-                                                <h3 class="product-name">
-                                                    <a href="demo23-product.html">Women's Summer Clothing</a>
-                                                </h3>
-                                                <div class="product-price">
-                                                    <ins class="new-price">$99.00</ins><del class="old-price">$150.00</del>
-                                                </div>
-                                                <div class="ratings-container">
-                                                    <div class="ratings-full">
-                                                        <span class="ratings" style="width:100%"></span>
-                                                        <span class="tooltiptext tooltip-top"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><!-- End Products Col -->
-                                    <div class="products-col">
-                                        <div class="product product-list-sm">
-                                            <figure class="product-media">
-                                                <a href="demo23-product.html">
-                                                    <img src="~/assets/images/shop/product-widget1.jpg" alt="product"
-                                                         width="100" height="100">
-                                                </a>
-                                            </figure>
-                                            <div class="product-details">
-                                                <h3 class="product-name">
-                                                    <a href="demo23-product.html">Fashion Hiking Hat</a>
-                                                </h3>
-                                                <div class="product-price">
-                                                    <span class="price">$199.00</span>
-                                                </div>
-                                                <div class="ratings-container">
-                                                    <div class="ratings-full">
-                                                        <span class="ratings" style="width:100%"></span>
-                                                        <span class="tooltiptext tooltip-top"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="product product-list-sm">
-                                            <figure class="product-media">
-                                                <a href="demo23-product.html">
-                                                    <img src="~/assets/images/shop/product-widget2.jpg" alt="product"
-                                                         width="100" height="100">
-                                                </a>
-                                            </figure>
-                                            <div class="product-details">
-                                                <h3 class="product-name">
-                                                    <a href="demo23-product.html">Men's Fashion Hood</a>
-                                                </h3>
-                                                <div class="product-price">
-                                                    <span class="price">$19.00</span>
-                                                </div>
-                                                <div class="ratings-container">
-                                                    <div class="ratings-full">
-                                                        <span class="ratings" style="width:100%"></span>
-                                                        <span class="tooltiptext tooltip-top"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="product product-list-sm">
-                                            <figure class="product-media">
-                                                <a href="demo23-product.html">
-                                                    <img src="~/assets/images/shop/product-widget3.jpg" alt="product"
-                                                         width="100" height="100">
-                                                </a>
-                                            </figure>
-                                            <div class="product-details">
-                                                <h3 class="product-name">
-                                                    <a href="demo23-product.html">Women's Summer Clothing</a>
-                                                </h3>
-                                                <div class="product-price">
-                                                    <ins class="new-price">$99.00</ins><del class="old-price">$150.00</del>
-                                                </div>
-                                                <div class="ratings-container">
-                                                    <div class="ratings-full">
-                                                        <span class="ratings" style="width:100%"></span>
-                                                        <span class="tooltiptext tooltip-top"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><!-- End Products Col -->
-                                </div>
-                            </div>
-                        </div><!-- End Widget Products -->
                     </div>
                 </div>
             </aside>
             <div class="col-lg-9 main-content">
                 <div class="shop-banner-default banner mb-1"
-                     style="background-image: url('./assets/images/shop/banner.jpg'); background-color: #4e6582;">
+                     style="background-image: url('/assets/images/shop/banner.jpg'); background-color: #4e6582;">
                     <div class="banner-content">
                         <h4 class="banner-subtitle font-weight-bold ls-normal text-uppercase text-white">
                             Riode Shop
@@ -255,10 +87,6 @@
                                 <option value="36">36</option>
                             </select>
                         </div>
-                        <div class="toolbox-item toolbox-layout">
-                            <a href="shop-list.html" class="d-icon-mode-list btn-layout"></a>
-                            <a href="shop.html" class="d-icon-mode-grid btn-layout active"></a>
-                        </div>
                     </div>
                 </nav>
                 <div class="row cols-2 cols-sm-3 product-wrapper">
@@ -268,22 +96,16 @@
                             <div class="product text-center">
                                 <figure class="product-media">
                                     <a asp-action="details" asp-route-id="@item.Id">
-                                        <img src="~/uploads/images/@item.ImagePath" alt="product" width="234"
+                                        <img src="~/uploads/images/@item.ImagePath" alt="@item.Name" width="234"
                                              height="259">
                                     </a>
                                     <div class="product-action-vertical">
-                                        <a data-item-id="@item.Id" onclick="addToWishlist(event)" class="btn-product-icon btn-wishlist" title="Add to wishlist"><i class="d-icon-heart"></i></a>
+                                        <a href="#" data-item-id="@item.Id" onclick="addToWishlist(event)" class="btn-product-icon btn-wishlist" title="Add to wishlist"><i class="d-icon-heart"></i></a>
                                     </div>
-                                    @*<div class="product-action">
-                                            <a href="#" class="btn-product btn-quickview" title="Quick View">
-                                                Quick
-                                                View
-                                            </a>
-                                        </div>*@
                                 </figure>
                                 <div class="product-details">
                                     <div class="product-cat">
-                                        <a href="demo23-shop.html">@item.Category.Name</a>
+                                        <a href="#">@item.Category.Name</a>
                                     </div>
                                     <h3 class="product-name">
                                         <a asp-action="details" asp-route-id="@item.Id">@item.Name</a>
@@ -310,7 +132,7 @@
                     }
                 </div>
                 <nav class="toolbox toolbox-pagination mb-0 pb-0">
-                    <p class="show-info">Showing 1–12 of 48 Products</p>
+                    <p class="show-info">Showing 1–@((Model.PagedViewModel.Items.Count() < 12) ? $"{Model.PagedViewModel.Items.Count()}" : "12") of @Model.PagedViewModel.Items.Count() Products</p>
                     @Model.PagedViewModel.GetPagenation(Url, "Index")
                 </nav>
             </div>

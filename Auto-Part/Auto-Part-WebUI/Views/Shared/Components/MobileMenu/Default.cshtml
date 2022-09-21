@@ -1,0 +1,34 @@
+﻿<div class="mobile-menu-wrapper">
+    <div class="mobile-menu-overlay">
+    </div>
+    <a class="mobile-menu-close" href="#"><i class="d-icon-times"></i></a>
+    <div class="mobile-menu-container scrollable">
+        <form method="get" asp-controller="Shop" asp-action="Search" class="input-wrapper">
+            <input type="text" class="form-control" id="search" name="query" placeholder="Axtardığınız məhsulun kodunu daxil edin ..." autocomplete="off"
+                   required />
+            <button class="btn btn-search" type="submit">
+                <i class="d-icon-search"></i>
+            </button>
+        </form>
+        <ul class="mobile-menu mmenu-anim">
+            <li>
+                <a asp-action="index" asp-controller="home">Ana Səhifə</a>
+            </li>
+            <li>
+                <a asp-action="Index" asp-controller="Shop">Bütün Məhsullar</a>
+            </li>
+            <li>
+                <a asp-action="About" asp-controller="Home">Haqqımızda</a>
+            </li>
+            <li>
+                <a href="#">Populyar Maşınlar</a>
+                <ul>
+                    @foreach (var popularCar in ViewBag.PopularCars)
+                    {
+                        <li><a asp-action="Brands" asp-controller="Shop" asp-route-id="@popularCar.Brand.Id">@popularCar.Brand.Name</a></li>
+                    }
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

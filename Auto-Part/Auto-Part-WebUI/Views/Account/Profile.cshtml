@@ -48,7 +48,6 @@
                                     <th>Date</th>
                                     <th>Status</th>
                                     <th>Total</th>
-                                    <th class="pr-2">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,7 +55,7 @@
                                 {
                                     <tr>
                                         <td class="order-number"><a href="#">#@item.Id</a></td>
-                                        <td class="order-date"><time>@item.CreatedDate.ToString("MMMM MM, yyyy")</time></td>
+                                        <td class="order-date"><time>@item.CreatedDate.ToString("MMMM dd, yyyy")</time></td>
                                         <td class="order-status">
                                             @if (item.isConfirmed)
                                             {
@@ -72,7 +71,6 @@
                                             }
                                         </td>
                                         <td class="order-total"><span>@item.TotalAmount ₼ for @item.OrderItems.Where(oi => oi.OrderId == item.Id).Count() items</span></td>
-                                        <td class="order-action"><a href="#" class="btn btn-primary btn-link btn-underline">View</a></td>
                                     </tr>
                                 }
                             </tbody>
