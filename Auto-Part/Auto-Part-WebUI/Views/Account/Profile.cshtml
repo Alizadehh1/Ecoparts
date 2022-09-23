@@ -7,47 +7,48 @@
         <div class="container">
             <ul class="breadcrumb">
                 <li><a asp-action="index" asp-controller="home"><i class="d-icon-home"></i></a></li>
-                <li>Account</li>
+                <li>Profil</li>
             </ul>
         </div>
     </nav>
     <div class="page-content mt-4 mb-10 pb-6">
         <div class="container">
-            <h2 class="title title-center mb-10">My Account</h2>
+            <h2 class="title title-center mb-10">Profil</h2>
             <div class="tab tab-vertical gutter-lg">
                 <ul class="nav nav-tabs mb-4 col-lg-3 col-md-4" role="tablist">
                     <li style="cursor:pointer" class="nav-item">
-                        <a class="nav-link active" onclick="tabDashboard(event)">Dashboard</a>
+                        <a class="nav-link active" onclick="tabDashboard(event)">Əsas Menyu</a>
                     </li>
                     <li style="cursor:pointer" class="nav-item">
-                        <a onclick="tabOrder(event)" class="nav-link">Orders</a>
+                        <a onclick="tabOrder(event)" class="nav-link">Sifarişlər</a>
                     </li>
                     <li style="cursor:pointer" class="nav-item">
-                        <a class="nav-link" onclick="tabAccount(event)">Account details</a>
+                        <a class="nav-link" onclick="tabAccount(event)">İstifadəçi məlumatları</a>
                     </li>
                     <li style="cursor:pointer;" onmouseout="this.style.color='red'" class="nav-item">
-                        <a class="nav-link" asp-action="logout">Logout</a>
+                        <a class="nav-link" asp-action="logout">Çıxış</a>
                     </li>
                 </ul>
                 <div class="tab-content col-lg-9 col-md-8">
                     <div class="tab-pane active in" id="dashboard">
                         <p class="mb-0">
-                            Hello <span>@User.GetPrincipalName()</span> (not <span>@User.GetPrincipalName()</span>? <a asp-action="logout" class="text-primary">Log out</a>)
+                            Xoş Gəlmisiniz <span>@User.GetPrincipalName()</span> ( <span>@User.GetPrincipalName()</span> Deyil? <a asp-action="logout" class="text-primary">Çıxış</a>)
                         </p>
                         <p class="mb-8">
-                            From your account dashboard you can view your <a href="#orders" class="link-to-tab text-primary">recent orders</a>, manage your shipping and billing
-                            addresses,<br>and edit your password and account details.
+                            Siz bu səhifədə sifarişlərinizə baxa bilərsiniz <a href="#orders" class="link-to-tab text-primary">Sifarişlər</a>, Profilinizəki məlumatlarda <br>
+                            dəyişiklik edə bilərsiniz
+                           
                         </p>
-                        <a href="shop.html" class="btn btn-dark btn-rounded">Go To Shop<i class="d-icon-arrow-right"></i></a>
+                        <a asp-action="index" asp-controller="shop" class="btn btn-dark btn-rounded">Sayta Keçid<i class="d-icon-arrow-right"></i></a>
                     </div>
                     <div class="tab-pane" id="orders">
                         <table class="order-table">
                             <thead>
                                 <tr>
-                                    <th class="pl-2">Order</th>
-                                    <th>Date</th>
+                                    <th class="pl-2">Sifariş</th>
+                                    <th>Tarix</th>
                                     <th>Status</th>
-                                    <th>Total</th>
+                                    <th>Ümumi Məbləğ</th>
                                 </tr>
                             </thead>
                             <tbody>

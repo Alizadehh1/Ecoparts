@@ -3,7 +3,7 @@
     <div class="container">
         <ul class="breadcrumb">
             <li><a asp-action="index" asp-controller="home"><i class="d-icon-home"></i></a></li>
-            <li>Shop</li>
+            <li>Məhsullar</li>
         </ul>
     </div>
 </nav>
@@ -44,15 +44,14 @@
             </aside>
             <div class="col-lg-9 main-content">
                 <div class="shop-banner-default banner mb-1"
-                     style="background-image: url('/assets/images/shop/banner.jpg'); background-color: #4e6582;">
+                     style="background-image: url('/assets/images/ujuj.jpg'); background-color: #4e6582;">
                     <div class="banner-content">
                         <h4 class="banner-subtitle font-weight-bold ls-normal text-uppercase text-white">
-                            Riode Shop
+                           
                         </h4>
-                        <h1 class="banner-title font-weight-bold text-white">Banner with Sidebar</h1>
-                        <a href="#" class="btn btn-white btn-outline btn-icon-right btn-rounded text-normal">
-                            Discover
-                            now<i class="d-icon-arrow-right"></i>
+                        <h1 class="banner-title font-weight-bold text-white"></h1>
+                        <a asp-action="basket" asp-controller="shop" class="btn btn-white btn-outline btn-icon-right btn-rounded text-normal">
+                           Səbət <i class="d-icon-arrow-right"></i>
                         </a>
                     </div>
                 </div>
@@ -100,8 +99,8 @@
                     }
                 </div>
                 <nav class="toolbox toolbox-pagination mb-0 pb-0">
-                    <p class="show-info">Showing 1–@((Model.PagedViewModel.Items.Count() < 12) ? $"{Model.PagedViewModel.Items.Count()}" : "12") of @Model.PagedViewModel.Items.Count() Products</p>
-                    @Model.PagedViewModel.GetPagenation(Url, "Index")
+                    @*<p class="show-info">Göstərilir 1–@((Model.PagedViewModel.Items.Count() < 12) ? $"{Model.PagedViewModel.Items.Count()}" : "12") of @Model.PagedViewModel.Items.Count() Məhsullar</p>
+                    @Model.PagedViewModel.GetPagenation(Url, "Index")*@
                 </nav>
             </div>
         </div>

@@ -13,7 +13,7 @@
                 <!-- End DropDown Menu -->
                 <span class="divider"></span>
                 <a asp-controller="home" asp-action="contact" class="contact d-lg-show"><i class="d-icon-map"></i>Bizimlə Əlaqə</a>
-                <a href="~/assets/#" class="help d-lg-show"><i class="d-icon-info"></i>Need Help</a>
+                <a href=# class="help d-lg-show"><i class="d-icon-info"></i>Kömək Lazımdır?</a>
                 @if (User.Identity.IsAuthenticated)
                 {
                     <a asp-action="Profile" asp-controller="account">
@@ -47,7 +47,7 @@
                     <form class="input-wrapper" method="get" asp-controller="Shop" asp-action="Search">
                         <div class="select-box">
                             <select asp-items="@ViewBag.Categories">
-                                <option selected hidden disabled>All Categories</option>
+                                <option selected hidden disabled>Kateqoriyalar</option>
                             </select>
                         </div>
                         <input type="text" class="form-control" id="search" name="query" placeholder="Axtardığınız məhsulun kodunu daxil edin ...">

@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Auto_Part_WebUI.Models.DataContexts;
+using Auto_Part_WebUI.Models.Entities;
+using Auto_Part_WebUI.Models.Entities.Membership;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Auto_Part_WebUI.Models.DataContexts;
-using Auto_Part_WebUI.Models.Entities;
-using Microsoft.AspNetCore.Identity;
-using Auto_Part_WebUI.Models.Entities.Membership;
-using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Auto_Part_WebUI.Areas.Admin.Controllers
 {

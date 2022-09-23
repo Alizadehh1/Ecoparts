@@ -49,7 +49,7 @@
 <body class="home">
 
     <div class="page-wrapper">
-        <h1 class="d-none">Riode - Responsive eCommerce HTML Template</h1>
+        @*<h1 class="d-none">Riode - Responsive eCommerce HTML Template</h1>*@
         @await Component.InvokeAsync("Header")
 
         <main class="main">
@@ -68,14 +68,14 @@
                         <div class="col-lg-9">
                             <div class="widget widget-newsletter form-wrapper form-wrapper-inline">
                                 <div class="newsletter-info mx-auto mr-lg-2 ml-lg-4">
-                                    <h4 class="widget-title">Subscribe to our Newsletter</h4>
-                                    <p class="mb-0">Get all the latest information, Sales and Offers.</p>
+                                    <h4 class="widget-title">Abunə olun</h4>
+                                    <p class="mb-0">Ən son təkliflərdən xəbərdar olmaq üçün abunə olun</p>
                                 </div>
                                 <form method="post" id="subscribeForm" class="input-wrapper input-wrapper-inline">
                                     <input type="email" class="form-control" name="Email" id="email"
-                                           placeholder="Email address here..." required />
+                                           placeholder="E-mail adresinizi daxil edin" required />
                                     <button id="btnSubs" class="btn btn-primary btn-rounded btn-md ml-2" type="submit">
-                                        subscribe<i class="d-icon-arrow-right"></i>
+                                        Abunə olun<i class="d-icon-arrow-right"></i>
                                     </button>
                                 </form>
                             </div>
@@ -86,69 +86,65 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-6">
                             <div class="widget widget-info">
-                                <h4 class="widget-title">Contact Info</h4>
+                                <h4 class="widget-title">Bizimlə əlaqə</h4>
                                 <ul class="widget-body">
                                     <li>
-                                        <label>Phone:</label>
-                                        <a href="~/assets/tel:#">Toll Free (123) 456-7890</a>
+                                        <label>Əlaqə Nömrəsi:</label>
+                                        <a href="~/assets/tel:#">+994507779990</a>
                                     </li>
                                     <li>
                                         <label>Email:</label>
-                                        <a href="~/assets/mailto:mail@riode.com">riode@mail.com</a>
+                                        <a href="~/assets/mailto:mail@riode.com">testmail@mail.com</a>
                                     </li>
                                     <li>
                                         <label>Address:</label>
-                                        <a href="~/assets/#">123 Street, City, Country</a>
+                                        <a href="~/assets/#">Bakı,Azərbaycan </a>
                                     </li>
                                     <li>
-                                        <label>WORKING DAYS / HOURS:</label>
+                                        <label>İş saatları:</label>
                                     </li>
                                     <li>
-                                        <a href="~/assets/#">Mon - Sun / 9:00 AM - 8:00 PM</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <div class="widget ml-lg-4">
-                                <h4 class="widget-title">About Us</h4>
-                                <ul class="widget-body">
-                                    <li>
-                                        <a asp-action="about" asp-controller="home">About Us</a>
-                                    </li>
-                                    <li>
-                                        <a href="~/assets/#">Order History</a>
-                                    </li>
-                                    <li>
-                                        <a href="~/assets/#">Returns</a>
-                                    </li>
-                                    <li>
-                                        <a href="~/assets/#">Custom Service</a>
-                                    </li>
-                                    <li>
-                                        <a href="~/assets/#">Terms &amp; Condition</a>
+                                        <a href="~/assets/#">Bazar Ertəsi - Şənbə / 9:00 - 18:00</a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="widget ml-lg-4">
-                                <h4 class="widget-title">My Account</h4>
+                                <h4 class="widget-title">Haqqımızda</h4>
                                 <ul class="widget-body">
                                     <li>
-                                        <a href="~/assets/#">Sign in</a>
+                                        <a asp-action="about" asp-controller="home">Haqqımızda</a>
                                     </li>
                                     <li>
-                                        <a asp-action="Basket" asp-controller="shop">View Cart</a>
+                                        <a href="~/assets/#">Sifariş tarixçəsi</a>
                                     </li>
                                     <li>
-                                        <a href="~/assets/wishlist.html">My Wishlist</a>
+                                        <a href="~/assets/#">Geri Qaytarılmalar</a>
                                     </li>
                                     <li>
-                                        <a href="~/assets/#">Track My Order</a>
+                                        <a href="~/assets/#">Müştəri məmnuniyyəti</a>
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="widget ml-lg-4">
+                                <h4 class="widget-title">Mənim Profilim</h4>
+                                <ul class="widget-body">
+                                    <li>
+                                        <a asp-action="signin" asp-controller="account">Daxil ol</a>
                                     </li>
                                     <li>
-                                        <a href="~/assets/#">Help</a>
+                                        <a asp-action="Basket" asp-controller="shop">Səbət</a>
+                                    </li>
+                                    <li>
+                                        <a asp-action="wishlist" asp-controller="shop" >Istəklər</a>
+                                    </li> 
+                                  
+                                    <li>
+                                        <a href="#">Kömək Lazımdır?</a>
                                     </li>
                                 </ul>
                             </div>
@@ -193,7 +189,7 @@
                         </figure>
                     </div>
                     <div class="footer-center">
-                        <p class="copyright">Riode eCommerce &copy; 2021. All Rights Reserved</p>
+                        <p class="copyright">EcoParts eCommerce &copy; 2022. Bütun hüquqlar qorunur</p>
                     </div>
                     <div class="footer-right">
                         <div class="social-links">
@@ -209,7 +205,7 @@
     <div class="sticky-footer sticky-content fix-bottom">
         <a asp-action="index" asp-controller="home" class="sticky-link active">
             <i class="d-icon-home"></i>
-            <span>Home</span>
+            <span>Ana Səhifə</span>
         </a>
         <a asp-action="Index" asp-controller="Shop" class="sticky-link">
             <i class="d-icon-volume"></i>
@@ -217,16 +213,16 @@
         </a>
         <a asp-controller="Shop" asp-action="Wishlist" class="sticky-link">
             <i class="d-icon-heart"></i>
-            <span>Wishlist</span>
+            <span>İstəklər</span>
         </a>
         <a asp-controller="account" asp-action="profile" class="sticky-link">
             <i class="d-icon-user"></i>
-            <span>Account</span>
+            <span>Profil</span>
         </a>
         <div class="header-search hs-toggle dir-up">
             <a href="#" class="search-toggle sticky-link">
                 <i class="d-icon-search"></i>
-                <span>Search</span>
+                <span>Axtar...</span>
             </a>
             <form method="get" asp-controller="Shop" asp-action="Search" class="input-wrapper">
                 <input type="text" class="form-control" id="search" name="query" placeholder="Axtardığınız məhsulun kodunu daxil edin ..." autocomplete="off"

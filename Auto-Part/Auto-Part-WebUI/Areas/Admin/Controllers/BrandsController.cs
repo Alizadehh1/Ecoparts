@@ -13,7 +13,7 @@ using Auto_Part_WebUI.Models.Entities.Membership;
 using Auto_Part_WebUI.Models.ViewModels;
 
 namespace Auto_Part_WebUI.Areas.Admin.Controllers
-{
+{   [AllowAnonymous]
     [Area("Admin")]
     public class BrandsController : Controller
     {

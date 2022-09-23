@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Auto_Part_WebUI.Areas.Admin.Controllers
-{
+{ 
     [Area("Admin")]
     public class DashboardController : Controller
     {
