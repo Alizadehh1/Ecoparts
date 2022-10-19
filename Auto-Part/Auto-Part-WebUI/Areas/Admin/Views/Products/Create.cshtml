@@ -37,7 +37,7 @@
             <form class="row" asp-action="Create" enctype="multipart/form-data" id="productCreate">
                 <div class="col-12 col-lg-6">
                     <div class="form-groupImage">
-                        <label for="file1" class="control-label">Image</label>
+                        <label for="file1" class="control-label">Şəkil</label>
                         <label for="file" class="photo-viewer" id="file-viewer">
 
                         </label>
@@ -49,28 +49,36 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
-                                <label asp-for="Name" class="control-label"></label>
+                                <label asp-for="Name" class="control-label">Ad</label>
                                 <input asp-for="Name" class="form-control" />
                             </div>
                         </div>
                         <div class="col-12 col-lg-6">
                             <div class="form-group">
-                                <label asp-for="ShortDescription" class="control-label"></label>
+                                <label asp-for="ShortDescription" class="control-label">Qısa detallı</label>
                                 <input asp-for="ShortDescription" class="form-control" />
                             </div>
                         </div>
                         <div class="col-12 col-lg-6">
                             <div class="form-group">
-                                <label asp-for="Quantity" class="control-label"></label>
+                                <label asp-for="Quantity" class="control-label">Ədəd</label>
                                 <input asp-for="Quantity" class="form-control" />
                             </div>
                         </div>
                         <div class="col-12 col-lg-6">
                             <div class="form-group">
-                                <label asp-for="CategoryId" class="control-label"></label>
+                                <label asp-for="CategoryId" class="control-label">Kateqoriya</label>
                                 <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
                             </div>
                         </div>
+                        <div class="col-12 col-lg-6">
+                            <label class="control-label">Əsas Kod</label>
+                            <select asp-for="MainPartCodeName" class="form-control select2" asp-items="ViewBag.MainCodes">
+                                <option selected disabled>---Birini Seçin---</option>
+                            </select>
+                            <span asp-validation-for="MainPartCodeName" class="text-danger"></span>
+                        </div>
+
                     </div>
                 </div>
                 <div class="col-12">

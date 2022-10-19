@@ -8,9 +8,10 @@ namespace Auto_Part_WebUI.Models.FormModels
 {
     public class LoginFormModel
     {
-        [Required]
+        [Required(ErrorMessage = "'Email (İstifadəçi adı)' Xanasını boş saxlamayın!")]
+        
         public string UserName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "'Şifrə' Xanasını boş saxlamayın!")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }

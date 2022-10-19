@@ -45,10 +45,30 @@ namespace Auto_Part_WebUI.Controllers
         {
             var userId = User.GetUserId();
             var viewModel = new ProfileViewModel();
-            viewModel.Order = db.Orders.Where(o => o.ECoPartUserId == userId).Include(o => o.OrderItems).ToList();
+            viewModel.Order = db.Orders.Where(o => o.ECoPartUserId == userId).OrderByDescending(o => o.CreatedDate).Include(o => o.OrderItems).ToList();
             viewModel.ECoPartUser = await userManager.FindByIdAsync(userId);
             return View(viewModel);
         }
+        public async Task<IActionResult> Order(int id)
+        {
+            var viewModel = new OrderViewModel();
+            viewModel.Order = db.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .FirstOrDefault(o => o.Id == id);
+            viewModel.Orders = db.Orders
+                .Where(o => o.Id == id)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .ToList();
+            viewModel.Products = db.Products
+                .Where(p => p.DeletedById == null)
+                .Include(p => p.Pricings)
+                .ToList();
+            viewModel.Users = db.Users.ToList();
+            return View(viewModel);
+        }
+        
         [Route("/accessdenied.html")]
         public IActionResult AccessDenied()
         {
@@ -68,7 +88,7 @@ namespace Auto_Part_WebUI.Controllers
             if (ModelState.IsValid)
             {
                 ECoPartUser foundedUser = null;
-
+                
                 if (user.UserName.IsEmail())
                 {
                     foundedUser = await userManager.FindByEmailAsync(user.UserName);
@@ -124,6 +144,11 @@ namespace Auto_Part_WebUI.Controllers
                     ViewBag.Message = "Bu Nömrə ilə artıq qeydiyyatdan keçmisiniz";
                     goto end;
                 }
+                if (db.Users.Any(u=>u.Email==model.Email))
+                {
+                    ViewBag.Message = "Bu email ilə artıq qeydiyyatdan keçmisiniz";
+                    goto end;
+                }
                 user.PhoneNumber = model.PhoneNumber;
                 user.StoreName = model.StoreName;
                 user.Name = model.Name;
@@ -140,14 +165,15 @@ namespace Auto_Part_WebUI.Controllers
                     var emailResponse = configuration.SendEmail(user.Email, "EcoPart istifadəçi qeydiyyatı", $"Zəhmət olmasa <a href=\"{path}\">link</a> vasitəsilə qeydiyyatı tamamlayasınız");
                     if (emailResponse)
                     {
-                        ViewBag.Message = "Təbriklər qeydiyyat Tamamlandı, Sizinlə Tezliklə Əlaqə Saxlanılacaq";
+                        ViewBag.Message = "Təbriklər qeydiyyat tamamlandı, saytı tam görmək üçün qeydiyyat təsdiqlənməlidir. Sizinlə Tezliklə Əlaqə Saxlanılacaq. ";
                     }
                     else
                     {
                         ViewBag.Message = "E-mailə göndərərkən səhv aşkar olundu, yenidən cəhd edin";
+                        goto end;
                     }
                     
-                    return RedirectToAction(nameof(SignIn));
+                    return View();
                 }
 
                 foreach (var error in result.Errors)

@@ -14,5 +14,6 @@
     <WebStackScaffolding_DbContextTypeFullName>Auto_Part_WebUI.Models.DataContexts.ECoPartDbContext</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
     <WebStackScaffolding_IsViewGenerationSelected>True</WebStackScaffolding_IsViewGenerationSelected>
+    <NameOfLastUsedPublishProfile>C:\Users\alide\OneDrive\Desktop\Auto-Part-Project\Auto-Part\Auto-Part-WebUI\Properties\PublishProfiles\FolderProfile.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>

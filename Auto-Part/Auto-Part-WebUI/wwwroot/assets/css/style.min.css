@@ -15520,12 +15520,7 @@ aside + div .product-single .product-details {
     }
 }
 
-@media (max-width: 479px) {
-    .order-action,
-    thead th:last-child {
-        display: none;
-    }
-}
+
 
 .section-buttons .row {
     justify-content: center;

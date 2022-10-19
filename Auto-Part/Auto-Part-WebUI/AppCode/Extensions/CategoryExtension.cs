@@ -1,10 +1,8 @@
 ﻿using Auto_Part_WebUI.Models.Entities;
 using Microsoft.AspNetCore.Html;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Auto_Part_WebUI.AppCode.Extensions
 {
@@ -14,21 +12,24 @@ namespace Auto_Part_WebUI.AppCode.Extensions
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("<ul class=\"widget-body filter-items search-ul\">");
-            foreach (var category in categories.Where(c=>c.DeletedById==null))
+            foreach (var category in categories.Where(c => c.ParentId == null))
             {
-                if (categories.Any(c=>c.Id == category.ParentId))
+                if (category.Children != null)
                 {
-                    continue;
+                    AppendCategory(category, sb);
                 }
-                bool hasChild = categories.Any(c => c.ParentId == category.Id);
-                AppendCategory(category, sb, hasChild);
             }
             sb.Append("</ul>");
+
             return new HtmlString(sb.ToString());
         }
-        static void AppendCategory(Category category, StringBuilder sb,bool hasChild)
+        static void AppendCategory(Category category, StringBuilder sb)
         {
-            //bool hasChild = category.Children.Any();
+            if (category.Children ==null)
+            {
+                return;
+            }
+            bool hasChild = category.Children.Any();
             sb.Append($"<li {(hasChild ? "class=with-ul" : "")}>" +
                 $"<a href=\"/shop/categories/{category.Id}\">{category.Name}");
             if (hasChild)
@@ -37,10 +38,9 @@ namespace Auto_Part_WebUI.AppCode.Extensions
             if (hasChild)
             {
                 sb.Append("<ul style=\"display: none\">");
-                foreach (var item in category.Children.Where(c => c.DeletedById == null))
+                foreach (var item in category.Children)
                 {
-                    bool hasChild1 = category.Children.Any(c => c.ParentId == item.Id);
-                    AppendCategory(item, sb, hasChild1);
+                    AppendCategory(item, sb);
                 }
                 sb.Append("</ul>");
             }

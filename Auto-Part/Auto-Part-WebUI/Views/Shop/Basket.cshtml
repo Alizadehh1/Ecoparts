@@ -1,18 +1,15 @@
-﻿@model List<Tuple<int, string, string, double>>
+﻿@model List<Tuple<int[], List<Product>,  double[], int[]>>
 @{
     ViewData["Title"] = "Basket";
 }
 <div class="page-content pt-7 pb-10">
-    <div class="step-by pr-4 pl-4">
-        <h3 class="title title-simple title-step active"><a href="#">Səbət</a></h3>
-    </div>
     <div class="container mt-7 mb-2">
         <div class="row">
-            <div class="col-lg-8 col-md-12 pr-lg-4">
+            <div class="col-lg-12 col-md-12 pr-lg-4">
                 <div class="emptyBasketContainer">
                     @if (Model.Count == 0)
                     {
-                        <div  class="d-flex flex-column justify-content-center align-items-center">
+                        <div class="d-flex flex-column justify-content-center align-items-center">
                             <i class="emptyBasket fa-solid fa-cart-shopping"></i>
                             <h1 class="emptyBasketText">Səbətiniz Boşdur</h1>
                         </div>
@@ -20,49 +17,57 @@
                 </div>
                 @if (Model.Count > 0)
                 {
+                    //int index = 0;
                     <table class="shop-table cart-table shipping">
                         <thead>
                             <tr>
                                 <th><span>Məhsul</span></th>
-                                <th>Adı</th>
+                                <th>Ad</th>
+                                <th>Əsas Kod</th>
                                 <th>Qiymət</th>
                                 <th style="text-align:center;">Ədəd</th>
                                 <th>Yekun</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @for (int i = 0; i < Model.Count; i++)
                             {
-                                <tr id="entityTr" data-id="@item.Item1" data-entity-id="@item.Item1-@item.Item4" data-price="@item.Item4" data-quantity="1">
+                                <tr id="entityTr" data-id="@Model[i].Item1[i]" data-entity-id="@Model[i].Item1[i]" data-price="@Model[i].Item3[i]" data-quantity="@Model[i].Item4[i]">
                                     <td class="product-thumbnail">
                                         <figure>
                                             <a href="product-simple.html">
-                                                <img src="~/uploads/images/@item.Item3" width="100" height="100"
+                                                <img src="~/uploads/images/@Model[i].Item2.FirstOrDefault(p=>p.Id==Model[i].Item1[i]).ImagePath" width="100" height="100"
                                                      alt="product">
                                             </a>
                                         </figure>
                                     </td>
                                     <td class="product-name">
                                         <div class="product-name-section">
-                                            <a asp-action="details" asp-controller="shop" asp-route-id=@item.Item1>
-                                                @item.Item2
+                                            <a asp-action="details" asp-controller="shop" asp-route-id=@Model[i].Item1[i]>
+                                                @Model[i].Item2.FirstOrDefault(p => p.Id == Model[i].Item1[i]).Name
                                             </a>
                                         </div>
                                     </td>
+                                    <td class="product-name">
+                                        <div class="product-name-section">
+                                            @Model[i].Item2.FirstOrDefault(p => p.Id == Model[i].Item1[i]).MainPartCodeName
+                                        </div>
+                                    </td>
+                                    
                                     <td class="product-subtotal">
-                                        <span class="amount">@item.Item4 ₼</span>
+                                        <span class="amount">@Model[i].Item3[i] ₼</span>
                                     <td class="product-quantity">
                                         <div class="input-group">
                                             <button class="quantity-minus d-icon-minus" onclick="minusQuantity(event)"></button>
-                                            <span class="quantity form-control d-flex justify-content-center align-items-center">1</span>
-                                            <button class="quantity-plus d-icon-plus" onclick="plusQuantity(event)"></button>
+                                            <input type="number" value="@Model[i].Item4[i]" class="quantity1 form-control d-flex justify-content-center align-items-center" />
+                                            <button class=" quantity-plus d-icon-plus" onclick="plusQuantity(event)"></button>
                                         </div>
                                     </td>
                                     <td class="product-price">
-                                        <span class="amount">@item.Item4 ₼</span>
+                                        <span class="amount">@(Model[i].Item3[i] * Model[i].Item4[i]) ₼</span>
                                     </td>
                                     <td class="product-close">
-                                        <a onclick="removeEntity(@item.Item1,@item.Item4)" class="product-remove" title="Məhsulu silin">
+                                        <a onclick="removeEntity(@Model[i].Item1[i],@Model[i].Item3[i],@Model[i].Item4[i])" class="product-remove" title="Məhsulu silin">
                                             <i class="fas fa-times"></i>
                                         </a>
                                     </td>
@@ -71,31 +76,32 @@
                         </tbody>
                     </table>
                 }
-                <div class="cart-actions mb-6 pt-4">
-                    <a asp-action="Index" class="btn btn-dark btn-md btn-rounded btn-icon-left mr-4 mb-4"><i class="d-icon-arrow-left"></i>Continue Shopping</a>
-                </div>
+
             </div>
             @if (Model.Count > 0)
             {
-                <aside id="placingOrder" class="col-lg-4 sticky-sidebar-wrapper">
+                <aside id="placingOrder" class="col-lg-4 mt-9 sticky-sidebar-wrapper">
                     <div class="sticky-sidebar" data-sticky-options="{'bottom': 20}">
                         <div class="summary mb-4">
-                            <h3 class="summary-title text-left">Cart Totals</h3>
+                            <h3 class="summary-title text-left">Səbət cəmi:</h3>
                             <table class="total">
                                 <tr class="summary-subtotal">
                                     <td>
-                                        <h4 class="summary-subtitle">Ümumi</h4>
+                                        <h4 class="summary-subtitle">Ümumi:</h4>
                                     </td>
-                                    <td>
-                                        <p class="summary-total-price summary-subtotal-price ls-s">0</p>₼
+                                    <td class="d-flex justify-content-center align-items-center pt-3">
+                                        <p class="summary-total-price summary-subtotal-price ls-s">0</p><b>₼</b>
                                     </td>
                                 </tr>
                             </table>
-                            <a href="#" id="placeOrderBtn" onclick="placeOrder()" class="btn btn-dark btn-rounded btn-checkout">Səbəti Təsdiqlə</a>
+                            <button id="placeOrderBtn" onclick="placeOrder()" class="btn btn-dark btn-rounded btn-checkout">Səbəti Təsdiqlə</button>
                         </div>
                     </div>
                 </aside>
             }
+            <div class="cart-actions mb-6 pt-4">
+                <a asp-action="Index" class="btn btn-dark btn-md btn-rounded btn-icon-left mr-4 mb-4"><i class="d-icon-arrow-left"></i>Alış verişə davam edin</a>
+            </div>
         </div>
     </div>
 </div>
@@ -104,24 +110,28 @@
 @section js{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-
         function readFromBasket() {
             return ($.cookie('cards') || '').split(',');
         }
         function readFromBasketPrices() {
             return ($.cookie('prices') || '').split(',');
         }
+        function readFromBasketQty() {
+            return ($.cookie('qtys') || '').split(',');
+        }
         function showCardCount() {
             let items = readFromBasket();
             $('span.cart-count').html(items.length - 1);
-
         }
         function showCartPrice() {
-            let items = ($.cookie('prices') || '').split(',');
-            console.log(items);
+
+            let prices = ($.cookie('prices') || '').split(',');
+            let qtys = ($.cookie('qtys') || '').split(',');
             let totalPrice = 0;
-            for (var i = 1; i < items.length; i++) {
-                totalPrice = totalPrice + parseFloat(items[i]);
+            for (var i = 0; i < prices.length; i++) {
+                for (var j = 0; j < qtys.length; j++) {
+                    totalPrice = totalPrice + prices[i] * qtys[j];
+                }
             }
             $('span.cart-price').html(totalPrice + "₼");
         }
@@ -133,7 +143,7 @@
             var iTag = $('<i>', {
                 class: 'emptyBasket fa-solid fa-cart-shopping'
             });
-            var h1Tag = $('<h1>').text("Your Cart is empty").addClass("emptyBasketText");
+            var h1Tag = $('<h1>').text("Səbətiniz Boşdur").addClass("emptyBasketText");
             let divTag = $('div.emptyBasketContainer');
             if (items.length <= 1) {
                 $('table.shipping').remove();
@@ -150,21 +160,23 @@
                 totalPrice = totalPrice + parseInt(items[i].textContent);
             }
             $('p.summary-subtotal-price').html(`${totalPrice}`);
-            console.log(totalPrice);
         }
         setTotalPrice();
-        function removeEntity(entityId, entityPrice) {
+        function removeEntity(entityId, entityPrice,entityQty) {
             let items = readFromBasket();
             let prices = readFromBasketPrices();
-
+            let qtys = readFromBasketQty();
             let id = entityId.toString();
             const index = items.indexOf(id);
             if (index > -1) {
                 items.splice(index, 1);
                 prices.splice(index, 1);
+                qtys.splice(index, 1);
+
             }
             $.cookie('cards', items.toString(), { expires: 7, path: '/' });
             $.cookie('prices', prices.toString(), { expires: 7, path: '/' });
+            $.cookie('qtys', qtys.toString(), { expires: 7, path: '/' });
             $.ajax({
                 success: function (response) {
                     if (response.error == true) {
@@ -172,7 +184,7 @@
                         return;
                     }
                     toastr.success("Successfully Deleted", response.message)
-                    $(`tr[data-entity-id=${entityId}-${entityPrice}]`).remove();
+                    $(`tr[data-entity-id=${entityId}]`).remove();
                     showCardCount();
                     showCartPrice();
                     setTotalPrice();
@@ -183,55 +195,39 @@
                 }
             })
         }
-
-
-
         function plusQuantity(e) {
             e.preventDefault();
-
             let row = $(e.currentTarget).closest('tr')
-
-
             let data = $(row).data();
-
-            let quantity = $(row).find('span.quantity').html();
-
+            let quantity = $(row).find('input.quantity1').val();
             if (!isNaN(quantity)) {
                 quantity++;
                 $(row).data('quantity', quantity);
             }
-            $(row).find('span.quantity').html(quantity);
+            $(row).find('input.quantity1').val(quantity);
             $(row).find('td.product-price .amount').html(`${(data.price * quantity)}₼`);
             setTotalPrice();
-            console.log(data);
         }
-
         function minusQuantity(e) {
             e.preventDefault();
-
             let row = $(e.currentTarget).closest('tr')
-
-
             let data = $(row).data();
-
-            let quantity = $(row).find('span.quantity').html();
+            let quantity = $(row).find('input.quantity1').val();
             if (quantity == 1) {
-                return;
+                return
             }
             if (!isNaN(quantity)) {
-                quantity--;
+                quantity--
                 $(row).data('quantity', quantity);
 
             }
-            $(row).find('span.quantity').html(quantity);
+            $(row).find('input.quantity1').val(quantity);
             $(row).find('td.product-price .amount').html(`${(data.price * quantity)}₼`);
             setTotalPrice();
-            console.log(data);
         }
-
-    </script>
-    <script>
         function placeOrder() {
+            let btn = document.getElementById('placeOrderBtn');
+            btn.disabled = true;
             let items = document.querySelectorAll('#entityTr');
             let productIds = [];
             let quantity = [];
@@ -241,9 +237,7 @@
                 productIds.push(data.id);
                 quantity.push(data.quantity);
                 price.push(data.price);
-
             }
-            console.log(quantity);
             let totalAmount = $('p.summary-subtotal-price').html();
             let itemsIds = readFromBasket();
             let itemsPrice = readFromBasketPrices();
@@ -262,16 +256,14 @@
                 success: function (response) {
                     if (response.error == true) {
                         toastr.error(response.message, 'Error!');
+                        btn.disabled = false;
                         return;
                     }
+                    btn.disabled = false;
                     toastr.success(response.message, 'Success!');
-
                     location.href = `@Url.Action("Index")`;
                 }
             });
         }
     </script>
-
-
-
 }

@@ -30,12 +30,25 @@
                         <div class="tab-content">
                             <div class="tab-pane active" id="register">
                                 <form method="post" asp-action="Register">
-                                    
-                                    <div asp-validation-summary="All"></div>
-                                    @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
+                                    @if (!Html.ViewData.ModelState.IsValid)
                                     {
                                         <div class="form-group mb-3">
-                                            <div class="alert alert-danger text-white">
+                                            <div asp-validation-summary="All" class="alert alert-danger text-white">
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
+                                    {
+                                        if (!Html.ViewData.ModelState.IsValid)
+                                        {
+                                            <div class="form-group mb-3">
+                                                <div class="alert alert-danger text-white">
+                                                    @ViewBag.Message
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="form-group mb-3">
+                                            <div class="alert alert-success text-white">
                                                 @ViewBag.Message
                                             </div>
                                         </div>
@@ -66,15 +79,6 @@
                                     </div>
                                     <div class="form-group">
                                         <input class="form-control" asp-for="ConfirmPassword" placeholder="Şifrənin Təkrarını daxil edin *" />
-                                    </div>
-                                    <div class="form-footer">
-                                        <div class="form-checkbox">
-                                            <input type="checkbox" class="custom-checkbox" id="register-agree" name="register-agree"
-                                                   required />
-                                            <label class="form-control-label" for="register-agree">
-                                                Qaydaları Qəbul Edirəm
-                                            </label>
-                                        </div>
                                     </div>
                                     <button class="btn btn-dark btn-block btn-rounded" type="submit">Qeydiyyatdan Keç</button>
                                 </form>

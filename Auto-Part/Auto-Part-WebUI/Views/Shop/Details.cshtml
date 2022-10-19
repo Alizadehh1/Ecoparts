@@ -28,18 +28,18 @@
 
                     <h1 class="product-name">@Model.Product.Name</h1>
                     <div class="product-meta">
-                        Məhsul Kodu: <span class="product-sku">@Model.Product.PartCodeName</span> <br />
-                        Aid Olduğu Maşın Brendi: <span class="product-brand">@Model.Product.Category.Brand.Name</span> <br />
-                        Kateqoriya: <span class="product-brand">@Model.Product.Category.Name</span>
+                        Məhsul Kodu: <b class="product-sku">@Model.Product.MainPartCodeName</b> <br />
+                        Aid Olduğu Maşın Brendi: <b class="product-brand">@Model.Product.Category.Brand.Name</b> <br />
+                        Kateqoriya: <b class="product-brand">@Model.Product.Category.Name</b>
                     </div>
                 </div>
                 <p class="product-short-desc">
                     @Model.Product.ShortDescription
                 </p>
                 <div class="product-form product-size">
-                    <label>Keyfiyyət:</label>
+                    <label>Keyfiyyət:&nbsp;</label>
                     <div class="product-form-group">
-                        <div class="product-variations">
+                        <div class="product-variations" style="margin-left:10px;">
                             @foreach (var item in Model.Product.Pricings)
                             {
                                 if (item.ProductId == Model.Product.Id)
@@ -48,34 +48,56 @@
                                     {
                                         if (item.TypeId == type.Id)
                                         {
-                                            <a data-type-id="@type.Id" id="type-@type.Id" class="size" href="#">@type.Name</a>
+                                            <span style="border: 1px solid; border-radius: 2px; background-color: transparent; font-size: 1.2rem; padding: 10px 7px; width: 3rem; text-align: center; vertical-align: middle;" data-type-id="@type.Id">@type.Name</span>
                                         }
                                     }
                                 }
                             }
                         </div>
-                        <a href="#" class="product-variation-clean">Clean All</a>
                     </div>
                 </div>
-                <div class="product-variation-price">
-                    <span id="product-price-type"></span><span>&#8380;</span>
+                <div class="product-form product-color">
+                    <label>Stok vəziyyəti:&nbsp;</label>
+                    @if (Model.Product.Quantity > 0)
+                    {
+                        <span style="color:#26c;" class="wishlist-in-stock">Anbarda</span>
+                    }
+                    else
+                    {
+                        <span style="color: #d26e4b;" class="wishlist-out-stock">Anbarda yoxdur</span>
+                    }
                 </div>
-
+                @foreach (var item in Model.Product.Pricings)
+                {
+                    if (item.ProductId == Model.Product.Id)
+                    {
+                        <span id="product-price-type" style="margin-bottom: 1rem; color: #222; font-size: 2.4rem; font-weight: 700; letter-spacing: -.025em;">@item.Price</span><span style="color: #222; font-size: 2.4rem; font-weight: 700;">&#8380;</span>
+                    }
+                }
+                <p class="error" style="color:red;"></p>
                 <hr class="product-divider">
+                @if (Model.Product.Quantity > 0)
+                {
+                    <div class="product-form product-qty">
+                        <div class="product-form-group">
+                            <div class="input-group mr-2">
+                                <button class="quantity-minus d-icon-minus"></button>
+                                <input class="quantity form-control" id="qty" type="number" min="1" max="1000000">
+                                <button class="quantity-plus d-icon-plus"></button>
+                            </div>
+                            <button data-item-id="@Model.Product.Id" onclick="addToCart(event)" class="btn-product btn-cart">
+                                <i class="d-icon-bag"></i>Səbətə Əlavə Et
+                            </button>
+                        </div>
+                        <div class="product-footer">
+                            <div>
+                                <a style="padding-left: 29px; cursor: pointer;" data-item-id="@Model.Product.Id" onclick="addToWishlist(event)" class="btn-product btn-wishlist mr-6"><i class="d-icon-heart"></i>Seçilmişlərə əlavə et</a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="product-divider mb-3">
+                }
 
-                <div class="product-form product-qty">
-                    <div class="product-form-group">
-                        <button data-item-id="@Model.Product.Id" onclick="addToCart(event)" class="btn-product btn-cart">
-                            <i class="d-icon-bag"></i>Səbətə Əlavə Et
-                        </button>
-                    </div>
-                </div>
-                <hr class="product-divider mb-3">
-                <div class="product-footer">
-                    <div class="product-action">
-                        <a data-item-id="@Model.Product.Id" onclick="addToWishlist(event)" style="cursor:pointer;"  class="btn-product btn-wishlist mr-6"><i class="d-icon-heart"></i>Seçilmişlərə əlavə et</a>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -110,7 +132,7 @@
                                     }
                                 }
                             </li>
-                            <li>Məhsul Kodu: @Model.Product.PartCodeName</li>
+                            <li>Alternativ kodlar: @Model.Product.PartCodeName</li>
                             <li>Aid Olduğu Maşın Brendi: @Model.Product.Category.Brand.Name</li>
                             <li>Kateqoriya: @Model.Product.Category.Name</li>
                         </ul>
@@ -163,6 +185,7 @@
                         <h3 class="product-name">
                             <a asp-route-id="@item.Id">@item.Name</a>
                         </h3>
+                        <span style="color: #aaa;margin-left:0.5rem;font-size:14px;">@item.MainPartCodeName</span>
                         <div class="product-price">
                             @foreach (var price in Model.Pricings)
                             {
@@ -188,23 +211,6 @@
 @section js{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        $('a[data-type-id]').click(function (e, item) {
-            let idName = e.currentTarget.getAttribute('id');
-            let typeId = idName.substring(5);
-            //console.log(typeId);
-            @foreach (var pricing in Model.Product.Pricings)
-            {
-                <text>
-                if (@pricing.TypeId == typeId) {
-                    let price = @pricing.Price;
-                    //let quantity = $('.quantity').val();
-                    let totalPrice = price;
-                    document.querySelector('#product-price-type').textContent = totalPrice;
-                }
-                </text>
-            }
-
-        });
         let quantityAction = () => {
             let types = document.querySelectorAll('.size');
             for (var i = 0; i < types.length; i++) {
@@ -233,17 +239,13 @@
             ev.stopPropagation();
             let data = $(ev.currentTarget).data();
             let price = $('#product-price-type').html();
-            //let qty = $('#qty').val();
-            let types = document.querySelectorAll('.size');
-            for (var i = 0; i < types.length; i++) {
-                if (types[i].getAttribute('class') == 'size active') {
-                    let idName = types[i].getAttribute('id');
-                    let typeId = idName.substring(5);
-                    addToBasket(data.itemId, price);
-                }
+            let qty = $('#qty').val();
+            if (qty<1) {
+                $('.error').html("Miqdarı düzgün qeyd edin!");
+                return;
             }
-
-
+            $('.error').html("");
+            addToBasket(data.itemId, price,qty);
             console.log(readFromBasket());
             showCardCount();
         }
@@ -253,31 +255,36 @@
         function readFromBasketPrices() {
             return ($.cookie('prices') || '').split(',');
         }
-        function addToBasket(cardId,cardPrice) {
+        function readFromBasketQty() {
+            return ($.cookie('qtys') || '').split(',');
+        }
+        function addToBasket(cardId,cardPrice,cardQty) {
             let items = readFromBasket();
             let prices = readFromBasketPrices();
-
+            let qtys = readFromBasketQty();
             let length = items.filter(item => item == cardId).length;
             let length1 = prices.filter(item => item == cardPrice).length;
             if (length > 0 && length1 > 0) {
                 return;
             }
-            items.push(cardId)
-            prices.push(cardPrice)
+            items.push(cardId);
+            prices.push(cardPrice);
+            qtys.push(cardQty);
             $.cookie('cards', items.toString(), { expires: 7, path: '/' });
             $.cookie('prices', prices.toString(), { expires: 7, path: '/' });
+            $.cookie('qtys', qtys.toString(), { expires: 7, path: '/' });
             $.ajax({
                 success: function (response) {
                     if (response.error == true) {
                         toastr.error(response.message, "Error!");
                         return;
                     }
-                    toastr.success("Successfully Added", response.message)
+                    toastr.success("Səbətə uğurla əlavə edildi", response.message)
                     showCardCount();
                     showCartPrice();
                 },
                 error: function (response) {
-                    toastr["error"]("Unsuccessfully", "Data has not been deleted")
+                    toastr["error"]("Uğursuz", "Əlavə edilmədi")
                 }
             })
         }
@@ -289,11 +296,14 @@
         }
         showCardCount();
         function showCartPrice() {
-            let items = ($.cookie('prices') || '').split(',');
-            console.log(items);
+
+            let prices = ($.cookie('prices') || '').split(',');
+            let qtys = ($.cookie('qtys') || '').split(',');
             let totalPrice = 0;
-            for (var i = 1; i < items.length; i++) {
-                totalPrice = totalPrice + parseFloat(items[i]);
+            for (var i = 0; i < prices.length; i++) {
+                for (var j = 0; j < qtys.length; j++) {
+                    totalPrice = totalPrice + prices[i] * qtys[j];
+                }
             }
             $('span.cart-price').html(totalPrice + "₼");
         }
@@ -323,11 +333,11 @@
                         toastr.error(response.message, "Error!");
                         return;
                     }
-                    toastr.success("Successfully Added", response.message)
+                    toastr.success("Seçilmişlərə uğurla əlavə edildi", response.message)
                     showWishlistCount();
                 },
                 error: function (response) {
-                    toastr["error"]("Unsuccessfully", "Data has not been deleted")
+                    toastr["error"]("Uğursuz", "Əlavə edilmədi")
                 }
             })
         }

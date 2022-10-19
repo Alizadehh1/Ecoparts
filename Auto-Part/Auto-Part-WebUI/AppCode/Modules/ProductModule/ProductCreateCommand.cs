@@ -25,6 +25,7 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
         public IFormFile File { get; set; }
         public string ImagePath { get; set; }
         public string ForSearch { get; set; }
+        public string MainPartCodeName { get; set; }
         public class ProductCreateCommandHandler : IRequestHandler<ProductCreateCommand, Product>
         {
             readonly ECoPartDbContext db;
@@ -59,12 +60,12 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
                 product.CategoryId = request.CategoryId;
                 product.ShortDescription = request.ShortDescription;
                 product.Quantity = request.Quantity;
-
+                product.MainPartCodeName = request.MainPartCodeName;
 
                 if (request.Values != null && request.Values.Length > 0)
                 {
                     product.PartCodeName = request.Values;
-                    product.ForSearch = request.Name + request.Values;
+                    product.ForSearch = request.MainPartCodeName + request.Name + request.Values;
                 }
 
                 if (request.Ids != null && request.Ids.Length > 0)

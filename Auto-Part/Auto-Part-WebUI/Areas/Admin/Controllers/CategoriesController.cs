@@ -31,9 +31,10 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
         {
             var query = db.Categories
                 .Where(c => c.DeletedById == null)
-                .Include(c => c.Brand).Include(c => c.Parent);
-            var pagedModel = new PagedViewModel<Category>(query, pageIndex, pageSize);
-            return View(pagedModel);
+                .Include(c => c.Brand).Include(c => c.Parent)
+                .ToList();
+            //var pagedModel = new PagedViewModel<Category>(query, pageIndex, pageSize);
+            return View(query);
         }
 
         [Authorize(Policy = "admin.categories.details")]

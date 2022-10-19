@@ -5,7 +5,6 @@ using Auto_Part_WebUI.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +21,7 @@ namespace Auto_Part_WebUI.Controllers
             this.db = db;
         }
         [Authorize(Policy = "shop.index")]
-        public IActionResult Index(int pageIndex = 1, int pageSize = 15)
+        public IActionResult Index(int pageIndex = 1, int pageSize = 12)
         {
 
             var model = new ShopViewModel();
@@ -30,6 +29,7 @@ namespace Auto_Part_WebUI.Controllers
                 .Where(b => b.DeletedById == null)
                 .ToList();
             model.Categories = db.Categories
+                .Include(c=>c.Children.Where(c=>c.DeletedById==null))
                 .Where(b => b.DeletedById == null)
                 .ToList();
             model.Pricings = db.ProductPricings
@@ -65,11 +65,11 @@ namespace Auto_Part_WebUI.Controllers
             return View(model);
         }
         [Authorize(Policy = "shop.categories")]
-        public IActionResult Brands(int id, int pageIndex = 1, int pageSize = 15)
+        public IActionResult Brands(int id, int pageIndex = 1, int pageSize = 12)
         {
             var model = new ShopViewModel();
             model.Categories = db.Categories
-                .Include(c => c.Children)
+                .Include(c => c.Children.Where(c => c.DeletedById == null))
                 .Where(c => c.BrandId == id && c.DeletedById == null)
                 .ToList();
             ViewBag.Brand = db.Brands
@@ -91,7 +91,7 @@ namespace Auto_Part_WebUI.Controllers
             model.PagedViewModel = new PagedViewModel<Product>(query, pageIndex, pageSize);
             return View(model);
         }
-        public IActionResult Categories(int id, int pageIndex = 1, int pageSize = 15)
+        public IActionResult Categories(int id, int pageIndex = 1, int pageSize = 12)
         {
             var model = new ShopViewModel();
             model.Category = db.Categories
@@ -107,6 +107,7 @@ namespace Auto_Part_WebUI.Controllers
                 .Where(b => b.DeletedById == null)
                 .ToList();
             model.Categories = db.Categories
+                .Include(c => c.Children.Where(c => c.DeletedById == null))
                 .Where(b => b.DeletedById == null)
                 .ToList();
             model.Types = db.ProductTypes
@@ -124,7 +125,7 @@ namespace Auto_Part_WebUI.Controllers
                 return RedirectToAction("Index", "Shop");
             }
             var model = new ShopViewModel();
-            model.Products = await db.Products.Include(p => p.Category).Where(p => p.DeletedById == null && p.ForSearch.ToLower().Contains(query.ToLower())).ToListAsync();
+            model.Products = await db.Products.Include(p => p.Category).ThenInclude(c=>c.Brand).Where(p => p.DeletedById == null && p.ForSearch.ToLower().Contains(query.ToLower())).ToListAsync();
             model.Pricings = db.ProductPricings
                 .Where(pc => pc.DeletedById == null)
                 .ToList();
@@ -144,33 +145,33 @@ namespace Auto_Part_WebUI.Controllers
 
         public IActionResult Basket()
         {
-            if (Request.Cookies.TryGetValue("cards", out string cards) && Request.Cookies.TryGetValue("prices", out string prices))
+            if (Request.Cookies.TryGetValue("cards", out string cards) && Request.Cookies.TryGetValue("prices", out string prices) && Request.Cookies.TryGetValue("qtys", out string qtys))
             {
                 int[] productIdsFromCookie = cards.Split(",").Where(CheckIsNumber)
                         .Select(item => int.Parse(item))
                         .ToArray();
 
-                double[] pricesFromCookie = prices.Split(",").Where(CheckIsNumber)
+                double[] pricesFromCookie = prices.Split(",").Where(CheckIsDouble)
                         .Select(item => double.Parse(item))
                         .ToArray();
+                int[] quantitiesFromCookie = qtys.Split(",").Where(CheckIsNumber)
+                        .Select(item => int.Parse(item))
+                        .ToArray();
 
-
-
-
+                var allProducts = db.Products.Where(p => p.DeletedById == null).ToList();
 
 
                 var products = (from p in db.Products.Where(p => p.DeletedById == null)
                                 where productIdsFromCookie.Contains(p.Id) && p.DeletedById == null
                                 join pr in db.ProductPricings on p.Id equals pr.ProductId
                                 where pricesFromCookie.Contains(pr.Price) && p.Id == pr.ProductId && pr.DeletedById == null
-                                select Tuple.Create(p.Id, p.Name, p.ImagePath, pr.Price)).ToList();
-                //select new { p.Name, p.ImagePath, p.Id, pr.TypeId, pr.Price }).ToList();
+                                select Tuple.Create(productIdsFromCookie, allProducts,  pricesFromCookie, quantitiesFromCookie)).ToList();
 
                 return View(products);
 
             }
 
-            return View(new List<Tuple<int, string, string, double>>());
+            return View(new List<Tuple<int[], List<Product>, double[],int[]>>());
 
         }
 
@@ -235,6 +236,10 @@ namespace Auto_Part_WebUI.Controllers
         private bool CheckIsNumber(string value)
         {
             return int.TryParse(value, out int v);
+        }
+        private bool CheckIsDouble(string value)
+        {
+            return double.TryParse(value, out double v);
         }
     }
 }

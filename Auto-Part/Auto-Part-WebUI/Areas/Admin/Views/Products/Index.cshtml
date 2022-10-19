@@ -48,13 +48,13 @@
                                 Məhsulun Adı
                             </th>
                             <th>
-                                Məhsulun qısa icmalı
-                            </th>
-                            <th>
                                 Məhsulun Kateqoriyası
                             </th>
                             <th>
-                                Məhsulun Kod nömrəsi
+                                Məhsulun Əsas Kod nömrəsi
+                            </th>
+                            <th>
+                                Məhsulun Alternativ Kod nömrələri
                             </th>
                             <th>
                                 Məhsulun Stokda Sayı
@@ -75,10 +75,10 @@
                                     @item.Name
                                 </td>
                                 <td>
-                                    @item.ShortDescription
+                                    @item.Category.Name
                                 </td>
                                 <td>
-                                    @item.Category.Name
+                                    @item.MainPartCodeName
                                 </td>
                                 <td>
                                     @item.PartCodeName
@@ -86,8 +86,6 @@
                                 <td>
                                     @item.Quantity ədəd
                                 </td>
-
-
                                 <td class="actionBtns">
                                     <a asp-action="Edit" asp-route-id="@item.Id"><button class="btn btn-warning btn-icon"><i class="icofont-pencil-alt-5"></i></button></a> |
                                     <a asp-action="Details" asp-route-id="@item.Id"><button class="btn btn-info btn-icon"><i class="icofont icofont-eye-alt"></i></button></a> |

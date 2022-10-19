@@ -67,6 +67,13 @@
                                 <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
                             </div>
                         </div>
+                        <div class="col-12 col-lg-6">
+                            <label class="control-label">Əsas Kod</label>
+                            <select asp-for="MainPartCodeName" class="form-control select2" asp-items="ViewBag.MainCodes">
+                                <option selected disabled>---Birini Seçin---</option>
+                            </select>
+                            <span asp-validation-for="MainPartCodeName" class="text-danger"></span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-12">
@@ -97,14 +104,14 @@
                                     <a id="partCodeRefresh" class="btn btn-mat btn-info text-white"><i class="icofont-refresh"></i>Yeniləyin</a>
                                     @foreach (var code in ViewBag.Codes)
                                     {
-                                        <tr class="code-checkbox">
-                                            <td class="table-row-select">
-                                                <input class="partCodes" type="checkbox" data-code-id="@code.Id" />
-                                            </td>
-                                            <th>
-                                                <p id="code-@code.Id">@code.Name</p>
-                                            </th>
-                                        </tr>
+                                    <tr class="code-checkbox">
+                                        <td class="table-row-select">
+                                            <input class="partCodes" type="checkbox" data-code-id="@code.Id" />
+                                        </td>
+                                        <th>
+                                            <p id="code-@code.Id">@code.Name</p>
+                                        </th>
+                                    </tr>
                                     }
 
                                 </tbody>
@@ -586,13 +593,16 @@
         let inputsCodes = document.querySelectorAll('.partCodes');
         for (var i = 0; i < inputsCodes.length; i++) {
             let data = $(inputsCodes[i]).data();
-            @foreach (var codeId in ViewBag.SelectedCodes)
+            @if (ViewBag.SelectedCodes!=null)
             {
-                <text>
-            if (data.codeId == @codeId) {
-                inputsCodes[i].checked = true;
-            }
-                </text>
+                foreach (var codeId in ViewBag.SelectedCodes)
+                {
+                    <text>
+                if (data.codeId == @codeId) {
+                    inputsCodes[i].checked = true;
+                }
+                    </text>
+                }
             }
         }
         @*let partCodeNames = @ViewBag.SelectedCodes

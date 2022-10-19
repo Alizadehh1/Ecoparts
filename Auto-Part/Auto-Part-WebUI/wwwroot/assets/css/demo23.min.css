@@ -16095,7 +16095,7 @@ aside .owl-nav-top .owl-nav {
     display: grid;
     margin-left: -5px;
     margin-right: -5px;
-    grid-template-columns: repeat(auto-fill, calc(100% / 17));
+    grid-template-columns: repeat(auto-fill, calc(100% / 15));
     grid-auto-rows: auto;
 }
 

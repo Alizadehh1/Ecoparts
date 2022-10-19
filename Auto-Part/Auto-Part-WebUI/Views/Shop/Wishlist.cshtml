@@ -24,7 +24,8 @@
                         <tr>
                             <th class="product-name"><span>Məhsul</span></th>
                             <th>Adı</th>
-                            <th class="product-price"><span>Kod</span></th>
+                            <th class="product-price"><span>Əsas Kod</span></th>
+                            <th class="product-price"><span>Alternativ Kod</span></th>
                             <th class="product-stock-status"><span>Stok vəziyyəti</span></th>
                             <th class="product-add-to-cart"></th>
                             <th class="product-remove"></th>
@@ -46,10 +47,20 @@
                                     <a asp-action="details" asp-route-id="@item.Id">@item.Name</a>
                                 </td>
                                 <td class="product-price">
+                                    <span class="amount">@item.MainPartCodeName</span>
+                                </td>
+                                <td class="product-price">
                                     <span class="amount">@item.PartCodeName</span>
                                 </td>
                                 <td class="product-stock-status">
-                                    <span class="wishlist-in-stock">Anbarda</span>
+                                    @if (item.Quantity > 0)
+                                    {
+                                        <span class="wishlist-in-stock">Anbarda</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="wishlist-out-stock">Anbarda yoxdur</span>
+                                    }
                                 </td>
                                 <td class="product-add-to-cart">
                                     <a asp-action="details" asp-route-id="@item.Id" class="btn-product btn-primary"><span>Seçim edin</span></a>

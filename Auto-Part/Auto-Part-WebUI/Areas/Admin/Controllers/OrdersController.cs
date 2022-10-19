@@ -2,6 +2,7 @@
 using Auto_Part_WebUI.Models.Entities;
 using Auto_Part_WebUI.Models.Entities.Membership;
 using Auto_Part_WebUI.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,15 +23,18 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             this.db = db;
             this.userManager = userManager;
         }
-        public IActionResult Index(int pageIndex = 1, int pageSize = 2)
+        [Authorize(Policy = "admin.orders.index")]
+        public IActionResult Index(int pageIndex = 1, int pageSize = 10)
         {
             var viewModel = new OrderViewModel();
             var query = db.Orders
+                .OrderByDescending(o=>o.CreatedDate)
                 .Include(o => o.OrderItems);
             viewModel.Users = db.Users.ToList();
             viewModel.PagedViewModel = new PagedViewModel<Order>(query, pageIndex, pageSize);
             return View(viewModel);
         }
+        [Authorize(Policy = "admin.orders.details")]
         public IActionResult Details(int id)
         {
             var viewModel = new OrderViewModel();
@@ -51,6 +55,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             return View(viewModel);
         }
         [HttpPost]
+        [Authorize(Policy = "admin.orders.confirm")]
         public IActionResult Confirm([FromRoute]int id)
         {
             var entity = db.Orders.Include(o=>o.OrderItems).FirstOrDefault(b => b.Id == id && b.DeletedById == null);
@@ -77,6 +82,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             });
         }
         [HttpPost]
+        [Authorize(Policy = "admin.orders.cancel")]
         public async Task<IActionResult> Cancel([FromRoute]int id)
         {
             var entity = db.Orders.FirstOrDefault(b => b.Id == id && b.isConfirmed == false);

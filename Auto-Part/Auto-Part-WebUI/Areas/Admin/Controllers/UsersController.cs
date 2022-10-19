@@ -68,8 +68,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                     message = "Movcud deyil"
                 });
             }
-            //entity.DeletedById = 1; //todo
-            //entity.DeletedDate = DateTime.UtcNow.AddHours(4);
+            db.Users.Remove(entity);
             db.SaveChanges();
             return Json(new
             {

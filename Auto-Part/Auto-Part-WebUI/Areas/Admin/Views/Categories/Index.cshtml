@@ -1,4 +1,4 @@
-﻿@model PagedViewModel<Category>
+﻿@model List<Category>
 
 @{
     ViewData["Title"] = "Index";
@@ -59,7 +59,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.Items.Where(c => c.ParentId == null))
+                        @foreach (var item in Model.Where(c => c.ParentId == null))
                         {
                             <tr data-entity-id="@item.Id" class="treegrid-@item.Id">
                                 <td>
@@ -124,7 +124,7 @@
                     </tbody>
                 </table>
             </div>
-            @Model.GetPagenation(Url,"Index","Admin")
+            @*@Model.GetPagenation(Url,"Index","Admin")*@
         </div>
     </div>
 </div>

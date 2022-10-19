@@ -69,11 +69,11 @@ namespace Vapie.WebUI.AppCode.Modules.SubscribeModule
 
                     SmtpClient client = new SmtpClient(smtpServer,smtpPort);
                     client.Credentials = new NetworkCredential(userName, password);
-                    client.EnableSsl = true;
+                    client.EnableSsl = false;
 
                     var from = new MailAddress(userName, displayName);
                     MailMessage message = new MailMessage(from, new MailAddress(subscribe.Email));
-                    message.Subject = "Vapie Confirmation Mail";
+                    message.Subject = "Ecoparts Confirmation Mail";
                     message.Body = $"Please confirm subscribtion with <a href=\"{link}\">link</a>";
                     message.IsBodyHtml = true;
                     //string[] ccs = cc.Split(';', StringSplitOptions.RemoveEmptyEntries);

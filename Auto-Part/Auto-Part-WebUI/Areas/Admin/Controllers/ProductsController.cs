@@ -74,6 +74,8 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             ViewBag.Codes = db.PartCodes.Where(ppc => ppc.DeletedById == null)
                 .OrderBy(pc => pc.Name)
                .ToList();
+            ViewBag.MainCodes = new SelectList(db.PartCodes.Where(ppc => ppc.DeletedById == null)
+                .OrderBy(pc => pc.Name).ToList(), "Name", "Name");
             return View();
         }
         [HttpPost]
@@ -119,10 +121,12 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             }
             ViewData["CategoryId"] = new SelectList(db.Categories.Where(s => s.DeletedById == null), "Id", "Name", product.CategoryId);
             ViewData["Types"] = new SelectList(db.ProductTypes.Where(s => s.DeletedById == null), "Id", "Name");
-            ViewBag.SelectedCodes = product.PartCodeIds.Split(",");
+            ViewBag.SelectedCodes = product.PartCodeIds?.Split(",");
             ViewBag.Codes = db.PartCodes.Where(ppc => ppc.DeletedById == null)
                 .OrderBy(pc=>pc.Name)
                .ToList();
+            ViewBag.MainCodes = new SelectList(db.PartCodes.Where(ppc => ppc.DeletedById == null)
+                .OrderBy(pc => pc.Name).ToList(), "Name", "Name");
             return View(product);
         }
 

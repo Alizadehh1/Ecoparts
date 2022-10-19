@@ -12,7 +12,7 @@
                 </div>
                 <!-- End DropDown Menu -->
                 <span class="divider"></span>
-                <a asp-controller="home" asp-action="contact" class="contact d-lg-show"><i class="d-icon-map"></i>Bizimlə Əlaqə</a>
+                <a href="#" class="contact d-lg-show"><i class="d-icon-map"></i>Bizimlə Əlaqə</a>
                 <a href=# class="help d-lg-show"><i class="d-icon-info"></i>Kömək Lazımdır?</a>
                 @if (User.Identity.IsAuthenticated)
                 {
@@ -23,9 +23,9 @@
                 else
                 {
                     <a asp-action="SignIn" asp-controller="account">
-                        <i style="margin-right: 3px;" class="d-icon-user"></i>Daxil Ol
+                        <i style="margin-right: 3px;" class="d-icon-user"></i>Giriş
                     </a>
-                    <span class="delimiter">/</span>
+                    <span class="delimiter" style="display:flex!important">/</span>
                     <a class="ml-0" asp-action="Register" asp-controller="account">Qeydiyyat</a>
                 }
             </div>
@@ -38,10 +38,6 @@
                 <a href="#" class="mobile-menu-toggle">
                     <i class="d-icon-bars2"></i>
                 </a>
-                <a asp-action="index" asp-controller="home" class="logo">
-                    <img src="~/assets/images/demos/demo23/logo.png" alt="logo" width="153" height="44" />
-                </a>
-                <!-- End Logo -->
 
                 <div class="header-search hs-simple">
                     <form class="input-wrapper" method="get" asp-controller="Shop" asp-action="Search">
@@ -57,7 +53,7 @@
                 <!-- End Header Search -->
             </div>
             <div class="header-right">
-                <a href="~/assets/tel:#" class="icon-box icon-box-side">
+                <a href="tel:+994507779990" class="icon-box icon-box-side">
                     <div class="icon-box-icon mr-0 mr-lg-2">
                         <i class="d-icon-phone"></i>
                     </div>
@@ -73,10 +69,6 @@
                 <span class="divider"></span>
                 <div class="dropdown cart-dropdown type2 cart-offcanvas mr-0 mr-lg-2">
                     <a asp-controller="shop" asp-action="Basket" class="cart-toggle label-block link">
-                        <div class="cart-label d-lg-show">
-                            <span class="cart-name">Səbət:</span>
-                            <span class="cart-price">$0.00</span>
-                        </div>
                         <i class="d-icon-bag"><span class="cart-count">2</span></i>
                     </a>
                     <div class="cart-overlay"></div>
