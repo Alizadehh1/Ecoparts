@@ -36,10 +36,6 @@ namespace Auto_Part_WebUI.Models.DataContexts
             {
                 e.HasKey(k => new { k.ProductId, k.TypeId });
             });
-            //builder.Entity<ProductPartCode>(e =>
-            //{
-            //    e.HasKey(k => new { k.ProductId, k.PartCodeId });
-            //});
 
             builder.Entity<ECoPartUser>(e =>
             {

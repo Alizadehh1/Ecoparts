@@ -49,7 +49,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
 
             var product = await db.Products
                 .Include(p => p.Category)
-                .ThenInclude(c => c.Brand)
+                .Include(p=>p.Brand)
                 .FirstOrDefaultAsync(m => m.Id == id && m.DeletedById == null);
 
             ViewBag.Pricings = db.ProductPricings
@@ -63,13 +63,13 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
             return View(product);
         }
         [Authorize(Policy = "admin.products.create")]
         public async Task<IActionResult> Create()
         {
             ViewData["CategoryId"] = new SelectList(db.Categories.Where(c => c.DeletedById == null), "Id", "Name");
+            ViewData["BrandId"] = new SelectList(db.Brands.Where(c => c.DeletedById == null), "Id", "Name");
             ViewData["Types"] = new SelectList(db.ProductTypes.Where(c => c.DeletedById == null), "Id", "Name");
             ViewBag.Codes = db.PartCodes.Where(ppc => ppc.DeletedById == null)
                 .OrderBy(pc => pc.Name)
@@ -120,6 +120,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                 return NotFound();
             }
             ViewData["CategoryId"] = new SelectList(db.Categories.Where(s => s.DeletedById == null), "Id", "Name", product.CategoryId);
+            ViewData["BrandId"] = new SelectList(db.Brands.Where(c => c.DeletedById == null), "Id", "Name");
             ViewData["Types"] = new SelectList(db.ProductTypes.Where(s => s.DeletedById == null), "Id", "Name");
             ViewBag.SelectedCodes = product.PartCodeIds?.Split(",");
             ViewBag.Codes = db.PartCodes.Where(ppc => ppc.DeletedById == null)

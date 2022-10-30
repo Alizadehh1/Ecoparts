@@ -42,7 +42,7 @@
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.Brand)
+                                @Html.DisplayNameFor(model => model.Name)
                             </th>
                             <th class="actionBtns">
                                 @if (User.HasAccess("admin.popularCars.create"))
@@ -58,7 +58,7 @@
                         {
                             <tr data-entity-id="@item.Id" class="treegrid-@item.Id">
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Brand.Name)
+                                    @Html.DisplayFor(modelItem => item.Name)
                                 </td>
                                 <td class="actionBtns">
                                     @if (User.HasAccess("admin.popularCars.edit"))
@@ -72,7 +72,7 @@
 
                                     @if (User.HasAccess("admin.popularCars.delete"))
                                     {
-                                        <a onclick="removeEntity(event,@item.Id,'@item.Id')" class="btn btn-danger btn-icon">
+                                        <a onclick="removeEntity(event,@item.Id, '@item.Name')" class="btn btn-danger btn-icon">
                                             <i class="icofont-trash"></i>
                                         </a>
                                     }

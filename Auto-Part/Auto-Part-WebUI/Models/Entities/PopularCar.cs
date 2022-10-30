@@ -8,7 +8,7 @@ namespace Auto_Part_WebUI.Models.Entities
 {
     public class PopularCar : BaseEntity
     {
-        public int BrandId { get; set; }
-        public virtual Brand Brand { get; set; }
+        public string Name { get; set; }
+        public string ProductIds { get; set; }
     }
 }

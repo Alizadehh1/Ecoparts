@@ -11,9 +11,9 @@
 
     <title>EcoParts - avto ehtiyyat hissələri</title>
 
-    <meta name="keywords" content="HTML5 Template" />
+    <meta name="keywords" content="EcoParts - onlayn mağaza" />
     <meta name="description" content="EcoParts - onlayn mağaza">
-    <meta name="author" content="D-THEMES">
+    <meta name="author" content="EcoParts - onlayn mağaza">
 
     <link rel="icon" type="image/png" href="~/assets/images/icons/favicon.png">
 
@@ -49,7 +49,6 @@
 <body class="home">
 
     <div class="page-wrapper">
-        @*<h1 class="d-none">Riode - Responsive eCommerce HTML Template</h1>*@
         @await Component.InvokeAsync("Header")
 
         <main class="main">
@@ -252,7 +251,7 @@
                         }
                         e.currentTarget.reset();
                         btn.disabled = false;
-                        toastr.success(response.message, 'Subscribe confirmation sended to your mail');
+                        toastr.success(response.message, 'Subscribe confirmation sent to your mail');
                     },
                     error: function (response) {
                         toastr.error(response.message, "Texniki Xeta!");

@@ -4,14 +4,16 @@ using Auto_Part_WebUI.Models.DataContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Auto_Part_WebUI.Migrations
 {
     [DbContext(typeof(ECoPartDbContext))]
-    partial class ECoPartDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221023214934_popularcarsvol2")]
+    partial class popularcarsvol2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

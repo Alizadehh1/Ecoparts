@@ -62,10 +62,18 @@
                             </div>
                         </div>
                         <div class="col-12 col-lg-6">
-                            <div class="form-group">
-                                <label asp-for="CategoryId" class="control-label"></label>
-                                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                            </div>
+                            <label class="control-label">Aid Olduğu Kateqoriya</label>
+                            <select asp-for="CategoryId" class="form-control select2" asp-items="ViewBag.CategoryId">
+                                <option selected disabled>---Birini Seçin---</option>
+                            </select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <label class="control-label">Aid Olduğu Maşın markası</label>
+                            <select asp-for="BrandId" class="form-control select2" asp-items="ViewBag.BrandId">
+                                <option selected disabled>---Birini Seçin---</option>
+                            </select>
+                            <span asp-validation-for="BrandId" class="text-danger"></span>
                         </div>
                         <div class="col-12 col-lg-6">
                             <label class="control-label">Əsas Kod</label>

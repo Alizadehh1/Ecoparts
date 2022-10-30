@@ -17,6 +17,7 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
     {
         public string Name { get; set; }
         public int CategoryId { get; set; }
+        public int BrandId { get; set; }
         public int Quantity { get; set; }
         public string ShortDescription { get; set; }
         public ProductPricing[] Pricing { get; set; }
@@ -58,6 +59,7 @@ namespace Auto_Part_WebUI.AppCode.Modules.ProductModule
 
                 product.Name = request.Name;
                 product.CategoryId = request.CategoryId;
+                product.BrandId = request.BrandId;
                 product.ShortDescription = request.ShortDescription;
                 product.Quantity = request.Quantity;
                 product.MainPartCodeName = request.MainPartCodeName;

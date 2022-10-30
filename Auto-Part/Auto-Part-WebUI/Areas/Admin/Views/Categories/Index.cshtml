@@ -44,9 +44,6 @@
                                 Ad
                             </th>
                             <th>
-                                Aid olduğu maşın markası
-                            </th>
-                            <th>
                                 Üst Kateqoriyası
                             </th>
                             <th class="actionBtns">
@@ -64,9 +61,6 @@
                             <tr data-entity-id="@item.Id" class="treegrid-@item.Id">
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Name)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Brand.Name)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Parent.Name)
@@ -97,9 +91,6 @@
                                         @Html.DisplayFor(modelItem => child.Name)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => child.Brand.Name)
-                                    </td>
-                                    <td>
                                         @Html.DisplayFor(modelItem => child.Parent.Name)
                                     </td>
                                     <td class="actionBtns">
@@ -124,7 +115,6 @@
                     </tbody>
                 </table>
             </div>
-            @*@Model.GetPagenation(Url,"Index","Admin")*@
         </div>
     </div>
 </div>

@@ -37,10 +37,14 @@
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label class="control-label">Maşın Marka Adı</label>
-                    <select asp-for="BrandId" class="form-control select2" asp-items="ViewBag.BrandId">
+                    <label asp-for="Name" class="control-label">Ad</label>
+                    <input asp-for="Name" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ProductIds">Məhsullar</label>
+                    <select asp-for="ProductIds" multiple class="js-example-basic-multiple col-sm-12 select2" asp-items="ViewBag.ProductId">
                     </select>
-                    <span asp-validation-for="BrandId" class="text-danger"></span>
+                    <span asp-validation-for="ProductIds" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <a asp-action="Index" class="btn btn-info btn-icon"><i class="icofont-arrow-left"></i></a> |
@@ -50,4 +54,13 @@
         </div>
     </div>
 </div>
-
+@section css{ 
+    <link href="~/admin/files/bower_components/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" rel="stylesheet" />
+}
+@section js{ 
+<script src="~/admin/files/bower_components/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
+<script>
+    let options = document.querySelectorAll('.select2-results__options .select2-results__option[aria-selected="false"]');
+    console.log(options);
+</script>
+}

@@ -49,7 +49,7 @@ namespace Auto_Part_WebUI.Controllers
             model.Product = db.Products
                 .Include(p => p.Pricings)
                 .Include(p => p.Category)
-                .ThenInclude(p => p.Brand)
+                .Include(p => p.Brand)
                 .FirstOrDefault(p => p.DeletedById == null && p.Id == id);
             model.Types = db.ProductTypes
                 .Where(pt => pt.DeletedById == null)
@@ -59,7 +59,7 @@ namespace Auto_Part_WebUI.Controllers
                 .ToList();
             model.Products = db.Products
                 .Include(p => p.Category)
-                .Where(b => b.DeletedById == null && b.Category.Brand.Id == model.Product.Category.Brand.Id && b.Id != id)
+                .Where(b => b.DeletedById == null && b.Brand.Id == model.Product.Brand.Id && b.Id != id)
                 .ToList();
 
             return View(model);
@@ -70,7 +70,7 @@ namespace Auto_Part_WebUI.Controllers
             var model = new ShopViewModel();
             model.Categories = db.Categories
                 .Include(c => c.Children.Where(c => c.DeletedById == null))
-                .Where(c => c.BrandId == id && c.DeletedById == null)
+                .Where(c => c.DeletedById == null)
                 .ToList();
             ViewBag.Brand = db.Brands
                 .Where(c => c.Id == id && c.DeletedById == null)
@@ -87,7 +87,7 @@ namespace Auto_Part_WebUI.Controllers
             model.Types = db.ProductTypes
                 .Where(b => b.DeletedById == null)
                 .ToList();
-            var query = db.Products.Include(p => p.Category).Where(b => b.DeletedById == null && b.Category.Brand.Id == id);
+            var query = db.Products.Include(p => p.Category).Where(b => b.DeletedById == null && b.Brand.Id == id);
             model.PagedViewModel = new PagedViewModel<Product>(query, pageIndex, pageSize);
             return View(model);
         }
@@ -125,7 +125,7 @@ namespace Auto_Part_WebUI.Controllers
                 return RedirectToAction("Index", "Shop");
             }
             var model = new ShopViewModel();
-            model.Products = await db.Products.Include(p => p.Category).ThenInclude(c=>c.Brand).Where(p => p.DeletedById == null && p.ForSearch.ToLower().Contains(query.ToLower())).ToListAsync();
+            model.Products = await db.Products.Include(p=>p.Brand).Include(p => p.Category).Where(p => p.DeletedById == null && p.ForSearch.ToLower().Contains(query.ToLower())).ToListAsync();
             model.Pricings = db.ProductPricings
                 .Where(pc => pc.DeletedById == null)
                 .ToList();

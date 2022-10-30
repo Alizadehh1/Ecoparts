@@ -36,9 +36,10 @@
         <div class="card-header">
             <h5>Products</h5>
         </div>
-        <div class="card-block table-border-style">
-            <div class="table-responsive">
-                <table class="table table-hover">
+        <div class="card-block">
+            <div class="dt-responsive table-responsive">
+                <table id="simpletable"
+                       class="table table-striped table-bordered nowrap">
                     <thead>
                         <tr>
                             <th>
@@ -98,7 +99,6 @@
                     </tbody>
                 </table>
             </div>
-            @Model.GetPagenation(Url,"Index","Admin")
         </div>
     </div>
 </div>
@@ -106,8 +106,20 @@
     <link type="text/css" rel="stylesheet" href="~/assets/css/pagination.css" />
 }
 @section js{
+    <script src="~/admin/files/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/admin/files/bower_components/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/admin/files/assets/pages/data-table/js/jszip.min.js"></script>
+    <script src="~/admin/files/assets/pages/data-table/js/pdfmake.min.js"></script>
+    <script src="~/admin/files/assets/pages/data-table/js/vfs_fonts.js"></script>
+    <script src="~/admin/files/bower_components/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/admin/files/bower_components/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/admin/files/assets/pages/data-table/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/admin/files/bower_components/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/admin/files/bower_components/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/admin/files/assets/pages/data-table/js/data-table-custom.js"></script>
     <script src="~/libs/sweetalert/sweetalert.min.js"></script>
     <script>
+        $('#simpletable').dataTable();
         function removeEntity(ev, entityId, name) {
             swal({
                 title: "Are you sure?",

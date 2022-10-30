@@ -11,8 +11,6 @@ namespace Auto_Part_WebUI.Models.Entities
     {
         [Required]
         public string Name { get; set; }
-        public int BrandId { get; set; }
-        public virtual Brand Brand { get; set; }
         public int? ParentId { get; set; }
         public virtual Category Parent { get; set; }
         public virtual ICollection<Category> Children { get; set; }

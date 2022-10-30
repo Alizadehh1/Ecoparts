@@ -26,7 +26,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
         [Authorize(Policy = "admin.popularCars.index")]
         public async Task<IActionResult> Index()
         {
-            var eCoPartDbContext = db.PopularCars.Where(pc=>pc.DeletedById==null).Include(p => p.Brand);
+            var eCoPartDbContext = db.PopularCars.Where(pc=>pc.DeletedById==null);
             return View(await eCoPartDbContext.ToListAsync());
         }
         [Authorize(Policy = "admin.popularCars.details")]
@@ -38,7 +38,6 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             }
 
             var popularCar = await db.PopularCars
-                .Include(p => p.Brand)
                 .FirstOrDefaultAsync(m => m.Id == id && m.DeletedById==null);
             if (popularCar == null)
             {
@@ -50,7 +49,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
         [Authorize(Policy = "admin.popularCars.create")]
         public IActionResult Create()
         {
-            ViewData["BrandId"] = new SelectList(db.Brands.Where(b=>b.DeletedById==null), "Id", "Name");
+            ViewData["ProductId"] = new MultiSelectList(db.Products.Where(b=>b.DeletedById==null), "Id", "Name");
             return View();
         }
 
@@ -65,7 +64,6 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(db.Brands.Where(b => b.DeletedById == null), "Id", "Name", popularCar.BrandId);
             return View(popularCar);
         }
         [Authorize(Policy = "admin.popularCars.edit")]
@@ -82,7 +80,6 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["BrandId"] = new SelectList(db.Brands.Where(b => b.DeletedById == null), "Id", "Name", popularCar.BrandId);
             return View(popularCar);
         }
 
@@ -116,7 +113,6 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(db.Brands.Where(b => b.DeletedById == null), "Id", "Name", popularCar.BrandId);
             return View(popularCar);
         }
 

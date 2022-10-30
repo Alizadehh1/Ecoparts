@@ -10,6 +10,5 @@ namespace Auto_Part_WebUI.Models.Entities
     {
         public string Name { get; set; }
         public ICollection<Product> Products { get; set; }
-        public ICollection<Category> Categories { get; set; }
     }
 }

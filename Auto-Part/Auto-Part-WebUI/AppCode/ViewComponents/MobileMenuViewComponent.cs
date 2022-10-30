@@ -19,7 +19,6 @@ namespace Auto_Part_WebUI.AppCode.ViewComponents
         public IViewComponentResult Invoke()
         {
             ViewBag.PopularCars = db.PopularCars
-                .Include(pc => pc.Brand)
                 .Where(c => c.DeletedById == null)
                 .ToList();
 

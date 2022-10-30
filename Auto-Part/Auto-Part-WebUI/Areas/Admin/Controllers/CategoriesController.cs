@@ -31,9 +31,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
         {
             var query = db.Categories
                 .Where(c => c.DeletedById == null)
-                .Include(c => c.Brand).Include(c => c.Parent)
                 .ToList();
-            //var pagedModel = new PagedViewModel<Category>(query, pageIndex, pageSize);
             return View(query);
         }
 
@@ -46,7 +44,6 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             }
 
             var category = await db.Categories
-                .Include(c => c.Brand)
                 .Include(c => c.Parent)
                 .FirstOrDefaultAsync(m => m.Id == id && m.DeletedById == null);
             if (category == null)
@@ -68,7 +65,6 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                     Name = c.ParentId == null ? c.Name : $"- {c.Name}"
                 })
                 .ToList();
-            ViewData["BrandId"] = new SelectList(db.Brands.Where(b => b.DeletedById == null), "Id", "Name");
             ViewData["ParentId"] = new SelectList(data, "Id", "Name");
             return View();
         }
@@ -92,7 +88,6 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                     Name = c.ParentId == null ? c.Name : $"- {c.Name}"
                 })
                 .ToList();
-            ViewData["BrandId"] = new SelectList(db.Brands.Where(b => b.DeletedById == null), "Id", "Name", category.BrandId);
             ViewData["ParentId"] = new SelectList(data, "Id", "Name", category.ParentId);
             return View(category);
         }
@@ -110,7 +105,6 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["BrandId"] = new SelectList(db.Brands.Where(c => c.DeletedById == null), "Id", "Name", category.BrandId);
             ViewData["ParentId"] = new SelectList(db.Categories.Where(c => c.DeletedById == null && c.Parent.Id != category.ParentId), "Id", "Name", category.ParentId);
             return View(category);
         }
@@ -145,7 +139,6 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(db.Brands.Where(c => c.DeletedById == null), "Id", "Name", category.BrandId);
             ViewData["ParentId"] = new SelectList(db.Categories.Where(c => c.DeletedById == null), "Id", "Name", category.ParentId);
             return View(category);
         }
