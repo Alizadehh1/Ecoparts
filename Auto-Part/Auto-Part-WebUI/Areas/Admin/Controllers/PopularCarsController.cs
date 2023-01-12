@@ -49,7 +49,7 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
         [Authorize(Policy = "admin.popularCars.create")]
         public IActionResult Create()
         {
-            ViewData["ProductId"] = new MultiSelectList(db.Products.Where(b=>b.DeletedById==null), "Id", "Name");
+            ViewData["ProductId"] = new MultiSelectList(db.Products.Where(b=>b.DeletedById==null), "Id", "MainPartCodeName");
             return View();
         }
 
@@ -74,12 +74,19 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var popularCar = await db.PopularCars.FindAsync(id);
-            
+            var popularCar = db.PopularCars.FirstOrDefault(pc => pc.DeletedById == null && pc.Id == id);
+
             if (popularCar == null || popularCar.DeletedById!=null)
             {
                 return NotFound();
             }
+
+            int[] productIds = popularCar.ProductIds.Split(",").Where(CheckIsNumber)
+                .Select(item => int.Parse(item))
+                .ToArray();
+
+            var selectedValue = db.Products.Where(b => b.DeletedById == null && productIds.Contains(b.Id));
+            ViewData["ProductId"] = new MultiSelectList(db.Products.Where(b => b.DeletedById == null), "Id", "MainPartCodeName", selectedValue.FirstOrDefault().MainPartCodeName);
             return View(popularCar);
         }
 
@@ -143,6 +150,10 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
         private bool PopularCarExists(int id)
         {
             return db.PopularCars.Any(e => e.Id == id);
+        }
+        private bool CheckIsNumber(string value)
+        {
+            return int.TryParse(value, out int v);
         }
     }
 }

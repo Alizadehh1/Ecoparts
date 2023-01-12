@@ -34,17 +34,16 @@
 <div class="page-body">
     <div class="card p-3">
         <div class="card-block">
-            <form asp-action="Create">
+            <form asp-action="Create" id="popularcarsCreate">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Name" class="control-label">Ad</label>
-                    <input asp-for="Name" />
+                    <label asp-for="Name" class="control-label"></label>
+                    <input required asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label class="control-label" asp-for="ProductIds">Məhsullar</label>
-                    <select asp-for="ProductIds" multiple class="js-example-basic-multiple col-sm-12 select2" asp-items="ViewBag.ProductId">
+                <div class="form-group searchable-multiple-select">
+                    <select id="dropdownSelect" asp-items="ViewBag.ProductId" style="display:none" name="" multiple>
                     </select>
-                    <span asp-validation-for="ProductIds" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <a asp-action="Index" class="btn btn-info btn-icon"><i class="icofont-arrow-left"></i></a> |
@@ -54,13 +53,58 @@
         </div>
     </div>
 </div>
-@section css{ 
-    <link href="~/admin/files/bower_components/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" rel="stylesheet" />
+@section css{
+    <link rel="stylesheet" href="~/admin/files/bower_components/searchable-multiselect/jquery.dropdown.min.css">
 }
-@section js{ 
-<script src="~/admin/files/bower_components/bootstrap-multiselect/dist/js/bootstrap-multiselect.js"></script>
-<script>
-    let options = document.querySelectorAll('.select2-results__options .select2-results__option[aria-selected="false"]');
-    console.log(options);
-</script>
+@section js{
+    <script src="~/admin/files/bower_components/searchable-multiselect/jquery.dropdown.min.js"></script>
+    <script>
+        $('.searchable-multiple-select').dropdown();
+        $(document).ready(function () {
+            $('#popularcarsCreate').submit(function (e) {
+                e.preventDefault();
+                const btn = $(e.currentTarget).find('input[type=submit]');
+                const idsArr=[]
+
+                $(btn).attr('disable', 'disabled');
+                let productsList = $('.dropdown-main ul li.dropdown-chose');
+                for (var i = 0; i < productsList.length; i++) {
+                    console.log($(productsList[i]).data('value'));
+                    let id = $(productsList[i]).data('value');
+                    idsArr.push(id);
+                }
+                let text = idsArr.toString();
+                let formData = new FormData(e.currentTarget);
+                formData.set(`ProductIds`, text);
+                $.ajax({
+                    url: '@Url.Action("Create")',
+                    type: 'post',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSent: function (xhr) {
+
+                    },
+                    success: function (response) {
+                        if (response.error == true) {
+                            toastr.error(response.message, "Xəta!");
+                            $(btn).removeAttr('disable');
+                            return;
+                        }
+
+                        e.currentTarget.reset();
+                        toastr.success(response.message, "Ugur");
+                        location.href = `@Url.Action("Index")`;
+                    },
+                    error: function (response) {
+                        $(btn).removeAttr('disable');
+                        console.warn(response);
+                    }
+                })
+                    .always(function () {
+
+                    });
+            });
+        });
+    </script>
 }

@@ -1,4 +1,4 @@
-﻿@model PagedViewModel<Auto_Part_WebUI.Models.Entities.Product>
+﻿@model List<Product>
 
 @{
     ViewData["Title"] = "Index";
@@ -66,7 +66,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.Items)
+                        @foreach (var item in Model)
                         {
                             <tr data-entity-id="@item.Id">
                                 <td>
@@ -102,9 +102,6 @@
         </div>
     </div>
 </div>
-@section css{
-    <link type="text/css" rel="stylesheet" href="~/assets/css/pagination.css" />
-}
 @section js{
     <script src="~/admin/files/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
     <script src="~/admin/files/bower_components/datatables.net-buttons/js/dataTables.buttons.min.js"></script>

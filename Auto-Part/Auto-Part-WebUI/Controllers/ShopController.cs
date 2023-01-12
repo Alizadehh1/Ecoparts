@@ -42,6 +42,7 @@ namespace Auto_Part_WebUI.Controllers
             model.PagedViewModel = new PagedViewModel<Product>(query, pageIndex, pageSize);
             return View(model);
         }
+        
         [Authorize(Policy = "shop.details")]
         public IActionResult Details(int id)
         {
@@ -59,6 +60,7 @@ namespace Auto_Part_WebUI.Controllers
                 .ToList();
             model.Products = db.Products
                 .Include(p => p.Category)
+                .Include(p=>p.Category)
                 .Where(b => b.DeletedById == null && b.Brand.Id == model.Product.Brand.Id && b.Id != id)
                 .ToList();
 
@@ -174,6 +176,32 @@ namespace Auto_Part_WebUI.Controllers
             return View(new List<Tuple<int[], List<Product>, double[],int[]>>());
 
         }
+        [Authorize(Policy = "shop.popularCars")]
+        public IActionResult PopularCars(int id, int pageIndex = 1, int pageSize = 12)
+        {
+            var popularCar = db.PopularCars.FirstOrDefault(pc => pc.DeletedById==null && pc.Id == id);
+            int[] productIds = popularCar.ProductIds.Split(",").Where(CheckIsNumber)
+                .Select(item => int.Parse(item))
+                .ToArray();
+            var model = new ShopViewModel();
+            model.Brands = db.Brands
+                .Where(b => b.DeletedById == null)
+                .ToList();
+            model.Categories = db.Categories
+                .Include(c => c.Children.Where(c => c.DeletedById == null))
+                .Where(b => b.DeletedById == null)
+                .ToList();
+            model.Pricings = db.ProductPricings
+                .Where(pc => pc.DeletedById == null)
+                .ToList();
+            model.Types = db.ProductTypes
+                .Where(pt => pt.DeletedById == null)
+                .ToList();
+            var query = db.Products.Include(p => p.Category).Include(p=>p.Brand).Where(b => b.DeletedById == null && productIds.Contains(b.Id));
+            model.PagedViewModel = new PagedViewModel<Product>(query, pageIndex, pageSize);
+            return View(model);
+        }
+
 
         public IActionResult Wishlist()
         {
@@ -203,8 +231,8 @@ namespace Auto_Part_WebUI.Controllers
             int[] quantity = quantities.Split(",").Where(CheckIsNumber)
                         .Select(item => int.Parse(item))
                         .ToArray();
-            int[] price = prices.Split(",").Where(CheckIsNumber)
-                        .Select(item => int.Parse(item))
+            double[] price = prices.Split(",").Where(CheckIsDouble)
+                        .Select(item => double.Parse(item))
                         .ToArray();
 
 

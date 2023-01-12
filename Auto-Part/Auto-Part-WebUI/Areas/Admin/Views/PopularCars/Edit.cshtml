@@ -37,7 +37,13 @@
             <form asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    
+                    <label asp-for="Name" class="control-label"></label>
+                    <input required asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group searchable-multiple-select">
+                    <select id="dropdownSelect" asp-items="ViewBag.ProductId" style="display:none" name="" multiple>
+                    </select>
                 </div>
                 <input type="hidden" asp-for="Id" />
                 <div class="form-group">
@@ -48,5 +54,59 @@
         </div>
     </div>
 </div>
+@section css{
+    <link rel="stylesheet" href="~/admin/files/bower_components/searchable-multiselect/jquery.dropdown.min.css">
+}
+@section js{
+    <script src="~/admin/files/bower_components/searchable-multiselect/jquery.dropdown.min.js"></script>
+    <script>
+        $('.searchable-multiple-select').dropdown();
+        $(document).ready(function () {
+            $('#popularcarsCreate').submit(function (e) {
+                e.preventDefault();
+                const btn = $(e.currentTarget).find('input[type=submit]');
+                const idsArr=[]
 
+                $(btn).attr('disable', 'disabled');
+                let productsList = $('.dropdown-main ul li.dropdown-chose');
+                for (var i = 0; i < productsList.length; i++) {
+                    console.log($(productsList[i]).data('value'));
+                    let id = $(productsList[i]).data('value');
+                    idsArr.push(id);
+                }
+                let text = idsArr.toString();
+                let formData = new FormData(e.currentTarget);
+                formData.set(`ProductIds`, text);
+                $.ajax({
+                    url: '@Url.Action("Edit")',
+                    type: 'post',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSent: function (xhr) {
+
+                    },
+                    success: function (response) {
+                        if (response.error == true) {
+                            toastr.error(response.message, "Xəta!");
+                            $(btn).removeAttr('disable');
+                            return;
+                        }
+
+                        e.currentTarget.reset();
+                        toastr.success(response.message, "Ugur");
+                        location.href = `@Url.Action("Index")`;
+                    },
+                    error: function (response) {
+                        $(btn).removeAttr('disable');
+                        console.warn(response);
+                    }
+                })
+                    .always(function () {
+
+                    });
+            });
+        });
+    </script>
+}
 

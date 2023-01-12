@@ -25,7 +25,7 @@
                 <ul>
                     @foreach (var popularCar in ViewBag.PopularCars)
                     {
-                        <li><a asp-action="Brands" asp-controller="Shop" asp-route-id="@popularCar.Id">@popularCar.Name</a></li>
+                        <li><a asp-action="PopularCars" asp-controller="Shop" asp-route-id="@popularCar.Id">@popularCar.Name</a></li>
                     }
                 </ul>
             </li>

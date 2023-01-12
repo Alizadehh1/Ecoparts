@@ -31,13 +31,14 @@ namespace Auto_Part_WebUI.Areas.Admin.Controllers
             this.userManager = userManager;
         }
         [Authorize(Policy = "admin.products.index")]
-        public async Task<IActionResult> Index(int pageIndex = 1, int pageSize = 5)
+        public async Task<IActionResult> Index()
         {
             var query = db.Products
                 .Include(p => p.Category)
-                .Where(p => p.DeletedById == null);
-            var pagedModel = new PagedViewModel<Product>(query, pageIndex, pageSize);
-            return View(pagedModel);
+                .Include(p=>p.Brand)
+                .Where(p => p.DeletedById == null)
+                .ToList();
+            return View(query);
         }
         [Authorize(Policy = "admin.products.details")]
         public async Task<IActionResult> Details(int? id)

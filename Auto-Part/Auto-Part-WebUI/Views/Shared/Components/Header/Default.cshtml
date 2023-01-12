@@ -90,7 +90,7 @@
                             <ul>
                                 @foreach (var item in @ViewBag.PopularCars)
                                 {
-                                    <li><a asp-controller="shop" asp-action="Brands" asp-route-id="@item.Id">@item.Name</a></li>
+                                    <li><a asp-controller="shop" asp-action="PopularCars" asp-route-id="@item.Id">@item.Name</a></li>
                                 }
                             </ul>
                         </li>
